@@ -59,4 +59,4 @@ class NLPU:
                     with open("preferences.txt","r") as preferences:
                         path_to_nltk_data = preferences.readline().rstrip()
             dir_input()
-NLPU()
+NLPU()  #Temporary, needed to call NLPU as there are no other main classes to combine units yet
