@@ -33,25 +33,30 @@ class NLPU:
             print("If the packages haven't been downloaded, input a space and hit enter")
             def dir_input():
                 choice = input("Path to nltk_data >>")
-                if input.isWhitespace():
-                    print("Warning: This takes about 2.8 GB of data") #citation needed!
+                if choice.isspace():
+                    print("Warning: This takes about 42 MB of data") #citation needed!
                     print("Please enter the path at which to download the data")
                     print("If you want to download the data to the current directory, enter space")
                     nltk_data_directory = input("Path to download nltk_data >>")
-                    if nltk_data_directory.isWhitespace():
-                        nltk_data_directory = os.path.dirname(os.path.abspath(__file__))
-                    if os.path.exists(choice):
-                        pass
+                    
+                    if nltk_data_directory.isspace():
+                        nltk_data_directory = os.path.dirname(os.path.abspath(__file__))+"/nltk_data"
+                        os.mkdir(nltk_data_directory)
                     else:
-                        print("Error, directory doesn't exist, please enter a different one!")
-                        dir_input()
-                    dir_input()
+                        if os.path.exists(nltk_data_directory):
+                            os.mkdir(nltk_data_directory+"/nltk_data")
+                            nltk_data_directory = nltk_data_directory+"/nltk_data"
+                        else:
+                            print("Error, directory doesn't exist, please enter a different one!")
+                            dir_input()
                     print("Download starting")
                     print("This will take a while....")
                     time.sleep(5)
                     nltk.download("punkt",nltk_data_directory)
-                          
-            else:
-                with open("preferences.txt","r") as preferences:
-                    path_to_nltk_data = preferences.readline().rstrip()
-                
+                    nltk.download("stopwords",nltk_data_directory)
+                    
+                else:
+                    with open("preferences.txt","r") as preferences:
+                        path_to_nltk_data = preferences.readline().rstrip()
+            dir_input()
+NLPU()
