@@ -1,4 +1,4 @@
-# Virtual-Assistant-Mark
+# Project-Mark
 
 ## A functional private Artificial Intelligence built from scratch.
 
