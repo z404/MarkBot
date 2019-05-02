@@ -1,1 +1,0 @@
-path_to_nltk_data = "C:\Users\acer\Desktop\Programs\Virtual-Assistant-Mark\NLP Unit\nltk_data"
