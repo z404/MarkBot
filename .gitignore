@@ -1,2 +1,4 @@
 # nltk_data is too big, the script installs it during runtime
 NLP unit/nltk_data
+# preferences change for every user, the script initializes it during runtime
+NLP unit/preferences.txt
