@@ -2,7 +2,7 @@
 NLPU/nltk_data
 
 # preferences change for every user, the script initializes it during runtime
-**preferences.txt
+**/preferences.txt
 
 # cache files aren't required
-**__pycache__
+**/__pycache__
