@@ -18,7 +18,7 @@ try: import nltk
 except ImportError: print("ImportError: Module NLTK hasn't been installed. Please install the module to continue")
 
 #import sub-requirement files
-import prefs
+from . import prefs
 
 #check to see if all nltk_data is present
 try:
@@ -74,6 +74,7 @@ except LookupError:
                 print("Initialization complete, ready for use")
             else:
                 if choice.replace(choice.replace('nltk_data',''),'') == '':
+                    print(choice)
                     print("Error, please paste the directory of the nltk_data")
                     dir_input()
                 elif not os.path.exists(choice):
@@ -101,7 +102,7 @@ except LookupError:
         else:
             nltk.data.path.append(path_to_nltk_data)
             try:
-                word_tokenize("Checking for Packages")
+                word_tokenize("Checking for Packages")  
                 set(stopwords.words('english'))
                 print("Directory for downloaded packages found!")
                 print("Initialization complete, ready for use")
