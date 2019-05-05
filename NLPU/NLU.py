@@ -62,6 +62,7 @@ except LookupError:
                 time.sleep(5)
                 nltk.download("punkt",nltk_data_directory)
                 nltk.download("stopwords",nltk_data_directory)
+                nltk.download("wordnet",nltk_data_directory)
                 print("download complete!")
                 print("Setting path in preference file")
                 prefs.set('path_to_nltk_data',nltk_data_directory)
