@@ -24,6 +24,8 @@ from . import prefs
 try:
     from nltk import word_tokenize
     from nltk.corpus import stopwords
+    lemma = nltk.wordnet.WordNetLemmatizer()
+    lemma.lemmatize('checking')
     set(stopwords.words('english'))
     word_tokenize("Checking for Packages")
     print("Directory for downloaded packages found!")

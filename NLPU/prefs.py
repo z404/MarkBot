@@ -1,9 +1,6 @@
 import os,sys,time
-print(os.getcwd())
 dict_prefs = {}  #key is name of preference, value is preference value
 if not os.path.exists(os.path.dirname(os.path.abspath(__file__))+'\\preferences.txt'):
-    print(os.path.dirname(os.path.abspath(__file__))+'\\preferences.txt')
-    print(os.path.exists(os.path.dirname(os.path.abspath(__file__))+'\\preferences.txt'))
     print("Creating preferences.txt")
     with open ('NLPU/preferences.txt','w+') as f:
         f.write('''path_to_nltk_data = ""''')
