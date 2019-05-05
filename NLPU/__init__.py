@@ -29,7 +29,7 @@ try:
     set(stopwords.words('english'))
     word_tokenize("Checking for Packages")
     print("Directory for downloaded packages found!")
-    print("Initialization complete, ready for use")
+    print("NLPU Initialization complete, ready for use")
 except LookupError:
     print("The preloaded nltk packages are missing at the runtime directory.")
     print("Checking Preferences file")
@@ -74,7 +74,7 @@ except LookupError:
                 word_tokenize("Checking for Packages")
                 set(stopwords.words('english'))
                 print("Directory for downloaded packages found!")
-                print("Initialization complete, ready for use")
+                print("NLPU Initialization complete, ready for use")
             else:
                 if choice.replace(choice.replace('nltk_data',''),'') == '':
                     print(choice)
@@ -91,7 +91,7 @@ except LookupError:
                         print("Directory for downloaded packages found!")
                         print("Adding path to preferences")
                         prefs.set('path_to_nltk_data',choice)
-                        print("Initialization complete, ready for use")
+                        print("NLPU Initialization complete, ready for use")
                     except LookupError:
                         print("Error, Broken Download, please download again!")
                         os.remove(os.path.dirname(os.path.abspath(__file__))+'/preferences.txt')
@@ -108,7 +108,7 @@ except LookupError:
                 word_tokenize("Checking for Packages")  
                 set(stopwords.words('english'))
                 print("Directory for downloaded packages found!")
-                print("Initialization complete, ready for use")
+                print("NLPU Initialization complete, ready for use")
             except LookupError:
                 print("Error, Broken Download, please download again!")
                 nltk.data.path.pop()

@@ -1,9 +1,10 @@
-import platform
+import platform, time
 
 #detect platform
 name = platform.system()
 if "Windows" in name:
     print("Found Platorm Windows....")
+    time.sleep(1)
     pf = "Windows"
 elif "Linux" in name:
     print("Found Platform Linux....")
