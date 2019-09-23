@@ -47,15 +47,15 @@ except LookupError:
                 print("If you want to download the data to the current directory, enter space")
                 nltk_data_directory = input("Path to download nltk_data >>")
                 if nltk_data_directory.isspace():
-                    nltk_data_directory = os.path.dirname(os.path.abspath(__file__))+"\\nltk_data"
+                    nltk_data_directory = os.path.dirname(os.path.abspath(__file__))+"/nltk_data"
                     try: os.mkdir(nltk_data_directory)
                     except FileExistsError:
                         print("Error, nltk_data under this directory already exists, please delete and try again")
                         dir_input()
                 else:
                     if os.path.exists(nltk_data_directory):
-                        os.mkdir(nltk_data_directory+"\\nltk_data")
-                        nltk_data_directory = nltk_data_directory+"\\nltk_data"
+                        os.mkdir(nltk_data_directory+"/nltk_data")
+                        nltk_data_directory = nltk_data_directory+"/nltk_data"
                     else:
                         print("Error, directory doesn't exist, please enter a different one!")
                         dir_input()

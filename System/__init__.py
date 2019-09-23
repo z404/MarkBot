@@ -16,6 +16,6 @@ elif "Darwin" in name:
 
 
 #save Platform in preferences.txt
-with open("System_Compat/preferences.txt","w+") as f:
+with open("System/preferences.txt","w+") as f:
     f.write('platform = "'+pf+'"')
     f.close()

@@ -12,7 +12,7 @@ l = '''
 
 '''-----------------------------------------------------------------------------------------------'''
 #Display Logo and initialize the ENTIRE PROGRAM
-from System_Compat import command as c
+from System import command as c
 c.execute('clear')
 import time
 try:
@@ -40,5 +40,14 @@ print(Fore.CYAN + "--------------------------\
 input()
 c.execute('clear')
 c.execute('l')
-input()
+
+#Start commandline
+command = ' '
+status = 'Mark>> '
+while command:
+    command = input(Fore.GREEN+status+Fore.BLUE)
+    if command != '':
+        c.execute(command)
+    else:
+        break
 '''----------------------------------------------------------------------------------------------'''

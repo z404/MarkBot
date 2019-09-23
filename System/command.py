@@ -12,7 +12,7 @@ l = '''
 '''
 
 def get_platform():
-    with open("System_Compat/preferences.txt","r") as f:
+    with open("System/preferences.txt","r") as f:
         line = f.readline()
         garbage, platform = line.split('=')
         platform = platform.strip().replace('"','')
@@ -24,6 +24,7 @@ pf = get_platform()
 def execute(code, params=None):
     from colorama import init as i, Fore, deinit as di
     #log the code in
+    
     if code == 'l' or code == 'logo':
         if pf == "Windows":
             os.system("cls")
@@ -32,11 +33,16 @@ def execute(code, params=None):
         i(autoreset = True)
         print(Fore.CYAN+l)
         return None
+    
     elif code == 'cmd' or code == 'terminal' or code == 'command':
         os.system(params)
         return None
+    
     elif code == 'install':
-        os.system("pip install -r requirements.txt")
+        try:
+            os.system("pip3 install -r requirements.txt")
+        except:
+            os.system("pip install -r requirements.txt")
         print("Done!")
         time.sleep(2)
         if pf == "Windows":
@@ -44,9 +50,11 @@ def execute(code, params=None):
         elif pf == "Linux":
             os.system("clear")
         return None
+    
     elif code == 'clear' or code == 'cls':
         if pf == "Windows": os.system('cls')
         elif pf == "Linux": os.system('clear')
         return None
+
     
     
