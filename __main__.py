@@ -1,13 +1,17 @@
-l = '''
+l = '''\
+██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗    
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝   
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║      
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║       
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║      
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝       
 
-  _____           _           _     __  __          _____  _  __
- |  __ \         (_)         | |   |  \/  |   /\   |  __ \| |/ /
- | |__) | __ ___  _  ___  ___| |_  | \  / |  /  \  | |__) | ' / 
- |  ___/ '__/ _ \| |/ _ \/ __| __| | |\/| | / /\ \ |  _  /|  <  
- | |   | | | (_) | |  __/ (__| |_  | |  | |/ ____ \| | \ \| . \ 
- |_|   |_|  \___/| |\___|\___|\__| |_|  |_/_/    \_\_|  \_\_|\_\\
-                _/ |                                            
-               |__/                                             
+            ███╗   ███╗ █████╗ ██████╗ ██╗  ██╗
+            ████╗ ████║██╔══██╗██╔══██╗██║ ██╔╝
+            ██╔████╔██║███████║██████╔╝█████╔╝ 
+            ██║╚██╔╝██║██╔══██║██╔══██╗██╔═██╗ 
+            ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██╗
+            ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 '''
 
 '''-----------------------------------------------------------------------------------------------'''
@@ -34,6 +38,7 @@ time.sleep(2)
 
 #make all print statements yellow
 import NLPU
+import Firebase
 
 print(Fore.CYAN + "--------------------------\
                 \n    Done Initializing!\
@@ -45,16 +50,23 @@ platform = c.get_platform()
 if platform!='Linux':
     print(Fore.RED+'Operating system not supported, limited functionality')
 from NLPU import process
+from Firebase import server
 #Start commandline
 command = ' '
 status = 'Mark>> '
 while command:
     command = input(Fore.GREEN+status+Fore.BLUE)
-    code, *params = command.split()
+    try:
+        code, *params = command.split()
+    except:
+        command = ' '
+        continue
     if command != '':
         ret_type = c.execute(code,params)
         if ret_type[0] == 'nlpu':
             print(process.get(ret_type[1]))
+        elif ret_type[0] == 'server_start':
+            server.start_server()
     else:
         break
 '''----------------------------------------------------------------------------------------------'''

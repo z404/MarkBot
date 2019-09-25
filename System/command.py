@@ -1,14 +1,18 @@
 ##run commands on the system's shell
-l = '''
+l = '''\
+██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗    
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝   
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║      
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║       
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║      
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝       
 
-  _____           _           _     __  __          _____  _  __
- |  __ \         (_)         | |   |  \/  |   /\   |  __ \| |/ /
- | |__) | __ ___  _  ___  ___| |_  | \  / |  /  \  | |__) | ' / 
- |  ___/ '__/ _ \| |/ _ \/ __| __| | |\/| | / /\ \ |  _  /|  <  
- | |   | | | (_) | |  __/ (__| |_  | |  | |/ ____ \| | \ \| . \ 
- |_|   |_|  \___/| |\___|\___|\__| |_|  |_/_/    \_\_|  \_\_|\_\\
-                _/ |                                            
-               |__/                                             
+            ███╗   ███╗ █████╗ ██████╗ ██╗  ██╗
+            ████╗ ████║██╔══██╗██╔══██╗██║ ██╔╝
+            ██╔████╔██║███████║██████╔╝█████╔╝ 
+            ██║╚██╔╝██║██╔══██║██╔══██╗██╔═██╗ 
+            ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██╗
+            ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 '''
 
 def get_platform():
@@ -18,7 +22,8 @@ def get_platform():
         platform = platform.strip().replace('"','')
         return platform
 
-import os, time
+import os, time, warnings
+warnings.filterwarnings("ignore")
 from colorama import init as i, Fore, deinit as di
 i(autoreset = True)
 
@@ -27,7 +32,6 @@ pf = get_platform()
 def execute(code, params=None):
     #from colorama import init as i, Fore, deinit as di
     #log the code in
-    print(code)
     
     if code == 'l' or code == 'logo':
         if pf == "Windows":
@@ -65,6 +69,13 @@ def execute(code, params=None):
             string+=i+' '
         string.rstrip(' \n')
         return ['nlpu',string]
+
+    elif code == 'exit' or code == 'quit':
+        print(Fore.CYAN+"Goodbye, Come back soon!")
+        exit(0)
+
+    elif code == 'start-server' or code == 'server-start':
+        return ['server_start']
 
     else:
         print(Fore.RED+'Error: Command not recognized')

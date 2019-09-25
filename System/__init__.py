@@ -14,8 +14,6 @@ elif "Darwin" in name:
     print("Error! This script is built only for Linux and Windows Platforms!")
     raise OSError
 
-
 #save Platform in preferences.txt
 with open("System/preferences.txt","w+") as f:
     f.write('platform = "'+pf+'"')
-    f.close()

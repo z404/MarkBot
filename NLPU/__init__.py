@@ -23,7 +23,6 @@ try:
     nlu_engine = SnipsNLUEngine(config=CONFIG_EN)
     with open(r'NLPU/testdataset.json') as f:
         js = json.load(f)
-        print('hi')
         nlu_engine = nlu_engine.fit(js)
         nlu_engine.parse('Mark is learning everyday')
     print('NLPU configured sucsessfullly')

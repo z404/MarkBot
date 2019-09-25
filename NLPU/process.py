@@ -7,6 +7,8 @@ import json, os
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.default_configs import CONFIG_EN
 nlu_engine = SnipsNLUEngine(config=CONFIG_EN)
+from colorama import init as i, Fore, deinit as di
+i(autoreset = True)
 #dataset = train.yaml
 
 yaml_path = os.path.join(os.path.dirname(__file__),'train.yaml')
@@ -22,6 +24,22 @@ with open(json_path) as f:
     json_f = json.load(f)
     trained_nlu_engine = nlu_engine.fit(json_f)
 
+def process_intent(ret_lst):
+    if ret_lst[0] == None:
+        return Fore.MAGENTA+'I\'m sorry, I didn\'t understand that'
+    elif ret_lst[0] == 'askNameOfAI':
+        return Fore.MAGENTA+'My name is Mark!'
+
+def rectify(return_json):
+    name_of_intent = return_json['intent']['intentName']
+    probability = return_json['intent']['probability']
+    slots = return_json['slots']
+    return [name_of_intent,probability,slots]
+
 def get(text):
     ret = trained_nlu_engine.parse(text)
-    return ret
+    rect_ret = rectify(ret)
+    output = process_intent(rect_ret)
+    return output
+
+    
