@@ -19,24 +19,27 @@ def get_platform():
         return platform
 
 import os, time
+from colorama import init as i, Fore, deinit as di
+i(autoreset = True)
+
 pf = get_platform()
 
 def execute(code, params=None):
-    from colorama import init as i, Fore, deinit as di
+    #from colorama import init as i, Fore, deinit as di
     #log the code in
+    print(code)
     
     if code == 'l' or code == 'logo':
         if pf == "Windows":
             os.system("cls")
         elif pf == "Linux":
             os.system("clear")
-        i(autoreset = True)
         print(Fore.CYAN+l)
-        return None
+        return [0]
     
     elif code == 'cmd' or code == 'terminal' or code == 'command':
         os.system(params)
-        return None
+        return [0]
     
     elif code == 'install':
         try:
@@ -49,12 +52,22 @@ def execute(code, params=None):
             os.system("cls")
         elif pf == "Linux":
             os.system("clear")
-        return None
+        return [0]
     
     elif code == 'clear' or code == 'cls':
         if pf == "Windows": os.system('cls')
         elif pf == "Linux": os.system('clear')
-        return None
+        return [0]
 
+    elif code == 'input' or code == 'inp' or code == 'nlp' or code == 'nlpu':
+        string = ''
+        for i in params:
+            string+=i+' '
+        string.rstrip(' \n')
+        return ['nlpu',string]
+
+    else:
+        print(Fore.RED+'Error: Command not recognized')
+        return [1]
     
     
