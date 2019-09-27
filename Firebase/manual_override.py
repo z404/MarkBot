@@ -21,4 +21,4 @@ firebase = pyrebase.initialize_app(config)
 
 db = firebase.database()
 
-db.set({'users':{1:{'name':'Anish','role':'creator','email':'anishr890@gmail.com','banned':'false'}},'rooms':{1:{'input':'blank','output':'blank'}}})
+db.child("user_database").update({3:{'name':'Dhrhduv','role':'administrator','email':'','banned':'false','room':{'input':'blank','output':'blank'}}})

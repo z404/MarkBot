@@ -27,7 +27,7 @@ except:
     print("Requirements not installed!")
     print("Installing requirements....")
     time.sleep(3)
-    c.execute("install")
+    c.execute("install",origin='script')
 
 from colorama import init as i, Fore, deinit as di
 i(autoreset = True)

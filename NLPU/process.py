@@ -24,11 +24,19 @@ with open(json_path) as f:
     json_f = json.load(f)
     trained_nlu_engine = nlu_engine.fit(json_f)
 
-def process_intent(ret_lst):
+def process_intent(ret_lst,origin):
+    
     if ret_lst[0] == None:
-        return Fore.MAGENTA+'I\'m sorry, I didn\'t understand that'
+        if origin == 'main':
+            return Fore.MAGENTA+'I\'m sorry, I didn\'t understand that'
+        else:
+            return 'I\'m sorry, I didn\'t understand that'
+
     elif ret_lst[0] == 'askNameOfAI':
-        return Fore.MAGENTA+'My name is Mark!'
+        if origin == 'main':
+            return Fore.MAGENTA+'My name is Mark!'
+        else:
+            return 'My name is Mark!'
 
 def rectify(return_json):
     name_of_intent = return_json['intent']['intentName']
@@ -36,10 +44,10 @@ def rectify(return_json):
     slots = return_json['slots']
     return [name_of_intent,probability,slots]
 
-def get(text):
+def get(text, origin='main'):
     ret = trained_nlu_engine.parse(text)
     rect_ret = rectify(ret)
-    output = process_intent(rect_ret)
+    output = process_intent(rect_ret,origin)
     return output
 
     

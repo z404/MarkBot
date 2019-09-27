@@ -3,6 +3,7 @@ import json, sys, os
 from colorama import init as i, Fore, deinit as di
 i(autoreset = True)
 
+
 sys.path.append('../')
 
 original_stdout = sys.stdout
@@ -31,32 +32,43 @@ def start_server(code=1):
         global count
         count=0
         def stream_handler(message):
-            global count
-            if count!=0:
-                print(message)
-                lst=message['path'].split('/')
-                room_num = lst[1]
-                try:
-                    if lst[2] == 'input':
-                        if message['data'] == 'blank':
-                            #ignore
-                            pass
-                        else:
-                            command = message['data']
-                            try:
-                                code, *params = command.split()
-                            except:
-                                command = ' '
-                            if command != '':
-                                ret_type = c.execute(code,params)
-                                if ret_type[0] == 1:
-                                    db.update({'output':ret_type[1]})
-                                if ret_type[0] == 'nlpu':
-                                    db.update({'output':process.get(ret_type[1])})
-                            db.update({'input':'blank'})
-                except: pass
-            else: count+=1
-        my_stream = db.child('rooms').stream(stream_handler)
+            #get path, number, role, banned
+            command = message['data']
+            path = message['path']
+            path_lst = path.split('/')
+            if len(path_lst)>2 and 'input' in path and command != 'blank':
+                userid = path_lst[1]
+                user_details = db.child('user_database').child(userid).get()
+                banned = user_details.val()['banned']
+                role = user_details.val()['role']
+                path_to_log_file = 'Firebase/logs/LOGUSER'+userid+'.txt'
+                with open(path_to_log_file,'a') as f:
+                    f.write('\n>>> '+command)
+                if banned == 'true':
+                    output = 'You have been banned from this service. Please contact an administrator to resolve this issue.'
+                else:
+                    #if role == 'administrator':
+                    try:
+                        code, *params = command.split()
+                    except:
+                        code = command
+                        params = []
+                    if code == 'input' or code == 'inp' or code == 'nlp' or code == 'nlpu':
+                        string = ''
+                        for i in params:
+                            string+=i+' '
+                        string.rstrip(' \n')
+                        output = process.get(string,origin='fire')
+                    else:
+                        output = c.execute(code,params,origin='fire',role=role)
+                with open(path_to_log_file,'a') as f:
+                    f.write('\n<<< '+output)
+                db.child('user_database').child(userid).child('room').update({'output':output})
+                db.child('user_database').child(userid).child('room').update({'input':'blank'})
+        my_stream = db.child('user_database').stream(stream_handler)
         print(Fore.GREEN+'Server started sucsessfully!')
     else:
-        my_stream.close()
+        try:
+            my_stream.close()
+        except AttributeError:
+            pass
