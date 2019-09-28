@@ -23,21 +23,20 @@ def get_platform():
         return platform
 
 import os, time
+import subprocess as s
 from colorama import init as i, Fore, deinit as di
 i(autoreset = True)
 
 pf = get_platform()
 
 def execute(code, params=None, origin='main',role='administrator'):
-    #from colorama import init as i, Fore, deinit as di
-    #log the code in
-    #if role == 'creator':
+    
     if code == 'l' or code == 'logo':
         if origin == 'main':
             if pf == "Windows":
-                os.system("cls")
+                os.system('cls')
             elif pf == "Linux":
-                os.system("clear")
+                os.system('clear')
             print(Fore.CYAN+l)
             return [0]
         else:
@@ -45,18 +44,21 @@ def execute(code, params=None, origin='main',role='administrator'):
         return [0]
     
     elif code == 'cmd' or code == 'terminal' or code == 'command':
-        if role=='administrator':
+        if role == 'administrator':
+            command = ''
+            for i in params:
+                command+=i+' '
+            command = command.lstrip(' \n').rstrip(' \n')
+            cmdoutput = os.popen(command).read()
             if origin == 'main':
-                ###############################################
-                #use subprocess so as to get a printable output
-                ###############################################
-                os.system(params)
-                return [0]
+                return [1,Fore.MAGENTA+cmdoutput]
             else:
-                #not implemented yet
-                return 'not implemented'
+                return cmdoutput
         else:
-            return [1,Fore.RED+'Error: Permission Denied. User does\'nt have the required role']
+            if origin == 'main':
+                return [1,Fore.RED+'Error: You don\'t have the required role for this command']
+            else:
+                return 'Error: You don\'t have the required role for this command'
     
     elif code == 'install':
         if origin == 'script':
@@ -80,7 +82,7 @@ def execute(code, params=None, origin='main',role='administrator'):
             elif pf == "Linux": os.system('clear')
             return [0]
         else:
-            return 'not implemented'
+            return '$clear'
 
     elif code == 'input' or code == 'inp' or code == 'nlp' or code == 'nlpu':
         string = ''
@@ -124,6 +126,8 @@ def execute(code, params=None, origin='main',role='administrator'):
                 ####################
                 #Not implemented yet
                 ####################
+                pass
+            
         else:
             if origin == 'main':
                 return [1,Fore.RED+'Error: Permission Denied. User does\'nt have the required role']

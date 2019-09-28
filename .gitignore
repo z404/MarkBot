@@ -1,5 +1,5 @@
-# nltk_data is too big, the script installs it during runtime
-NLPU/nltk_data
+#logs are private, cannot be brodcasted over the internet
+Firebase/logs
 
 # preferences change for every user, the script initializes it during runtime
 **/preferences.txt

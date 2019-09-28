@@ -7,3 +7,13 @@ utterances:
   - what do i call you?
   - what are you named as?
   - who are you?
+
+# greet Intent
+---
+type: intent
+name: greet
+utterances:
+  - hello
+  - hi
+  - how are you doing?
+  - whats up?

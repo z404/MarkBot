@@ -36,7 +36,13 @@ def start_server(code=1):
             command = message['data']
             path = message['path']
             path_lst = path.split('/')
-            if len(path_lst)>2 and 'input' in path and command != 'blank':
+            if (len(path_lst)>2 and 'input' in path and command != 'blank')\
+               or (len(path_lst)==2 and str(type(message['data'])) == "<class 'dict'>"):
+                if str(type(message['data'])) == "<class 'dict'>":
+                    try:
+                        command = message['data']['input']
+                    except:
+                        return
                 userid = path_lst[1]
                 user_details = db.child('user_database').child(userid).get()
                 banned = user_details.val()['banned']
@@ -63,8 +69,8 @@ def start_server(code=1):
                         output = c.execute(code,params,origin='fire',role=role)
                 with open(path_to_log_file,'a') as f:
                     f.write('\n<<< '+output)
-                db.child('user_database').child(userid).child('room').update({'output':output})
-                db.child('user_database').child(userid).child('room').update({'input':'blank'})
+                db.child('user_database').child(userid).update({'output':output})
+                db.child('user_database').child(userid).update({'input':'blank'})
         my_stream = db.child('user_database').stream(stream_handler)
         print(Fore.MAGENTA+'Server started sucsessfully!')
     else:

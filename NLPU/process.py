@@ -3,7 +3,7 @@
 Natural Language Processing Unit of Project Mark
 ================================================
 '''
-import json, os
+import json, os, random
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.default_configs import CONFIG_EN
 nlu_engine = SnipsNLUEngine(config=CONFIG_EN)
@@ -37,6 +37,14 @@ def process_intent(ret_lst,origin):
             return Fore.MAGENTA+'My name is Mark!'
         else:
             return 'My name is Mark!'
+
+    elif ret_lst[0] == 'greet':
+        messages = ['Hello! Nice to see you today','Good day to you!']
+        string = random.choice(messages)
+        if origin == 'main':
+            return Fore.MAGENTA+string
+        else:
+            return string
 
 def rectify(return_json):
     name_of_intent = return_json['intent']['intentName']

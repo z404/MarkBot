@@ -32,6 +32,38 @@
           ]
         }
       ]
+    },
+    "greet": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "hello"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hi"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "how are you doing?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "whats up?"
+            }
+          ]
+        }
+      ]
     }
   },
   "language": "en"
