@@ -63,12 +63,19 @@ while command:
         continue
     if command != '':
         ret_type = c.execute(code,params)
+        
         if ret_type[0] == 1:
             print(ret_type[1])
+            
         if ret_type[0] == 'nlpu':
             print(process.get(ret_type[1]))
+            
         elif ret_type[0] == 'server_start':
             server.start_server()
+
+        elif ret_type[0] == 'server_stop':
+            server.start_server(0)
+            
         elif ret_type[0] == 'quit':
             server.start_server(0)
             exit(0)

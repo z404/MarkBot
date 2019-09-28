@@ -1,3 +1,7 @@
 
 >>> inp who are you?
 <<< [35mMy name is Mark!
+>>> input who are you?
+<<< My name is Mark!
+>>> inp what is your name
+<<< You have been banned from this service. Please contact an administrator to resolve this issue.

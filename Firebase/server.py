@@ -66,9 +66,10 @@ def start_server(code=1):
                 db.child('user_database').child(userid).child('room').update({'output':output})
                 db.child('user_database').child(userid).child('room').update({'input':'blank'})
         my_stream = db.child('user_database').stream(stream_handler)
-        print(Fore.GREEN+'Server started sucsessfully!')
+        print(Fore.MAGENTA+'Server started sucsessfully!')
     else:
         try:
             my_stream.close()
+            print(Fore.MAGENTA+'Server stopped sucsessfully!')
         except AttributeError:
             pass

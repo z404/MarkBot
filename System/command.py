@@ -111,8 +111,25 @@ def execute(code, params=None, origin='main',role='administrator'):
             else:
                 return 'Server already running'
         else:
-            return [1,Fore.RED+'Error: Permission Denied. User does\'nt have the required role']
+            if origin == 'main':
+                return [1,Fore.RED+'Error: Permission Denied. User does\'nt have the required role']
+            else:
+                return 'Error: Permission Denied. User does\'nt have the required role'
 
+    if code == 'stop-server' or code == 'server-stop':
+        if role=='administrator':
+            if origin == 'main':
+                return ['server_stop']
+            else:
+                ####################
+                #Not implemented yet
+                ####################
+        else:
+            if origin == 'main':
+                return [1,Fore.RED+'Error: Permission Denied. User does\'nt have the required role']
+            else:
+                return 'Error: Permission Denied. User does\'nt have the required role'
+    
     else:
         if origin == 'main':
             message = Fore.RED+'Error: Command not recognized'
