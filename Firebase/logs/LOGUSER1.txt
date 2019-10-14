@@ -68,3 +68,26 @@ See 'git help git' for an overview of the system.
 >>> blank
 <<< Error: Command not recognized
 >>> terminal git add .
+<<< 
+>>> blank
+<<< Error: Command not recognized
+>>> terminal git commit -m "firebase development 5"
+<<< [master c50f677] firebase development 5
+ 7 files changed, 151 insertions(+), 28 deletions(-)
+ rewrite Firebase/logs/LOGUSER1.txt (80%)
+
+>>> blank
+<<< Error: Command not recognized
+>>> terminal git push
+<<< 
+>>> blank
+<<< Error: Command not recognized
+>>> exit
+>>> hello
+<<< Error: Command not recognized
+>>> blank
+<<< Error: Command not recognized
+>>> input hello
+<<< Good day to you!
+>>> blank
+<<< Error: Command not recognized

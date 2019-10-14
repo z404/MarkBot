@@ -6,12 +6,13 @@
 
 ## Info
 ### Basic functions to be added:
-- [ ] Natural Language Processer ---In Development
+- [ ] Natural Language Processor ---In Development
 - [ ] Text to Speech
 - [ ] Speech to Text
-- [ ] Vedio Processing
+- [ ] Video Processing
   - [ ] Face Recognition
   - [ ] Object detection
 
+##Development has been paused. Major framework changes are under way!
 
 #### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations
