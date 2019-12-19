@@ -1,8 +1,5 @@
-#logs are private, cannot be brodcasted over the internet
-Firebase/logs
-
-# preferences change for every user, the script initializes it during runtime
-**/preferences.txt
-
 # cache files aren't required
 **/__pycache__
+
+# credential files are different for every user
+**/credentials.txt

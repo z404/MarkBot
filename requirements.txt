@@ -1,3 +1,2 @@
-nltk==3.4.1
-colorama==0.4.1
-snips_nlu==0.20.1
+#requirements for Project Mark
+snips-nlu

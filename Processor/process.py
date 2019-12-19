@@ -1,0 +1,2 @@
+def command(command,origin):
+    
