@@ -1,2 +1,0 @@
-def command(command,origin):
-    
