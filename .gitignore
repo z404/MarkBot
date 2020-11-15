@@ -1,5 +1,0 @@
-# cache files aren't required
-**/__pycache__
-
-# credential files are different for every user
-**/credentials.txt
