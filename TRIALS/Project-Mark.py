@@ -13,17 +13,9 @@ l = '''
              ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██╗
              ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 '''
-import io
-import json
+import wolframalpha
+app_id = 'ELG889-LP97GKQKJ9'
+client = wolframalpha.Client(app_id)
+res = client.query('what is the laplace transform of sin at e^t')
 
-from snips_nlu import SnipsNLUEngine
-from snips_nlu.default_configs import CONFIG_EN
-
-engine = SnipsNLUEngine(config=CONFIG_EN)
-
-with io.open("dataset.json") as f:
-    dataset = json.load(f)
-
-engine.fit(dataset)
-parsing = engine.parse("Hey, lights on in the lounge !")
-print(json.dumps(parsing, indent=2))
+print(res)
