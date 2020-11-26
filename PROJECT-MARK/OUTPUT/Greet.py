@@ -1,4 +1,5 @@
 import random
-def output():
-    a = ['Hi','Hello']
-    print(random.choice(a))
+def output(intentname):
+    if intentname[1] == 'Normal':
+        a = ['Hi','Hello','Hello there, General Kenobi']
+        print(random.choice(a))

@@ -1,6 +1,10 @@
 def output(intent):
     import os
-    mod = __import__('OUTPUT.'+intent['intentName'])
-    func = getattr(mod,intent['intentName'])
-    func.output()
-    
+    try:
+        intentname = intent['intentName'].split('_')
+        mod = __import__('OUTPUT.'+intentname[0])
+        func = getattr(mod,intentname[0])
+        func.output(intentname)
+    except ModuleNotFoundError:
+        print('Sorry, I couldn\'t understand that.')
+   

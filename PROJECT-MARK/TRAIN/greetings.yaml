@@ -1,25 +1,25 @@
-# Greet intent
+# Greet_Normal intent
 ---
 type: intent
-name: Greet
+name: Greet_Normal
 utterances:
   - Hello
   - Hi
   - Howdy
 
-# GreetWithQuestion intent
+# Greet_WithQuestion intent
 ---
 type: intent
-name: GreetWithQuestion
+name: Greet_WithQuestion
 utterances:
   - Hello! How are you?
   - Hi! How do you do?
   - What's Up
 
-# GreetWithName intent
+# Greet_WithName intent
 ---
 type: intent
-name: GreetWithName
+name: Greet_WithName
 slots:
   - name: username
     entity: username
@@ -28,10 +28,10 @@ utterances:
   - hello, i am [username](John)
   - howdy, im [username](George)
 
-# AskNameOfAI intent 
+# Greet_AskNameOfAI intent 
 ---
 type: intent
-name: AskNameOfAI
+name: Greet_AskNameOfAI
 slots:
   - name: name
     entity: name
@@ -44,10 +44,10 @@ utterances:
   - Who are you? Im [username](Terry)
   - hello, im [username](Anish), who are you?
 
-# GreetWithTime intent
+# Greet_WithTime intent
 ---
 type: intent
-name: GreetWithTime
+name: Greet_WithTime
 slots:
   - name: TimeOfDay
     entity: TimeOfDay

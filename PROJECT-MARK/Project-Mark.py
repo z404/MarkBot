@@ -28,6 +28,8 @@ engine = SnipsNLUEngine(config=CONFIG_EN)
 data = dataset.Dataset.from_yaml_files('en',['./PROJECT-MARK/TRAIN/'+i for i in os.listdir('./PROJECT-MARK/TRAIN') if '.yaml' in i])
 engine.fit(data)
 
+
+#This is temporary code to test NLPU. Change after system is in place
 def INPUT(text):
     parsing = engine.parse(text)
     IntentAssesment.output(parsing['intent'])
