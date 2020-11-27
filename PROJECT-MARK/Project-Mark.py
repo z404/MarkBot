@@ -61,7 +61,9 @@ mythread.start()
 #This is temporary code to test NLPU. Change after system is in place
 def INPUT(text):
     parsing = engine.parse(text)
-    return IntentAssesment.output(parsing['intent'])
+    try: slot = parsing['slots']
+    except: slot = []
+    return IntentAssesment.output(parsing['intent'],slot)
 
 while True:
     if initlst.count(True) == len(initlst):
