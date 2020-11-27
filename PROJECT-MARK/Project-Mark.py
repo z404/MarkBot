@@ -48,8 +48,12 @@ async def on_ready(): #Defining methods for discord bot
 @client.event
 async def on_message(message):
     if message.author.id != client.user.id:
-        a = INPUT(message.content)
-        await message.channel.send(a)
+        if message.content.startswith('.'):
+            command = message.content.split()
+            if command[0].lower() == '.say' and len(command)>1:
+                inputstr = ' '.join([i for i in command[1:]])
+                a = INPUT(inputstr)
+                await message.channel.send(a)
 mythread = threading.Thread(target=client.run,args=['NzgxNDAzNzcwNzIxNDAyOTAx.X79I-A._AJLoasLGh94vMf4h5z-KWiU_PM'])
 mythread.daemon = True
 mythread.start()
