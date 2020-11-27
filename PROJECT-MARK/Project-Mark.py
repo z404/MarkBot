@@ -45,7 +45,6 @@ async def on_ready(): #Defining methods for discord bot
 @client.event
 async def on_message(message):
     print(message.content)
-#client.run('NzgxNDAzNzcwNzIxNDAyOTAx.X79I-A._AJLoasLGh94vMf4h5z-KWiU_PM')
 mythread = threading.Thread(target=client.run,args=['NzgxNDAzNzcwNzIxNDAyOTAx.X79I-A._AJLoasLGh94vMf4h5z-KWiU_PM'])
 mythread.daemon = True
 mythread.start()
