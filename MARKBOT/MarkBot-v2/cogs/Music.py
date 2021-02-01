@@ -952,6 +952,24 @@ class Music(commands.Cog):
             await ctx.send("Song added to "+name_of_playlist+"!")
             write_db(self.db)
 
+    @_playlist.command(pass_context=True, name="play")
+    async def _playlist_play(self, ctx: commands.Context, name_of_playlist: str):
+        self.db = get_db()
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            if self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist] != None:
+                await ctx.send("Enqueueing "+str(len(self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]))+" songs. This could take a while..")
+                for i in self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]:
+                    await self._play(ctx=ctx, search=i, flag=True)
+                await ctx.send("Playlist enqueued!")
+            else:
+                await ctx.send("This playlist has no songs. Please add a few songs first")
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
