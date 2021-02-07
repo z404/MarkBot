@@ -1,4 +1,0 @@
-This code is being tested on windows
-To set up the required environment, on 18th November, 2020, python 3.7 is required
-To install snips-nlu, setuptools_rust needs to be installed using pip, and rustc needs to be installed with its exe installer
-To install the language resources for en, (snips-nlu download en), run the cmd with admin priviliges
