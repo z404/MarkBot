@@ -1,8 +1,9 @@
 # Project-Mark
-## Version 3.0
+## Version 4.0
 
 ## Major framework changes are under way! New framework has been planned!
 ## A functional private Artificial Intelligence built from scratch.
+## Primarily focused on being a discord bot, so its easier to use
 
 ## Installation
 Clone or download the repositiory, and run Project-Mark.py in the default terminal emulator
