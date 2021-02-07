@@ -17,4 +17,7 @@ Clone or download the repositiory, and run Project-Mark.py in the default termin
   - [ ] Face Recognition
   - [ ] Object detection
   
+### Functions as a discord bot:
+- [x] Music bot
+
 #### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations
