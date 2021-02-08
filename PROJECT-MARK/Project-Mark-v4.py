@@ -32,6 +32,7 @@ import youtube_dl
 from async_timeout import timeout
 from discord.ext import commands
 import wikipedia
+import wolframalpha
 
 print(l)
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -44,6 +45,9 @@ class Functionality(commands.Cog):
         data = dataset.Dataset.from_yaml_files('en',['./PROJECT-MARK/TRAIN/'+i for i in os.listdir('./PROJECT-MARK/TRAIN') if '.yaml' in i])
         engine.fit(data)
         self.engine = engine
+        app_id = 'ELG889-LP97GKQKJ9'
+        client = wolframalpha.Client(app_id)
+        self.wolframclient = client
 
     @commands.command(name='say')
     async def _say(self, ctx: commands.Context, *, message):
@@ -57,11 +61,24 @@ class Functionality(commands.Cog):
     async def wiki(self, ctx: commands.Context, *, searchmsg):
         '''Searches wikipedia and shows a summary of the search term'''
         try:
-            url = wikipedia.page(searchmsg).url
-            summary = wikipedia.summary(searchmsg,sentences=5)
-            await ctx.send(summary+'\n\nUrl = `'+str(url)+'`')
+            async with ctx.typing():
+                url = wikipedia.page(searchmsg).url
+                summary = wikipedia.summary(searchmsg,sentences=5)
+                await ctx.send(summary+'\n\nUrl = `'+str(url)+'`')
         except wikipedia.exceptions.PageError:
             await ctx.send("Could not find a page with that search term")
+
+    @commands.command(aliases=['wolfram'])
+    async def math(self, ctx: commands.Context, *, searchquery):
+        '''Tries to solve a few basic math problems'''
+        try:
+            async with ctx.typing():
+                res = self.wolframclient.query(searchquery)
+            for i in res.results:
+                if i['@title'] == 'Result':
+                    await ctx.send(i['subpod']['img']['@src'])
+        except Exception as e:
+            await ctx.send('Something went wrong. (Math is in beta) '+e)
             
         
 
