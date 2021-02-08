@@ -26,3 +26,14 @@ def output(intentname,slots):
                     name = i['value']['value']
             return 'Hi '+name+'! I\'m Mark!'
         else: return 'I could\'t understand that'
+    
+    if intentname[1] == 'WithTime':
+        if slots != []:
+            timeofday = ''
+            for i in slots:
+                print(i)
+                if i['entity'] == 'TimeOfDay':
+                    timeofday = i['value']['value']
+                    print(i['value'])
+            return 'Good '+timeofday
+        else: return 'I could\'t understand that'

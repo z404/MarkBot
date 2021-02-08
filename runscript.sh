@@ -1,4 +1,4 @@
 pip install -r requirements.txt
-python -m snips_nlu install en
+python -m snips_nlu download en
 clear
-python3 TRIALS/RythmOnSteroids.py
+python3 PROJECT-MARK/Project-Mark-v4.py

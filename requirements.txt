@@ -3,3 +3,4 @@ snips_nlu
 discord
 youtube_dl
 pynacl
+wikipedia
