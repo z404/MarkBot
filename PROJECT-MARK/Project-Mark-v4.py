@@ -53,7 +53,7 @@ class Functionality(commands.Cog):
         except: slot = []
         await ctx.send(IntentAssesment.output(parsing['intent'],slot))
         
-    @commands.command()
+    @commands.command(aliases=['wikipedia'])
     async def wiki(self, ctx: commands.Context, *, searchmsg):
         '''Searches wikipedia and shows a summary of the search term'''
         try:
@@ -362,7 +362,7 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
-    @commands.command(name='leave', aliases=['disconnect'])
+    @commands.command(name='leave', aliases=['disconnect','yeet'])
     @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
         """Clears the queue and leaves the voice channel."""
@@ -374,7 +374,7 @@ class Music(commands.Cog):
         await ctx.send("I've been yeeted :(")
         del self.voice_states[ctx.guild.id]
 
-    @commands.command(name='volume')
+    @commands.command(name='volume', aliases=['vol'])
     async def _volume(self, ctx: commands.Context, *, volume: int):
         """Sets the volume of the player."""
 
@@ -387,7 +387,7 @@ class Music(commands.Cog):
         ctx.voice_state.volume = volume / 100
         await ctx.send('Volume of the player set to {}%'.format(volume))
 
-    @commands.command(name='now', aliases=['current', 'playing'])
+    @commands.command(name='now', aliases=['current', 'playing','np'])
     async def _now(self, ctx: commands.Context):
         """Displays the currently playing song."""
 
@@ -422,7 +422,7 @@ class Music(commands.Cog):
         ctx.voice_state.voice.stop()
         await ctx.message.add_reaction('⏹')
 
-    @commands.command(name='skip')
+    @commands.command(name='skip',aliases['n'])
     async def _skip(self, ctx: commands.Context):
         """Vote to skip a song. The requester can automatically skip.
         3 skip votes are needed for the song to be skipped.
@@ -449,7 +449,7 @@ class Music(commands.Cog):
         #else:
         #   await ctx.send('You have already voted to skip this song.')
 
-    @commands.command(name='queue')
+    @commands.command(name='queue',aliases=['q'])
     async def _queue(self, ctx: commands.Context, *, page: int = 1):
         """Shows the player's queue.
 
@@ -483,7 +483,7 @@ class Music(commands.Cog):
         ctx.voice_state.songs.shuffle()
         await ctx.message.add_reaction('✅')
 
-    @commands.command(name='remove')
+    @commands.command(name='remove',aliases=['r'])
     async def _remove(self, ctx: commands.Context, index: int):
         """Removes a song from the queue at a given index."""
 
@@ -493,7 +493,7 @@ class Music(commands.Cog):
         ctx.voice_state.songs.remove(index - 1)
         await ctx.message.add_reaction('✅')
 
-    @commands.command(name='loop')
+    @commands.command(name='loop',aliases= ['l'])
     async def _loop(self, ctx: commands.Context):
         """Loops the currently playing song.
 
@@ -507,7 +507,7 @@ class Music(commands.Cog):
         ctx.voice_state.loop = not ctx.voice_state.loop
         await ctx.message.add_reaction('✅')
 
-    @commands.command(name='play')
+    @commands.command(name='play',aliases=['p'])
     async def _play(self, ctx: commands.Context, *, search: str):
         """Plays a song.
 
@@ -572,7 +572,7 @@ class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name='changestatus')
+    @commands.command(name='changestatus',aliases=['chst'])
     async def _changestatus(self, ctx: commands.Context, typeofstatus, *message):
         '''Changes the bot\'s status to the given message'''
         message = ' '.join(message)
@@ -590,13 +590,13 @@ class Fun(commands.Cog):
         else:
             await ctx.send('Wrong format! format = <type> <message> <url (for stream)> Choose type from ["playing","watching","listeningto","streaming"]')
 
-    @commands.command()
+    @commands.command(aliases=['l'])
     async def logo(self, ctx: commands.Context):
         '''Displays Project Mark's logo'''
         await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256'+'```')
         await ctx.send(file=discord.File('logo.jpg'))
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"),description='Developed by Wilford Warfstache#0256')
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019')
 
 bot.add_cog(Music(bot))
 bot.add_cog(Fun(bot))
