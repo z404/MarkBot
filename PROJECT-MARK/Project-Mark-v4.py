@@ -602,7 +602,6 @@ class Music(commands.Cog):
                     for i in urllst:
                         source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
                         song = Song(source)
-                        print('work please')
                         await ctx.voice_state.songs.put(song)
                         #break
                 else:
