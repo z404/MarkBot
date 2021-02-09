@@ -5,3 +5,5 @@ youtube_dl
 pynacl
 wikipedia
 wolframalpha
+search-engine-parser
+bs4

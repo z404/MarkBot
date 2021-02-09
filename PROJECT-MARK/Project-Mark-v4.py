@@ -16,6 +16,7 @@ l = '''
 #Importing nessesary packages
 import json
 import os
+import warnings
 #Importing packages required to run NLPU tasks 
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.dataset import dataset
@@ -28,14 +29,22 @@ import functools
 import itertools
 import math
 import random
-import youtube_dl
 from async_timeout import timeout
 from discord.ext import commands
+#Importing packages for music
+import youtube_dl
+#importing package for searching
 import wikipedia
+#importing package for math
 import wolframalpha
+#importing packages for google
+from search_engine_parser import GoogleSearch
+
 
 print(l)
 youtube_dl.utils.bug_reports_message = lambda: ''
+warnings.catch_warnings()
+warnings.simplefilter("ignore")
 
 class Functionality(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -67,6 +76,8 @@ class Functionality(commands.Cog):
                 await ctx.send(summary+'\n\nUrl = `'+str(url)+'`')
         except wikipedia.exceptions.PageError:
             await ctx.send("Could not find a page with that search term")
+        except wikipedia.exceptions.DisambiguationError:
+            await ctx.send("Too many results. Please be more specific")
 
     @commands.command(aliases=['wolfram'])
     async def math(self, ctx: commands.Context, *, searchquery):
@@ -78,9 +89,28 @@ class Functionality(commands.Cog):
                 if i['@title'] == 'Result':
                     await ctx.send(i['subpod']['img']['@src'])
         except Exception as e:
-            await ctx.send('Something went wrong. (Math is in beta) '+e)
-            
-        
+            await ctx.send('Something went wrong. (Math is in beta) '+str(e))
+    
+    @commands.command()
+    async def google(self, ctx: commands.Context, *, searchquery):
+        '''Gives the first 5 results of a google search of the query'''
+        try:
+            gsearch = GoogleSearch()
+            async with ctx.typing():
+                gresults = await gsearch.async_search(searchquery,1)
+            embed = discord.Embed()
+            embed.title = "Search Results for \""+searchquery+"\""
+            descstring = ''
+            count = 0
+            for i in gresults:
+                count+=1
+                if count>5:
+                    break
+                descstring+='\n\n'+str(count)+') ['+i['descriptions']+']('+i['links']+')'
+            embed.description = descstring
+            await ctx.send(embed=embed)
+        except:
+            await ctx.send("Something went wrong")
 
 class VoiceError(Exception):
     pass
@@ -196,7 +226,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         return ', '.join(duration)
 
-
 class Song:
     __slots__ = ('source', 'requester')
 
@@ -215,7 +244,6 @@ class Song:
                  .set_thumbnail(url=self.source.thumbnail))
 
         return embed
-
 
 class SongQueue(asyncio.Queue):
     def __getitem__(self, item):
@@ -238,7 +266,6 @@ class SongQueue(asyncio.Queue):
 
     def remove(self, index: int):
         del self._queue[index]
-
 
 class VoiceState:
     def __init__(self, bot: commands.Bot, ctx: commands.Context):
@@ -319,7 +346,6 @@ class VoiceState:
         if self.voice:
             await self.voice.disconnect()
             self.voice = None
-
 
 class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -565,15 +591,29 @@ class Music(commands.Cog):
                 partial = functools.partial(ytdl.extract_info, search,            download=False, process=False)
                 loop = asyncio.get_event_loop()
                 data = await loop.run_in_executor(None, partial)
-                print(data)
-                source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
+                if 'entries' in list(data.keys()):
+                    video = data['entries']
+                    count = 0
+                    urllst = []
+                    for i in video:
+                        count+=1
+                        urllst.append(i['title'])
+                    await ctx.send('Enqueued '+str(count)+' songs')
+                    for i in urllst:
+                        source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
+                        song = Song(source)
+                        print('work please')
+                        await ctx.voice_state.songs.put(song)
+                        #break
+                else:
+                    source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
+                    song = Song(source)
+
+                    await ctx.voice_state.songs.put(song)
+                    await ctx.send('Enqueued {}'.format(str(source)))
             except YTDLError as e:
                 await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
-            else:
-                song = Song(source)
 
-                await ctx.voice_state.songs.put(song)
-                await ctx.send('Enqueued {}'.format(str(source)))
 
     @_join.before_invoke
     @_play.before_invoke
@@ -585,9 +625,10 @@ class Music(commands.Cog):
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError('Bot is already in a voice channel.')
 
-class Fun(commands.Cog):
+class Misc(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.deletedict = {}
 
     @commands.command(name='changestatus',aliases=['chst'])
     async def _changestatus(self, ctx: commands.Context, typeofstatus, *message):
@@ -610,13 +651,13 @@ class Fun(commands.Cog):
     @commands.command(aliases=['l'])
     async def logo(self, ctx: commands.Context):
         '''Displays Project Mark's logo'''
-        await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256'+'```')
+        await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
         await ctx.send(file=discord.File('logo.jpg'))
-
+    
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019')
 
 bot.add_cog(Music(bot))
-bot.add_cog(Fun(bot))
+bot.add_cog(Misc(bot))
 bot.add_cog(Functionality(bot))
 
 
