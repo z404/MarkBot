@@ -589,14 +589,25 @@ class Music(commands.Cog):
                     spotify = spotipy.Spotify(auth=token)
                     if 'track' in search:
                         features = spotify.track(search)
-                        search_new = features['name']+' '+features['artists'][0]['name']+' audio'
+                        search_new = features['name']+' '+features['artists'][0]['name']
                         source = await YTDLSource.create_source(ctx, search_new, loop=self.bot.loop)
                         song = Song(source)
 
                         await ctx.voice_state.songs.put(song)
                         await ctx.send('Enqueued {}'.format(str(source)))
                     else:
-                        await ctx.send('Playlist')
+                        response = spotify.playlist_items(search)
+                        await ctx.send("Enqueueing "+str(len(response['items']))+" songs. This may take a while..")
+                        for i in response['items']:
+                            try:
+                                search_new = i['track']['name']+' '+i['track']['artists'][0]['name']
+                                source = await YTDLSource.create_source(ctx, search_new, loop=self.bot.loop)
+                                song = Song(source)
+                                await ctx.voice_state.songs.put(song)
+                            except:
+                                continue
+                        await ctx.send("Playlist has been enqueued")
+
                 else:
                     YTDL_OPTIONS = {
                         'format': 'bestaudio/best',
@@ -637,9 +648,12 @@ class Music(commands.Cog):
                             urllst.append(i['title'])
                         await ctx.send('Enqueued '+str(count)+' songs')
                         for i in urllst:
-                            source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
-                            song = Song(source)
-                            await ctx.voice_state.songs.put(song)
+                            try:
+                                source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
+                                song = Song(source)
+                                await ctx.voice_state.songs.put(song)
+                            except:
+                                pass
                             #break
                     else:
                         source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
