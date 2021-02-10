@@ -1,0 +1,10 @@
+# Hardcoded_lol intent
+---
+type: intent
+name: Hardcoded_lol
+utterances:
+  - lol
+  - lmao
+  - laugh out loud
+  - laugh my ass off
+  - XD
