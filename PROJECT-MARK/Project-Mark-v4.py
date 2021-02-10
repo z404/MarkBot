@@ -729,7 +729,9 @@ class Misc(commands.Cog):
         await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
         await ctx.send(file=discord.File('logo.jpg'))
     
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019')
+with open('.prefix') as file:
+    prefix = file.read()
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019')
 
 bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
