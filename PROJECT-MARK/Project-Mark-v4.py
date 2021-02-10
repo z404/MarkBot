@@ -39,6 +39,9 @@ import wikipedia
 import wolframalpha
 #importing packages for google
 from search_engine_parser import GoogleSearch
+#importing packages for spotify
+import spotipy
+import spotipy.oauth2 as oauth2
 
 
 print(l)
@@ -122,7 +125,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     YTDL_OPTIONS = {
         'format': 'bestaudio/best',
         'extractaudio': True,
-        'audioformat': 'mp3',
+        #'audioformat': 'mp3',
         'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
         'restrictfilenames': True,
         'noplaylist': True,
@@ -133,6 +136,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'no_warnings': True,
         'default_search': 'auto',
         'source_address': '0.0.0.0',
+        'postprocessors': [{
+                                'key': 'FFmpegExtractAudio',
+                                'preferredcodec': 'mp3',
+                                'preferredquality': '192',
+                            }],
     }
 
     FFMPEG_OPTIONS = {
@@ -351,6 +359,12 @@ class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.voice_states = {}
+        with open('creds.txt') as file:
+            creds = file.readlines()
+            cli_id = creds[1].rstrip('\n')
+            cli_sec = creds[2].rstrip('\n')
+        self.cli_id = cli_id
+        self.cli_sec = cli_sec
 
     def get_voice_state(self, ctx: commands.Context):
         state = self.voice_states.get(ctx.guild.id)
@@ -566,50 +580,73 @@ class Music(commands.Cog):
 
         async with ctx.typing():
             try:
-                YTDL_OPTIONS = {
-                    'format': 'bestaudio/best',
-                    'extractaudio': True,
-                    'audioformat': 'mp3',
-                    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-                    'restrictfilenames': True,
-                    'noplaylist': True,
-                    'nocheckcertificate': True,
-                    'ignoreerrors': False,
-                    'logtostderr': False,
-                    'quiet': True,
-                    'no_warnings': True,
-                    'default_search': 'auto',
-                    'source_address': '0.0.0.0',
-                }
-
-                FFMPEG_OPTIONS = {
-                    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-                    'options': '-vn',
-                }
-
-                ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS) 
-                partial = functools.partial(ytdl.extract_info, search,            download=False, process=False)
-                loop = asyncio.get_event_loop()
-                data = await loop.run_in_executor(None, partial)
-                if 'entries' in list(data.keys()):
-                    video = data['entries']
-                    count = 0
-                    urllst = []
-                    for i in video:
-                        count+=1
-                        urllst.append(i['title'])
-                    await ctx.send('Enqueued '+str(count)+' songs')
-                    for i in urllst:
-                        source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
+                if 'open.spotify' in search:
+                    auth = oauth2.SpotifyClientCredentials(
+                        client_id=self.cli_id,
+                        client_secret=self.cli_sec
+                    )
+                    token = auth.get_access_token()
+                    spotify = spotipy.Spotify(auth=token)
+                    if 'track' in search:
+                        features = spotify.track(search)
+                        search_new = features['name']+' '+features['artists'][0]['name']+' audio'
+                        source = await YTDLSource.create_source(ctx, search_new, loop=self.bot.loop)
                         song = Song(source)
-                        await ctx.voice_state.songs.put(song)
-                        #break
-                else:
-                    source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
-                    song = Song(source)
 
-                    await ctx.voice_state.songs.put(song)
-                    await ctx.send('Enqueued {}'.format(str(source)))
+                        await ctx.voice_state.songs.put(song)
+                        await ctx.send('Enqueued {}'.format(str(source)))
+                    else:
+                        await ctx.send('Playlist')
+                else:
+                    YTDL_OPTIONS = {
+                        'format': 'bestaudio/best',
+                        'extractaudio': True,
+                        #'audioformat': 'mp3',
+                        'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+                        'restrictfilenames': True,
+                        'noplaylist': True,
+                        'nocheckcertificate': True,
+                        'ignoreerrors': False,
+                        'logtostderr': False,
+                        'quiet': True,
+                        'no_warnings': True,
+                        'default_search': 'auto',
+                        'source_address': '0.0.0.0',
+                        'postprocessors': [{
+                                'key': 'FFmpegExtractAudio',
+                                'preferredcodec': 'mp3',
+                                'preferredquality': '192',
+                            }],
+                    }
+
+                    FFMPEG_OPTIONS = {
+                        'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+                        'options': '-vn',
+                    }
+
+                    ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS) 
+                    partial = functools.partial(ytdl.extract_info, search,            download=False, process=False)
+                    loop = asyncio.get_event_loop()
+                    data = await loop.run_in_executor(None, partial)
+                    if 'entries' in list(data.keys()):
+                        video = data['entries']
+                        count = 0
+                        urllst = []
+                        for i in video:
+                            count+=1
+                            urllst.append(i['title'])
+                        await ctx.send('Enqueued '+str(count)+' songs')
+                        for i in urllst:
+                            source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
+                            song = Song(source)
+                            await ctx.voice_state.songs.put(song)
+                            #break
+                    else:
+                        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
+                        song = Song(source)
+
+                        await ctx.voice_state.songs.put(song)
+                        await ctx.send('Enqueued {}'.format(str(source)))
             except YTDLError as e:
                 await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
 
@@ -657,7 +694,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or("!"),description='D
 
 bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
-bot.add_cog(Functionality(bot))
+#bot.add_cog(Functionality(bot))
 
 
 @bot.event
