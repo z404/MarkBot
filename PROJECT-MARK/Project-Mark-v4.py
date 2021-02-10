@@ -22,6 +22,8 @@ from snips_nlu import SnipsNLUEngine
 from snips_nlu.dataset import dataset
 from snips_nlu.default_configs import CONFIG_EN
 from OUTPUT import IntentAssesment
+#Importing replit database
+from replit import db
 #Importing packages required for discord bot
 import discord
 import asyncio
@@ -357,7 +359,10 @@ class VoiceState:
 
             self.current.source.volume = self._volume
             self.voice.play(self.current.source, after=self.play_next_song)
-            await self.current.source.channel.send(embed=self.current.create_embed())
+            if self.current.source.channel.guild.id in db.keys():
+                pass
+            else:
+                await self.current.source.channel.send(embed=self.current.create_embed())
 
             await self.next.wait()
 
@@ -589,6 +594,16 @@ class Music(commands.Cog):
         ctx.voice_state.loop = not ctx.voice_state.loop
         await ctx.message.add_reaction('✅')
 
+    @commands.command()
+    async def toggleannounce(self, ctx: commands.Context):
+        '''Toggles the announcement of a new song in a server'''
+        if ctx.guild.id not in db.keys():
+            await ctx.send('Announcement of new songs is toggled off')
+            db[ctx.guild.id] = False
+        else:
+            await ctx.send('Announcement of new songs is toggled on')
+            del db[ctx.guild.id]
+        
     @commands.command(name='play',aliases=['p'])
     async def _play(self, ctx: commands.Context, *, search: str):
         """Plays a song.
