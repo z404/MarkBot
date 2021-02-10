@@ -7,3 +7,4 @@ wikipedia
 wolframalpha
 search-engine-parser
 bs4
+spotipy

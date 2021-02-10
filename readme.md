@@ -1,7 +1,6 @@
 # Project-Mark
 ## Version 4.0
 
-## Major framework changes are under way! New framework has been planned!
 ## A functional private Artificial Intelligence built from scratch.
 ## Primarily focused on being a discord bot, so its easier to use
 

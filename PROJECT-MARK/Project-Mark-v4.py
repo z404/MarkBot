@@ -666,6 +666,6 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game('With Myself'))
 
 with open('creds.txt') as file:
-    TOKEN = file.read()
+    TOKEN = file.readlines()[0].rstrip('\n')
 
 bot.run(TOKEN)
