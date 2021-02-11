@@ -17,6 +17,7 @@ l = '''
 import json
 import os
 import warnings
+from random import randint
 #Importing packages required to run NLPU tasks 
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.dataset import dataset
@@ -44,6 +45,10 @@ from search_engine_parser import GoogleSearch
 #importing packages for spotify
 import spotipy
 import spotipy.oauth2 as oauth2
+#importing packages for giphy
+import giphy_client as gc
+from giphy_client.rest import ApiException
+
 
 
 print(l)
@@ -719,6 +724,10 @@ class Misc(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.deletedict = {}
+        with open('creds.txt') as file:
+            apikey = file.readlines()[3].rstrip('\n')
+        self.giphy = gc.DefaultApi()
+        self.giphykey = apikey
 
     @commands.command(name='changestatus',aliases=['chst'])
     async def _changestatus(self, ctx: commands.Context, typeofstatus, *message):
@@ -750,6 +759,16 @@ class Misc(commands.Cog):
         await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
         await ctx.send(file=discord.File('logo.jpg'))
     
+    @commands.command(aliases=['gif','tenor'])
+    async def giphy(self, ctx: commands.Context, *, searchquery):
+        '''Displays a random gif from giphy based on the search query'''
+        try:
+            response = self.giphy.gifs_search_get(self.giphykey,searchquery,limit=1,offset=randint(1,10),fmt='gif')
+            gif_id = response.data[0]
+            await ctx.send(gif_id.images.downsized.url)
+        except ApiException:
+            await ctx.send("Whoops, an error occured!")
+
 with open('.prefix') as file:
     prefix = file.read()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019')

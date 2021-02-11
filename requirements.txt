@@ -8,3 +8,4 @@ wolframalpha
 search-engine-parser
 bs4
 spotipy
+giphy_client
