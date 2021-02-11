@@ -140,7 +140,7 @@ class Functionality(commands.Cog):
             embed.description = descstring
             await ctx.send(embed=embed)
         except:
-            await ctx.send("Something went wrong")
+            await ctx.send("Google wasn't able to find appropriate results for this query")
 
 class VoiceError(Exception):
     pass
