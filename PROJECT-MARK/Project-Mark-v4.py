@@ -722,7 +722,7 @@ class Misc(commands.Cog):
 
     @commands.command(name='changestatus',aliases=['chst'])
     async def _changestatus(self, ctx: commands.Context, typeofstatus, *message):
-        '''Changes the bot\'s status to the given message'''
+        '''Changes the bot\'s status to the given parameters'''
         message = ' '.join(message)
         if typeofstatus.lower() == 'playing':
             await bot.change_presence(activity=discord.Game(message))
@@ -735,8 +735,14 @@ class Misc(commands.Cog):
                 await ctx.send('Please provide a twitch url')
             else:
                 await bot.change_presence(activity=discord.Streaming(name=' '.join(message.split()[:-1]), url=message.split()[-1]))
+        elif typeofstatus.lower() == 'online':
+            await bot.change_presence(status = discord.Status.online)
+        elif typeofstatus.lower() == 'idle':
+            await bot.change_presence(status = discord.Status.idle)
+        elif typeofstatus.lower() == 'dnd':
+            await bot.change_presence(status = discord.Status.dnd)
         else:
-            await ctx.send('Wrong format! format = <type> <message> <url (for stream)> Choose type from ["playing","watching","listeningto","streaming"]')
+            await ctx.send('Wrong format! format = <type> <message> <url (for stream)> Choose type from ["playing","watching","listeningto","streaming"]. You can also set status as ["online","idle","dnd"]')
 
     @commands.command(aliases=['l'])
     async def logo(self, ctx: commands.Context):
