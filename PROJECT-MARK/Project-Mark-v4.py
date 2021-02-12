@@ -771,7 +771,7 @@ class Misc(commands.Cog):
 
 
 ###############################
-class Coder(commands.Cog):
+class Encoder(commands.Cog):
     """Coder"""
 
     def __init__(self, bot):
@@ -782,13 +782,13 @@ class Coder(commands.Cog):
     async def _to(self, ctx):
         """Convert text to a coded something."""
         if not ctx.invoked_subcommand:
-            await send_cmd_help(ctx)
+            await ctx.send('```-to \n\nConvert text to a coded something.\n\nCommands:\n\tbinary   Convert text to binary.\n\tmorse    Convert text to morse.\n\treversed Reverses your text\n\nType -help command for more info on a command.\nYou can also type -help category for more info on a category.```')
 
     @_to.command(pass_context=True, name="binary")
     async def _binary(self, ctx, *, text):
         """Convert text to binary."""
         try:
-            ctx.message.delete()
+            await ctx.message.delete()
         except:
             pass
         alpha_to_binary = {
@@ -810,7 +810,7 @@ class Coder(commands.Cog):
     async def _morse(self, ctx, *, text):
         """Convert text to morse."""
         try:
-            ctx.message.delete()
+            await ctx.message.delete()
         except:
             pass
         alpha_to_morse = {
@@ -831,20 +831,24 @@ class Coder(commands.Cog):
     @_to.command(pass_context=True, name="reversed")
     async def _reversed(self, ctx, *, msg):
         """Reverses your text"""
-        await self.bot.say(msg[::-1])
+        try:
+            await ctx.message.delete()
+        except:
+            pass
+        await ctx.send(msg[::-1])
         
     # from something coded to text
     @commands.group(name="from", pass_context=True)
     async def _from(self, ctx):
         """Convert a coded something to text."""
         if not ctx.invoked_subcommand:
-            await send_cmd_help(ctx)
+            await ctx.send('```-from \n\nConvert a coded something to text.\n\nCommands:\n\tbinary   Convert binary to text.\n\tmorse    Convert morse to text.\n\treversed Unreverses your text\n\nType -help command for more info on a command.\nYou can also type -help category for more info on a category.```')
 
     @_from.command(pass_context=True)
     async def binary(self, ctx, *, binary):
         """Convert binary to text."""
         try:
-            self.bot.delete_message(ctx.message)
+            await ctx.message.delete()
         except:
             pass
         binary = binary.split()
@@ -856,18 +860,18 @@ class Coder(commands.Cog):
         try:
             alpha = [binary_to_alpha[char] for char in binary]
         except KeyError:
-            await self.bot.say("One of the characters you filled in is not in the list.")
+            await ctx.send("One of the characters you filled in is not in the list.")
             return
         except:
-            await self.bot.say("An unknown error occured while translating your text.")
+            await ctx.send("An unknown error occured while translating your text.")
             return
-        await self.bot.say("".join(alpha))
+        await ctx.send(" ".join(alpha))
         
     @_from.command(pass_context=True)
     async def morse(self, ctx, *, morse):
         """Convert morse to text."""
         try:
-            self.bot.delete_message(ctx.message)
+            await ctx.message.delete()
         except:
             pass
         morse = morse.split()
@@ -878,17 +882,21 @@ class Coder(commands.Cog):
         try:
             alpha = [morse_to_alpha[char] for char in morse]
         except KeyError:
-            await self.bot.say("One of the characters you filled in is not in the list.")
+            await ctx.send("One of the characters you filled in is not in the list.")
             return
         except:
-            await self.bot.say("An unknown error occured while translating your text.")
+            await ctx.send("An unknown error occured while translating your text.")
             return
-        await self.bot.say("".join(alpha))
+        await ctx.send("".join(alpha))
         
     @_from.command(pass_context=True)
     async def reversed(self, ctx, *, msg):
         """Unreverses your text"""
-        await self.bot.say(msg[::-1])
+        try:
+            ctx.message.delete()
+        except:
+            pass
+        await ctx.send(msg[::-1])
 ###############################
 with open('.prefix') as file:
     prefix = file.read()
@@ -897,7 +905,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description
 bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
 bot.add_cog(Functionality(bot))
-bot.add_cog(Coder(bot))
+bot.add_cog(Encoder(bot))
 
 
 @bot.event
