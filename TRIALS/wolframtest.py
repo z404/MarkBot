@@ -14,7 +14,8 @@ l = '''
              ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 '''
 import wolframalpha
-app_id = 'ELG889-LP97GKQKJ9'
+with open('creds.txt') as file:
+    app_id = file.readlines()[4].rstrip('\n')
 client = wolframalpha.Client(app_id)
 res = client.query('who is markiplier')
 

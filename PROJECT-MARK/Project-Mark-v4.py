@@ -64,7 +64,8 @@ class Functionality(commands.Cog):
         data = dataset.Dataset.from_yaml_files('en',['./PROJECT-MARK/TRAIN/'+i for i in os.listdir('./PROJECT-MARK/TRAIN') if '.yaml' in i])
         engine.fit(data)
         self.engine = engine
-        app_id = 'ELG889-LP97GKQKJ9'
+        with open('creds.txt') as file:
+            app_id = file.readlines()[4].rstrip('\n')
         client = wolframalpha.Client(app_id)
         self.wolframclient = client
 
@@ -909,7 +910,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description
 
 bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
-#bot.add_cog(Functionality(bot))
+bot.add_cog(Functionality(bot))
 bot.add_cog(Encoder(bot))
 
 
