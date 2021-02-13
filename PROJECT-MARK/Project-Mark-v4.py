@@ -768,11 +768,16 @@ class Misc(commands.Cog):
             await ctx.send(gif_id.images.downsized.url)
         except ApiException:
             await ctx.send("Whoops, an error occured!")
+    
+    @commands.command(aliases=['inv'])
+    async def invite(self, ctx: commands.Context):
+        embedVar = discord.Embed(title="Invite MarkBot to your server!", description="MarkBot is a project that is being worked on since April 19th, 2019. It was developed by [Anish R](https://github.com/z404). Feel free to fork the bot, and send pull requests if you've made any good changes. If you're interested in discussing future features to this bot, dm <@353835291053785088> to discuss it further", color=0x00ff00)
+        embedVar.add_field(name="Invite Markbot", value = '[Click here to invite MarkBot](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=8&scope=bot)\n',inline=False)
+        embedVar.add_field(name="Invite MarkBot Beta", value="[Click here to invite MarkBot Beta](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot)\nMarkBot Beta is an unstable release, and will not be online at all times, but will have experimental features that aren't present in MarkBot", inline=False)
+        embedVar.set_image(url='https://t4.ftcdn.net/jpg/03/75/38/73/360_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg')
+        await ctx.send(embed=embedVar)
 
-
-###############################
 class Encoder(commands.Cog):
-    """Coder"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -804,7 +809,7 @@ class Encoder(commands.Cog):
         except:
             await ctx.send("An unknown error occured while translating your text.")
             return
-        await ctx.send(" ".join(binary))
+        await ctx.send("<@"+str(ctx.author.id)+"> Said:\n```fix\n"+" ".join(binary)+"```")
 
     @_to.command(pass_context=True, name="morse")
     async def _morse(self, ctx, *, text):
@@ -826,7 +831,7 @@ class Encoder(commands.Cog):
         except:
             await ctx.send("An unknown error occured while translating your text.")
             return
-        await ctx.send(" ".join(morse))
+        await ctx.send("<@"+str(ctx.author.id)+"> Said:\n```fix\n"+" ".join(morse)+'```')
         
     @_to.command(pass_context=True, name="reversed")
     async def _reversed(self, ctx, *, msg):
@@ -835,7 +840,7 @@ class Encoder(commands.Cog):
             await ctx.message.delete()
         except:
             pass
-        await ctx.send(msg[::-1])
+        await ctx.send("<@"+str(ctx.author.id)+"> Said:\n```fix\n"+msg[::-1]+'```')
         
     # from something coded to text
     @commands.group(name="from", pass_context=True)
@@ -865,7 +870,7 @@ class Encoder(commands.Cog):
         except:
             await ctx.send("An unknown error occured while translating your text.")
             return
-        await ctx.send(" ".join(alpha))
+        await ctx.send("<@"+str(ctx.author.id)+"> Converted binary to text:\n```fix\n"+" ".join(alpha)+'```')
         
     @_from.command(pass_context=True)
     async def morse(self, ctx, *, morse):
@@ -887,7 +892,7 @@ class Encoder(commands.Cog):
         except:
             await ctx.send("An unknown error occured while translating your text.")
             return
-        await ctx.send("".join(alpha))
+        await ctx.send("<@"+str(ctx.author.id)+"> Converted Morse to text:\n```fix\n"+"".join(alpha)+'```')
         
     @_from.command(pass_context=True)
     async def reversed(self, ctx, *, msg):
@@ -896,22 +901,22 @@ class Encoder(commands.Cog):
             ctx.message.delete()
         except:
             pass
-        await ctx.send(msg[::-1])
-###############################
+        await ctx.send("<@"+str(ctx.author.id)+"> Unreversed the message to:\n```fix\n"+msg[::-1]+'```')
+
 with open('.prefix') as file:
     prefix = file.read()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019')
 
 bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
-bot.add_cog(Functionality(bot))
+#bot.add_cog(Functionality(bot))
 bot.add_cog(Encoder(bot))
 
 
 @bot.event
 async def on_ready():
     print('Bot is online')
-    await bot.change_presence(activity=discord.Game('With Myself'))
+    await bot.change_presence(activity=discord.Game('with Life\'s decisions'))
 
 with open('creds.txt') as file:
     TOKEN = file.readlines()[0].rstrip('\n')
