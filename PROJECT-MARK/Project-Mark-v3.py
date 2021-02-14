@@ -73,3 +73,7 @@ while True:
         if a == 'quit':
             break
         print(INPUT(a))
+
+
+#Discontinued
+#Discord module implemented in v4. Firebase is abandonded for now
