@@ -401,6 +401,7 @@ class VoiceState:
 
 class Music(commands.Cog):
 
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.voice_states = {}
         with open('creds.txt') as file:
@@ -789,6 +790,9 @@ class Misc(commands.Cog):
         await ctx.send(embed=embedVar)
 
 class Encoder(commands.Cog):
+            
+    def __init__(self, bot):
+        self.bot = bot
 
     # from text to something coded
     @commands.group(name="to", pass_context=True)
