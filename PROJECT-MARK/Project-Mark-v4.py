@@ -401,14 +401,6 @@ class VoiceState:
 
 class Music(commands.Cog):
 
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        try:
-            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
-        except AttributeError:
-            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
-
-    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.voice_states = {}
         with open('creds.txt') as file:
@@ -739,13 +731,6 @@ class Music(commands.Cog):
 
 class Misc(commands.Cog):
 
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        try:
-            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
-        except AttributeError:
-            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.deletedict = {}
@@ -804,16 +789,6 @@ class Misc(commands.Cog):
         await ctx.send(embed=embedVar)
 
 class Encoder(commands.Cog):
-
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        try:
-            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
-        except AttributeError:
-            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
-            
-    def __init__(self, bot):
-        self.bot = bot
 
     # from text to something coded
     @commands.group(name="to", pass_context=True)
