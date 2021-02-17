@@ -57,6 +57,14 @@ warnings.catch_warnings()
 warnings.simplefilter("ignore")
 
 class Functionality(commands.Cog):
+
+    @commands.Cog.listener()
+    async def on_command(self, ctx):
+        try:
+            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+        except AttributeError:
+            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         print('Initializing NLPU')
@@ -392,6 +400,14 @@ class VoiceState:
             self.voice = None
 
 class Music(commands.Cog):
+
+    @commands.Cog.listener()
+    async def on_command(self, ctx):
+        try:
+            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+        except AttributeError:
+            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.voice_states = {}
@@ -722,6 +738,14 @@ class Music(commands.Cog):
                 raise commands.CommandError('Bot is already in a voice channel.')
 
 class Misc(commands.Cog):
+
+    @commands.Cog.listener()
+    async def on_command(self, ctx):
+        try:
+            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+        except AttributeError:
+            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.deletedict = {}
@@ -772,6 +796,7 @@ class Misc(commands.Cog):
     
     @commands.command(aliases=['inv'])
     async def invite(self, ctx: commands.Context):
+        '''Invite the bot to your server!'''
         embedVar = discord.Embed(title="Invite MarkBot to your server!", description="MarkBot is a project that is being worked on since April 19th, 2019. It was developed by [Anish R](https://github.com/z404). Feel free to fork the bot, and send pull requests if you've made any good changes. If you're interested in discussing future features to this bot, dm <@353835291053785088> to discuss it further", color=0x00ff00)
         embedVar.add_field(name="Invite Markbot", value = '[Click here to invite MarkBot](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=8&scope=bot)\n',inline=False)
         embedVar.add_field(name="Invite MarkBot Beta", value="[Click here to invite MarkBot Beta](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot)\nMarkBot Beta is an unstable release, and will not be online at all times, but will have experimental features that aren't present in MarkBot", inline=False)
@@ -780,6 +805,13 @@ class Misc(commands.Cog):
 
 class Encoder(commands.Cog):
 
+    @commands.Cog.listener()
+    async def on_command(self, ctx):
+        try:
+            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+        except AttributeError:
+            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+            
     def __init__(self, bot):
         self.bot = bot
 
