@@ -16,3 +16,5 @@ try:
     print(gif_id.images.downsized.url)
 except ApiException:
     print("Exception when calling DefaultApi->gifs_search_get: %s\n" % e)
+
+#Recieved an email saying that the giphy api key used is the beta key. This needs to be changed to the actual key

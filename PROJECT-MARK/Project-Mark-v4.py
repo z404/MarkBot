@@ -50,7 +50,6 @@ import giphy_client as gc
 from giphy_client.rest import ApiException
 
 
-
 print(l)
 youtube_dl.utils.bug_reports_message = lambda: ''
 warnings.catch_warnings()
