@@ -49,7 +49,7 @@ To make your own bot with this source code, you will have to follow these instru
     
   - **Step 9: Keeping your bot always on**
       - Follow the guide given [here](https://repl.it/talk/learn/Hosting-discordpy-bots-with-replit/11008)
-
+<!---
 ## Info
 ### Basic functions to be added:
 - [ ] Natural Language Processor ---In Development
@@ -62,4 +62,4 @@ To make your own bot with this source code, you will have to follow these instru
 ### Functions as a discord bot:
 - [x] Music bot
 
-#### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations
+#### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations --->
