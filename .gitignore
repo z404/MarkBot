@@ -3,4 +3,3 @@ logfile_spotify_scraper.log
 cache
 .prefix
 *.pyc
-creds.py
