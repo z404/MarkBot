@@ -129,9 +129,23 @@ class Functionality(commands.Cog):
         try:
             async with ctx.typing():
                 res = self.wolframclient.query(searchquery)
-            for i in res.results:
-                if i['@title'] == 'Result':
-                    await ctx.send(i['subpod']['img']['@src'])
+            for i in res:
+                #if i['@title'] == 'Result':
+                #    await ctx.send(i['subpod']['img']['@src'])
+                embed = discord.Embed()
+                if i['@title'] == 'Input interpretation' or i['@title'] == 'Input':
+                    embed.title = 'Input Interpretation:'
+                    embed.set_image(url=i['subpod']['img']['@src'])
+                    await ctx.send(embed=embed)
+                elif i['@title'] == 'Result' or i['@title'] == 'Implicit plot' or i['@title'] == 'Plots':
+                    try:
+                        embed.title = 'Result'
+                        embed.set_image(url=i['subpod']['img']['@src'])
+                        await ctx.send(embed=embed)
+                    except:
+                        embed.title = 'Result'
+                        embed.set_image(url=i['subpod'][0]['img']['@src'])
+                        await ctx.send(embed=embed)
         except Exception as e:
             await ctx.send('Something went wrong. (Math is in beta) '+str(e))
     
