@@ -48,6 +48,8 @@ import spotipy.oauth2 as oauth2
 #importing packages for giphy
 import giphy_client as gc
 from giphy_client.rest import ApiException
+#import packages for currency conversion
+from currency_converter import CurrencyConverter
 
 
 
@@ -137,7 +139,7 @@ class Functionality(commands.Cog):
                     embed.title = 'Input Interpretation:'
                     embed.set_image(url=i['subpod']['img']['@src'])
                     await ctx.send(embed=embed)
-                elif i['@title'] == 'Result' or i['@title'] == 'Implicit plot' or i['@title'] == 'Plots':
+                elif i['@title'] == 'Result' or i['@title'] == 'Implicit plot' or i['@title'] == 'Plots' or i['@title'] == 'Surface plot' or i['@title'] == 'Volume of solid':
                     try:
                         embed.title = 'Result'
                         embed.set_image(url=i['subpod']['img']['@src'])
@@ -169,6 +171,16 @@ class Functionality(commands.Cog):
             await ctx.send(embed=embed)
         except:
             await ctx.send("Google wasn't able to find appropriate results for this query")
+
+    @commands.command(name='currency_converter',aliases=['currconv'])
+    async def _currency_converter(self, ctx: commands.Context, value: int, frm: str, to: str):
+        '''Converts currency from one unit to another'''
+        c = CurrencyConverter()
+        try:
+            newvalue = c.convert(value, frm.upper(), to.upper())
+            await ctx.send(str(value)+' '+frm.upper()+' is equal to '+str(newvalue)+' '+to.upper())
+        except Exception as e:
+            await ctx.send("An Error occured: "+str(e))
 
 class VoiceError(Exception):
     pass
