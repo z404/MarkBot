@@ -106,24 +106,6 @@ class Functionality(commands.Cog):
             await ctx.send("Could not find a page with that search term")
         except wikipedia.exceptions.DisambiguationError:
             await ctx.send("Too many results. Please be more specific")
-        
-        #tos = searchmsg
-        #async with ctx.typing():
-        #    tosearch = wikipedia.suggest(tos)
-        #if tosearch != None:
-        #    embed = discord.Embed(title = tosearch[0].capitalize(), description = wikipedia.summary(tosearch[0], sentences = 5), color = 0x0c3c96)
-        #    embed.set_footer(text = '\nView more on this topic: {}'.format(wikipedia.page(tosearch[0]).url))
-        #    if wikipedia.page(tosearch[0]).images != None:
-        #        embed.set_image(url = wikipedia.page(tosearch[0]).images[0])
-        #    await ctx.send(content = None, embed = embed)
-        #if tosearch == None:
-        #    embed = discord.Embed(title = tos.capitalize(), description = wikipedia.summary(tos, sentences = 5), color = 0x0c3c96)
-        #    embed.description = embed.description+'\n[View more on this topic]('+str(wikipedia.page(tos).url)+')'
-        #    if wikipedia.page(tos).images != None:
-        #        embed.set_image(url = wikipedia.page(tos).images[0])
-        #    await ctx.send(content = None, embed = embed)
-        #else:
-        #    await ctx.send("`No suggestions were found for the object you queried.`")
 
     @commands.command(aliases=['wolfram'])
     async def math(self, ctx: commands.Context, *, searchquery):
