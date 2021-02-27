@@ -61,5 +61,7 @@ To make your own bot with this source code, you will have to follow these instru
   
 ### Functions as a discord bot:
 - [x] Music bot
+- [x] Currency conversion bot
+- [x] Converstion to and from binary or morse code
 
 #### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations --->
