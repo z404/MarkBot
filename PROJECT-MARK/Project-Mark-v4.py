@@ -17,7 +17,7 @@ l = '''
 import json
 import os
 import warnings
-from random import randint
+from random import randint, choice
 #Importing packages required to run NLPU tasks 
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.dataset import dataset
@@ -381,7 +381,7 @@ class VoiceState:
 
             self.current.source.volume = self._volume
             self.voice.play(self.current.source, after=self.play_next_song)
-            if self.current.source.channel.guild.id in db.keys():
+            if (self.current.source.channel.guild.id + 'announce') in db.keys():
                 pass
             else:
                 await self.current.source.channel.send(embed=self.current.create_embed())
@@ -617,16 +617,35 @@ class Music(commands.Cog):
         ctx.voice_state.loop = not ctx.voice_state.loop
         await ctx.message.add_reaction('✅')
 
+    # @commands.command()
+    # async def toggleannounce(self, ctx: commands.Context):
+    #     '''Toggles the announcement of a new song in a server'''
+    #     if ctx.guild.id not in db.keys():
+    #         await ctx.send('Announcement of new songs is toggled off')
+    #         db[ctx.guild.id] = True
+    #     else:
+    #         await ctx.send('Announcement of new songs is toggled on')
+    #         del db[ctx.guild.id]
     @commands.command()
     async def toggleannounce(self, ctx: commands.Context):
         '''Toggles the announcement of a new song in a server'''
-        if ctx.guild.id not in db.keys():
+        if (str(ctx.guild.id) + 'announce') not in db.keys():
             await ctx.send('Announcement of new songs is toggled off')
-            db[ctx.guild.id] = False
+            db[str(ctx.guild.id) + 'announce'] = True
         else:
             await ctx.send('Announcement of new songs is toggled on')
-            del db[ctx.guild.id]
-        
+            del db[str(ctx.guild.id) + 'announce']
+    
+    @commands.command()
+    async def toggleyenglis(self, ctx: commands.Context):
+        '''Translates English to Yenglis'''
+        if (str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis') not in db.keys():
+            await ctx.send('Translation is toggled on')
+            db[str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis'] = True
+        else:
+            await ctx.send('Translation is toggled off')
+            del db[str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis']
+
     @commands.command(name='play',aliases=['p'])
     async def _play(self, ctx: commands.Context, *, search: str):
         """Plays a song.
@@ -771,6 +790,11 @@ class Misc(commands.Cog):
             await bot.change_presence(status = discord.Status.dnd)
         else:
             await ctx.send('Wrong format! format = <type> <message> <url (for stream)> Choose type from ["playing","watching","listeningto","streaming"]. You can also set status as ["online","idle","dnd"]')
+
+    @commands.command()
+    async def yenglis(self, ctx: commands.Context, *message):
+        msg = " ".join(message)
+        await ctx.message.channel.send(basicshout(use_rules(replace_words(msg))))
 
     @commands.command(aliases=['l'])
     async def logo(self, ctx: commands.Context):
@@ -932,6 +956,64 @@ bot.add_cog(Misc(bot))
 bot.add_cog(Functionality(bot))
 bot.add_cog(Encoder(bot))
 
+def basicshout(input):
+    return input[0].lower()+input[1:].upper()
+
+def replace_words(inp):
+    if inp[:4].lower() == 'what': inp+= ' ma'
+    inp = ' ' + inp.lower() + ' '
+    word_dict = {
+        # ' fuck': [' fugg'],
+        ' goodnight ': [' goodnite ', ' nitenite '],
+        ' i dont ': [' ion '],
+        ' want to ': [' wanna '],
+        ' ion wanna ': [' ionwanna '],
+        ' gonna ': [' gon '],
+        ' discrete ': [' discreet '],
+        ' english ': [' yenglis '],
+        ' yes ': [' yee ', ' ye '],
+        ' oh no ':[' wohno ', ' wono '],
+        ' peace ': [' pspice '],
+        ' lol ': [' lel ', ' xDD ', ' lmaoo ',' xDDD '], #can add more later
+        ' if ': [' yif '],
+        ' study ': [' stedy '],
+        ' i am ': [' i iz '],
+        ' im ': [' i iz '],
+        ' is ': [' iz ']
+    }
+    for x, y in word_dict.items():
+        inp = inp.replace(x,choice(y))
+    return inp.strip()
+
+def use_rules(inp):
+    inp = ' ' + inp.lower() + ' '
+    rules = {
+        'ing ': ['in '],
+        'ck': ['cc' , 'gg'],
+        'sh ': ['s '],
+        ' s': [' sh'],
+        ' shh': [' sh'],
+        ' e': [' ye'],
+        'k': ['g'],
+        'me ': ['m '],
+        ' m ': [' me '],
+        ' aw': [' wo'],
+        # ' a': [' ye'],
+        ' yere ': [' are '],
+        'y ': ['i '],
+        ' qu': [' qw'],
+    }
+    for x, y in rules.items():
+        
+        inp = inp.replace(x,choice(y))
+    return inp.strip()
+
+@bot.event
+async def on_message(message):
+    msg = str(message.content)
+    if (str(message.channel.id)+str(message.guild.id) + "yenglis") in db.keys() and not message.author.bot and message.content[0] != prefix:
+        await message.channel.send(basicshout(use_rules(replace_words(msg))))
+    else: await bot.process_commands(message)
 
 @bot.event
 async def on_ready():
