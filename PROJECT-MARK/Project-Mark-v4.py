@@ -76,10 +76,11 @@ class Functionality(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
+        logchannel = bot.get_channel(844599292442181653)
         try:
-            print(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+            await logchannel.send(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
         except AttributeError:
-            print(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+            await logchannel.send(f"Private message > {ctx.author} > {ctx.message.clean_content}")
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
