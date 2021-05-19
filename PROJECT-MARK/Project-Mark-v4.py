@@ -64,8 +64,9 @@ class AdminControls(commands.Cog):
 
     @commands.command(pass_context = True)
     @commands.has_permissions(administrator=True)
-    async def changenick(self, ctx: commands.Context, member, newnick):
+    async def changenick(self, ctx: commands.Context, member, *newnick):
         '''Changes nickname of any user, if the user is below the bot and if sender has admin perms'''
+        newnick = " ".join(list(newnick))
         await ctx.message.delete()
         if '<' in member:
             member = ctx.message.guild.get_member(int(member.strip('<@!>')))
