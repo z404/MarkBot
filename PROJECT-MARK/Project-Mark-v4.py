@@ -64,14 +64,18 @@ class AdminControls(commands.Cog):
 
     @commands.command(pass_context = True)
     @commands.has_permissions(administrator=True)
-    async def changenick(self, ctx: commands.Context, member: discord.User, newnick):
+    async def changenick(self, ctx: commands.Context, member, newnick):
         '''Changes nickname of any user, if the user is below the bot and if sender has admin perms'''
         await ctx.message.delete()
+        if '<' in member:
+            member = ctx.message.guild.get_member(int(member.strip('<@!>')))
+        else: member = ctx.message.guild.get_member(int(member))
         await member.edit(nick=newnick)
 
     @changenick.error
     async def changenick_error(self, ctx, error):
-        await ctx.send("You don't have permission to do that mate")
+        if "permission" in str(error):
+            await ctx.send("You don't have permission to do that mate")
 
 class Functionality(commands.Cog):
 
@@ -965,11 +969,14 @@ class Encoder(commands.Cog):
 
 with open('.prefix') as file:
     prefix = file.read()
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019')
+
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019', intents=intents)
 
 bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
-bot.add_cog(Functionality(bot))
+# bot.add_cog(Functionality(bot))
 bot.add_cog(Encoder(bot))
 bot.add_cog(AdminControls(bot))
 
