@@ -58,6 +58,16 @@ youtube_dl.utils.bug_reports_message = lambda: ''
 warnings.catch_warnings()
 warnings.simplefilter("ignore")
 
+class AdminControls(commands.Cog):
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+
+    @commands.command(pass_context = True)
+    @commands.has_permissions(administrator=True)
+    async def changenick(self, ctx: commands.Context, member: discord.User, newnick):
+        print(member)
+        await member.edit(nick=newnick)
+
 class Functionality(commands.Cog):
 
     @commands.Cog.listener()
@@ -955,6 +965,7 @@ bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
 bot.add_cog(Functionality(bot))
 bot.add_cog(Encoder(bot))
+bot.add_cog(AdminControls(bot))
 
 def basicshout(input):
     return input[0].lower()+input[1:].upper()
