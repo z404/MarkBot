@@ -66,6 +66,7 @@ class AdminControls(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def changenick(self, ctx: commands.Context, member: discord.User, newnick):
         '''Changes nickname of any user, if the user is below the bot and if sender has admin perms'''
+        await ctx.message.delete()
         await member.edit(nick=newnick)
 
     @changenick.error
