@@ -976,7 +976,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description
 
 bot.add_cog(Music(bot))
 bot.add_cog(Misc(bot))
-# bot.add_cog(Functionality(bot))
+bot.add_cog(Functionality(bot))
 bot.add_cog(Encoder(bot))
 bot.add_cog(AdminControls(bot))
 
