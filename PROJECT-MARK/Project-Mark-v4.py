@@ -788,6 +788,16 @@ class Misc(commands.Cog):
             await ctx.send('Wrong format! format = <type> <message> <url (for stream)> Choose type from ["playing","watching","listeningto","streaming"]. You can also set status as ["online","idle","dnd"]')
 
     @commands.command()
+    async def toggleyenglis(self, ctx: commands.Context):
+        '''Translates English to Yenglis'''
+        if (str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis') not in db.keys():
+            await ctx.send('Translation is toggled on')
+            db[str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis'] = True
+        else:
+            await ctx.send('Translation is toggled off')
+            del db[str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis']
+
+    @commands.command()
     async def yenglis(self, ctx: commands.Context, *message):
         msg = " ".join(message)
         await ctx.message.channel.send(basicshout(use_rules(replace_words(msg))))
@@ -951,10 +961,10 @@ intents.members = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019', intents=intents)
 
 bot.add_cog(Music(bot))
-# bot.add_cog(Misc(bot))
-# bot.add_cog(Functionality(bot))
-# bot.add_cog(Encoder(bot))
-# bot.add_cog(AdminControls(bot))
+bot.add_cog(Misc(bot))
+bot.add_cog(Functionality(bot))
+bot.add_cog(Encoder(bot))
+bot.add_cog(AdminControls(bot))
 
 def basicshout(input):
     return input[0].lower()+input[1:].upper()
