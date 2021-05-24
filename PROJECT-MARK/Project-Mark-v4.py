@@ -402,7 +402,7 @@ class VoiceState:
 
             self.current.source.volume = self._volume
             self.voice.play(self.current.source, after=self.play_next_song)
-            if (self.current.source.channel.guild.id + 'announce') in db.keys():
+            if self.current.source.channel.guild.id in db.keys():
                 pass
             else:
                 await self.current.source.channel.send(embed=self.current.create_embed())
@@ -429,7 +429,6 @@ class VoiceState:
             self.voice = None
 
 class Music(commands.Cog):
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.voice_states = {}
@@ -479,7 +478,6 @@ class Music(commands.Cog):
     @commands.has_permissions(manage_guild=True)
     async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
         """Summons the bot to a voice channel.
-
         If no channel was specified, it joins your channel.
         """
 
@@ -494,7 +492,7 @@ class Music(commands.Cog):
         ctx.voice_state.voice = await destination.connect()
 
     @commands.command(name='leave', aliases=['disconnect','yeet'])
-    #@commands.has_permissions(manage_guild=True)
+    @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
         """Clears the queue and leaves the voice channel."""
 
@@ -525,7 +523,7 @@ class Music(commands.Cog):
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
     @commands.command(name='pause')
-    #@commands.has_permissions(manage_guild=True)
+    @commands.has_permissions(manage_guild=True)
     async def _pause(self, ctx: commands.Context):
         """Pauses the currently playing song."""
 
@@ -534,7 +532,7 @@ class Music(commands.Cog):
         await ctx.message.add_reaction('⏯')
 
     @commands.command(name='resume')
-    #@commands.has_permissions(manage_guild=True)
+    @commands.has_permissions(manage_guild=True)
     async def _resume(self, ctx: commands.Context):
         """Resumes a currently paused song."""
 
@@ -543,7 +541,7 @@ class Music(commands.Cog):
         await ctx.message.add_reaction('⏯')
 
     @commands.command(name='stop')
-    #@commands.has_permissions(manage_guild=True)
+    @commands.has_permissions(manage_guild=True)
     async def _stop(self, ctx: commands.Context):
         """Stops playing song and clears the queue."""
 
@@ -583,7 +581,6 @@ class Music(commands.Cog):
     @commands.command(name='queue',aliases=['q'])
     async def _queue(self, ctx: commands.Context, *, page: int = 1):
         """Shows the player's queue.
-
         You can optionally specify the page to show. Each page contains 10 elements.
         """
 
@@ -627,7 +624,6 @@ class Music(commands.Cog):
     @commands.command(name='loop')
     async def _loop(self, ctx: commands.Context):
         """Loops the currently playing song.
-
         Invoke this command again to unloop the song.
         """
 
@@ -638,42 +634,21 @@ class Music(commands.Cog):
         ctx.voice_state.loop = not ctx.voice_state.loop
         await ctx.message.add_reaction('✅')
 
-    # @commands.command()
-    # async def toggleannounce(self, ctx: commands.Context):
-    #     '''Toggles the announcement of a new song in a server'''
-    #     if ctx.guild.id not in db.keys():
-    #         await ctx.send('Announcement of new songs is toggled off')
-    #         db[ctx.guild.id] = True
-    #     else:
-    #         await ctx.send('Announcement of new songs is toggled on')
-    #         del db[ctx.guild.id]
     @commands.command()
     async def toggleannounce(self, ctx: commands.Context):
         '''Toggles the announcement of a new song in a server'''
-        if (str(ctx.guild.id) + 'announce') not in db.keys():
+        if ctx.guild.id not in db.keys():
             await ctx.send('Announcement of new songs is toggled off')
-            db[str(ctx.guild.id) + 'announce'] = True
+            db[ctx.guild.id] = False
         else:
             await ctx.send('Announcement of new songs is toggled on')
-            del db[str(ctx.guild.id) + 'announce']
-    
-    @commands.command()
-    async def toggleyenglis(self, ctx: commands.Context):
-        '''Translates English to Yenglis'''
-        if (str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis') not in db.keys():
-            await ctx.send('Translation is toggled on')
-            db[str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis'] = True
-        else:
-            await ctx.send('Translation is toggled off')
-            del db[str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis']
-
+            del db[ctx.guild.id]
+        
     @commands.command(name='play',aliases=['p'])
     async def _play(self, ctx: commands.Context, *, search: str):
         """Plays a song.
-
         If there are songs in the queue, this will be queued until the
         other songs finished playing.
-
         This command automatically searches from various sites if no URL is provided.
         A list of these sites can be found here: https://rg3.github.io/youtube-dl/supportedsites.html
         """
@@ -976,10 +951,10 @@ intents.members = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix),description='Developed by Wilford Warfstache#0256, started on April 16th, 2019', intents=intents)
 
 bot.add_cog(Music(bot))
-bot.add_cog(Misc(bot))
-bot.add_cog(Functionality(bot))
-bot.add_cog(Encoder(bot))
-bot.add_cog(AdminControls(bot))
+# bot.add_cog(Misc(bot))
+# bot.add_cog(Functionality(bot))
+# bot.add_cog(Encoder(bot))
+# bot.add_cog(AdminControls(bot))
 
 def basicshout(input):
     return input[0].lower()+input[1:].upper()
