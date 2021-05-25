@@ -670,7 +670,7 @@ class Music(commands.Cog):
                         client_id=self.cli_id,
                         client_secret=self.cli_sec
                     )
-                    token = auth.get_access_token()
+                    token = auth.get_access_token(as_dict=False)
                     spotify = spotipy.Spotify(auth=token)
                     if 'track' in search:
                         features = spotify.track(search)
