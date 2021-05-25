@@ -102,7 +102,7 @@ class Functionality(commands.Cog):
         engine.fit(data)
         self.engine = engine
         with open('creds.txt') as file:
-            app_id = file.readlines()[4].rstrip('\n')
+            app_id = file.readlines()[4].strip().rstrip('\n ')
         client = wolframalpha.Client(app_id)
         self.wolframclient = client
 
@@ -440,8 +440,9 @@ class Music(commands.Cog):
         self.voice_states = {}
         with open('creds.txt') as file:
             creds = file.readlines()
-            cli_id = creds[1].rstrip('\n')
-            cli_sec = creds[2].rstrip('\n')
+            cli_id = creds[1].strip().rstrip('\n ')
+            cli_sec = creds[2].rstrip().rstrip('\n ')
+            print(creds, cli_id, cli_sec)
         self.cli_id = cli_id
         self.cli_sec = cli_sec
 
@@ -765,7 +766,7 @@ class Misc(commands.Cog):
         self.bot = bot
         self.deletedict = {}
         with open('creds.txt') as file:
-            apikey = file.readlines()[3].rstrip('\n')
+            apikey = file.readlines()[3].strip().rstrip('\n ')
         self.giphy = gc.DefaultApi()
         self.giphykey = apikey
 
@@ -960,7 +961,7 @@ class Encoder(commands.Cog):
         await ctx.send("<@"+str(ctx.author.id)+"> Unreversed the message to:\n```fix\n"+msg[::-1]+'```')
 
 with open('.prefix') as file:
-    prefix = file.read()
+    prefix = file.read().rstrip('\n ')
 
 intents = discord.Intents.default()
 intents.members = True
@@ -1037,6 +1038,6 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game('with Life\'s decisions'))
 
 with open('creds.txt') as file:
-    TOKEN = file.readlines()[0].rstrip('\n')
+    TOKEN = file.readlines()[0].strip().rstrip('\n ')
 
 bot.run(TOKEN)
