@@ -24,7 +24,10 @@ from snips_nlu.dataset import dataset
 from snips_nlu.default_configs import CONFIG_EN
 from OUTPUT import IntentAssesment
 #Importing replit database
-from replit import db
+try:
+    from replit import db
+except:
+    db={}
 #Importing packages required for discord bot
 import discord
 import asyncio
@@ -41,7 +44,10 @@ import wikipedia
 #importing package for math
 import wolframalpha
 #importing packages for google
-from search_engine_parser import GoogleSearch
+try:
+    from search_engine_parser import GoogleSearch
+except:
+    pass
 #importing packages for spotify
 import spotipy
 import spotipy.oauth2 as oauth2
