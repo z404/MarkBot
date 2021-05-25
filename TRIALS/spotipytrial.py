@@ -11,7 +11,7 @@ auth = oauth2.SpotifyClientCredentials(
     client_secret=cli_sec
 )
 
-token = auth.get_access_token()
+token = auth.get_access_token(as_dict=False)
 spotify = spotipy.Spotify(auth=token)
 
 features = spotify.track('https://open.spotify.com/track/1tm4Bl2E5RwTevOiBs4gtH?si=X7KuHtN6TQ6lZ15ijB4v4A')
