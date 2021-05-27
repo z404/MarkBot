@@ -84,6 +84,13 @@ class AdminControls(commands.Cog):
         if "permission" in str(error):
             await ctx.send("You don't have permission to do that mate")
 
+    @commands.command()
+    @commands.is_owner()
+    async def terminate(self, ctx: commands.Context):
+        if ctx.message.author.id == 353835291053785088:
+            await ctx.send("It's getting dark.. Maybe I'll take a little nap..")
+            await bot.close()
+
 class Functionality(commands.Cog):
 
     @commands.Cog.listener()
@@ -442,7 +449,6 @@ class Music(commands.Cog):
             creds = file.readlines()
             cli_id = creds[1].strip().rstrip('\n ')
             cli_sec = creds[2].rstrip().rstrip('\n ')
-            print(creds, cli_id, cli_sec)
         self.cli_id = cli_id
         self.cli_sec = cli_sec
 
