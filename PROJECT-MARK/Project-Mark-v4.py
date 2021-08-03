@@ -13,6 +13,9 @@ l = '''
              ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██╗
              ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
 '''
+
+## DISCORD BOT VERSION OF PROJECT MARk
+
 #Importing nessesary packages
 import json
 import os
