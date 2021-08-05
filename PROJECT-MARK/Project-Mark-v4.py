@@ -120,6 +120,7 @@ class Functionality(commands.Cog):
 
     @commands.command(name="resetshrugchannel")
     async def _resetshrugchannel(self, ctx: commands.Context):
+        '''Resets Shrug channel in a server'''
         def check_if_server_has_shrug(server_id):
             for i in db.keys():
                 if str(server_id) == i[:len(str(server_id))] and "shrugchan" in i:
@@ -134,6 +135,7 @@ class Functionality(commands.Cog):
 
     @commands.command(name="setshrugchannel")
     async def _setshrugchannel(self, ctx: commands.Context, channel: discord.TextChannel):
+        '''Set Shrug channel in a server'''
         def check_if_server_has_shrug(server_id):
             for i in db.keys():
                 if str(server_id) == i[:len(str(server_id))] and "shrugchan" in i:
@@ -156,6 +158,7 @@ class Functionality(commands.Cog):
 
     @commands.command(name="shrugleaderboard")
     async def _shrugleaderboard(self, ctx: commands.Context):
+        '''Displays a shrug leaderboard for the server'''
         def check_if_server_has_shrug(server_id):
             for i in db.keys():
                 if str(server_id) == i[:len(str(server_id))] and "shrugchan" in i:
@@ -871,7 +874,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def toggleyenglis(self, ctx: commands.Context):
-        '''Translates English to Yenglis'''
+        '''Toggles English to Yenglis translator (credits esteban)'''
         if (str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis') not in db.keys():
             await ctx.send('Translation is toggled on')
             db[str(ctx.channel.id)+str(ctx.guild.id) + 'yenglis'] = True
@@ -881,6 +884,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def yenglis(self, ctx: commands.Context, *message):
+        '''Translates a single English line to Yenglis (credits esteban)'''
         msg = " ".join(message)
         await ctx.message.channel.send(basicshout(use_rules(replace_words(msg))))
 
