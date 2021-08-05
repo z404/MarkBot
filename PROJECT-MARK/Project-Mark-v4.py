@@ -173,7 +173,10 @@ class Functionality(commands.Cog):
             userlst.reverse()
             finaldict = []
             for i in userlst:
-                finaldict.append([str(i.nick), str(leaderdata[i])])
+                try:
+                    finaldict.append([str(i.nick), str(leaderdata[i])])
+                except:
+                    finaldict.append([str(i), str(leaderdata[i])])
             headers =  ["User", "Shurgs"]
             table = tabulate(finaldict, headers, tablefmt="fancy_grid")
             # await ctx.send("Leaderboard:\n```"+table+"```")
