@@ -147,7 +147,7 @@ class Functionality(commands.Cog):
             await ctx.send("Please wait while I figure out what a shrug means to humans")
             counter = 0
             message_count = {}
-            async for message in channel.history(oldest_first=True):
+            async for message in channel.history(oldest_first=True, limit=None):
                 if message.content == "¯\\_(ツ)_/¯":
                     try:
                         message_count[message.author] += 1
