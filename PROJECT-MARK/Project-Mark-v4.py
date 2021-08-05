@@ -118,6 +118,20 @@ class Functionality(commands.Cog):
         client = wolframalpha.Client(app_id)
         self.wolframclient = client
 
+    @commands.command(name="resetshrugchannel")
+    async def _resetshrugchannel(self, ctx: commands.Context):
+        def check_if_server_has_shrug(server_id):
+            for i in db.keys():
+                if str(server_id) == i[:len(str(server_id))] and "shrugchan" in i:
+                    return True, i
+            return False, None
+        ret = check_if_server_has_shrug(ctx.guild.id)
+        if ret[0]:
+            del(db[ret[1]])
+            await ctx.send("Successfully reset shrug channel!")
+        else:
+            await ctx.send("What's a shrug channel? I can't reset what I don't know. I'm not a supercomputer y'know")
+
     @commands.command(name="setshrugchannel")
     async def _setshrugchannel(self, ctx: commands.Context, channel: discord.TextChannel):
         def check_if_server_has_shrug(server_id):
@@ -138,7 +152,7 @@ class Functionality(commands.Cog):
                     except:
                         message_count[message.author] = 1
             db[str(ctx.guild.id)+str(channel.id)+'shrugchan'] = message_count
-            await ctx.send(str(list(db.keys())[0][:len(str(ctx.guild.id))]))
+            await ctx.send("Shrug channel is now configured!")
 
     @commands.command(name="shrugleaderboard")
     async def _shrugleaderboard(self, ctx: commands.Context):
