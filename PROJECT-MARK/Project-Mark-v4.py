@@ -148,7 +148,7 @@ class Functionality(commands.Cog):
             counter = 0
             message_count = {}
             async for message in channel.history(oldest_first=True, limit=None):
-                if message.content == "¯\\_(ツ)_/¯":
+                if message.content == "¯\\_(ツ)_/¯" or repr(message.content) == r"'¯\\\\_(ツ)\\_/¯'":
                     try:
                         message_count[message.author] += 1
                     except:
@@ -177,7 +177,7 @@ class Functionality(commands.Cog):
                     finaldict.append([str(i.nick), str(leaderdata[i])])
                 except:
                     finaldict.append([str(i), str(leaderdata[i])])
-            headers =  ["User", "Shurgs"]
+            headers =  ["User", "Shrugs"]
             table = tabulate(finaldict, headers, tablefmt="fancy_grid")
             # await ctx.send("Leaderboard:\n```"+table+"```")
             desc = "```yaml\n"+table+"```\n Total shrugs: "+str(sum(Y))
@@ -1115,7 +1115,7 @@ async def on_message(message):
     msg = str(message.content)
     if (str(message.channel.id)+str(message.guild.id) + "yenglis") in db.keys() and not message.author.bot and message.content[0] != prefix:
         await message.channel.send(basicshout(use_rules(replace_words(msg))))
-    if (str(message.guild.id)+str(message.channel.id)+'shrugchan') in db.keys() and message.content == "¯\\_(ツ)_/¯":
+    if (str(message.guild.id)+str(message.channel.id)+'shrugchan') in db.keys() and(message.content == "¯\\_(ツ)_/¯" or repr(message.content) == r"'¯\\\\_(ツ)\\_/¯'"):
         await shrugupdate(message, str(message.guild.id)+str(message.channel.id)+'shrugchan')
     else: await bot.process_commands(message)
 
