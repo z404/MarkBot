@@ -60,7 +60,8 @@ import giphy_client as gc
 from giphy_client.rest import ApiException
 #import packages for currency conversion
 from currency_converter import CurrencyConverter
-
+#importing pretty tables
+from tabulate import tabulate
 
 
 print(l)
@@ -149,9 +150,19 @@ class Functionality(commands.Cog):
         ret = check_if_server_has_shrug(ctx.guild.id)
         if ret[0]:
             leaderdata = db[ret[1]]
-            userlst = list(leaderdata.keys())
-            for user, number in leaderdata.items():
-                await ctx.send(user)
+            X = list(leaderdata.keys())
+            Y = list(leaderdata.values())
+            userlst = [x for _, x in sorted(zip(Y, X))]
+            userlst.reverse()
+            finaldict = []
+            for i in userlst:
+                finaldict.append([str(i.nick), str(leaderdata[i])])
+            headers =  ["User", "Shurgs"]
+            table = tabulate(finaldict, headers, tablefmt="fancy_grid")
+            # await ctx.send("Leaderboard:\n```"+table+"```")
+            desc = "```yaml\n"+table+"```\n Total shrugs: "+str(sum(Y))
+            embed=discord.Embed(title="Leaderboard", description=desc, color=0x00ff00)
+            await ctx.send(embed=embed)
             # await ctx.send(str(leaderdata))
         else:
             await ctx.send("No shrug channel has been set! Set a shrug channel by typing `!setshrugchannel`")
