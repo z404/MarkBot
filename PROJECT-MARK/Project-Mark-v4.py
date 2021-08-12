@@ -62,7 +62,8 @@ from giphy_client.rest import ApiException
 from currency_converter import CurrencyConverter
 #importing pretty tables
 from tabulate import tabulate
-
+#importing azapi for lyrics
+import azapi
 
 print(l)
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -314,6 +315,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.requester = ctx.author
         self.channel = ctx.channel
         self.data = data
+        self.requested_string = ctx.message.content
 
         self.uploader = data.get('uploader')
         self.uploader_url = data.get('uploader_url')
@@ -410,6 +412,9 @@ class Song:
                  .set_thumbnail(url=self.source.thumbnail))
 
         return embed
+
+    def return_request_string(self):
+        return self.source.requested_string
 
 class SongQueue(asyncio.Queue):
     def __getitem__(self, item):
@@ -609,6 +614,18 @@ class Music(commands.Cog):
         """Displays the currently playing song."""
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
+
+    @commands.command(name="songlyrics")
+    async def _lyrics(self, ctx: commands.Context):
+        """Shows lyrics of current song, if it exists"""
+        try:
+            command = "".join(ctx.voice_state.current.return_request_string().split()[1:])
+            azpi = azapi.AZlyrics('google', accuracy=0.5)
+            azpi.title = command
+            lyrics = azpi.getLyrics()
+            await ctx.send(lyrics)
+        except:
+            await ctx.send("There was an error getting lyrics for this song")
 
     @commands.command(name='pause')
     #@commands.has_permissions(manage_guild=True)
