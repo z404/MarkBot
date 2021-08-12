@@ -615,17 +615,34 @@ class Music(commands.Cog):
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
-    @commands.command(name="songlyrics")
+    @commands.command(name="lyrics")
     async def _lyrics(self, ctx: commands.Context):
         """Shows lyrics of current song, if it exists"""
-        try:
-            command = "".join(ctx.voice_state.current.return_request_string().split()[1:])
-            azpi = azapi.AZlyrics('google', accuracy=0.5)
-            azpi.title = command
-            lyrics = azpi.getLyrics()
-            await ctx.send(lyrics)
-        except:
-            await ctx.send("There was an error getting lyrics for this song")
+        async with ctx.typing():
+            try:
+                command = " ".join(ctx.voice_state.current.return_request_string().split()[1:])
+                azpi = azapi.AZlyrics('google', accuracy=0.5)
+                azpi.title = command
+                lyrics = azpi.getLyrics()
+                embed = discord.Embed(title="Lyrics for "+command, description=lyrics)
+                await ctx.send(embed=embed)
+            except:
+                await ctx.send("There was an error getting lyrics for this song")
+
+    @commands.command(name="lyricsofsong", aliases=['songlyrics'])
+    async def _lyricsofsong(self, ctx: commands.Context, *, songname: str):
+        """Shows lyrics of any song"""
+        async with ctx.typing():
+            try:
+                command = songname
+                print(command, songname)
+                azpi = azapi.AZlyrics('google', accuracy=0.5)
+                azpi.title = command
+                lyrics = azpi.getLyrics()
+                embed = discord.Embed(title="Lyrics for "+command, description=lyrics)
+                await ctx.send(embed=embed)
+            except:
+                await ctx.send("There was an error getting lyrics for this song")
 
     @commands.command(name='pause')
     #@commands.has_permissions(manage_guild=True)
@@ -656,7 +673,7 @@ class Music(commands.Cog):
         ctx.voice_state.voice.stop()
         await ctx.message.add_reaction('⏹')
 
-    @commands.command(name='skip',aliases=['n'])
+    @commands.command(name='skip',aliases=['n', 'next'])
     async def _skip(self, ctx: commands.Context):
         """Vote to skip a song. The requester can automatically skip.
         3 skip votes are needed for the song to be skipped.
