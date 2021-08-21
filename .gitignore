@@ -4,3 +4,4 @@ cache
 .prefix
 *.pyc
 .cache
+config.json
