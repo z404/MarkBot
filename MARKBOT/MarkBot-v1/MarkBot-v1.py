@@ -22,11 +22,6 @@ import os
 import warnings
 from random import randint, choice
 from discord import channel
-#Importing packages required to run NLPU tasks 
-from snips_nlu import SnipsNLUEngine
-from snips_nlu.dataset import dataset
-from snips_nlu.default_configs import CONFIG_EN
-from OUTPUT import IntentAssesment
 #Importing replit database
 try:
     from replit import db
@@ -109,11 +104,6 @@ class Functionality(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        print('Initializing NLPU')
-        engine = SnipsNLUEngine(config=CONFIG_EN)
-        data = dataset.Dataset.from_yaml_files('en',['./PROJECT-MARK/TRAIN/'+i for i in os.listdir('./PROJECT-MARK/TRAIN') if '.yaml' in i])
-        engine.fit(data)
-        self.engine = engine
         with open('creds.txt') as file:
             app_id = file.readlines()[4].strip().rstrip('\n ')
         client = wolframalpha.Client(app_id)
@@ -187,15 +177,6 @@ class Functionality(commands.Cog):
             # await ctx.send(str(leaderdata))
         else:
             await ctx.send("No shrug channel has been set! Set a shrug channel by typing `!setshrugchannel`")
-
-
-    @commands.command(name='say')
-    async def _say(self, ctx: commands.Context, *, message):
-        '''Natural Language processing command to understand basic communication'''
-        parsing = self.engine.parse(message)
-        try: slot = parsing['slots']
-        except: slot = []
-        await ctx.send(IntentAssesment.output(parsing['intent'],slot))
         
     @commands.command(aliases=['wikipedia'])
     async def wiki(self, ctx: commands.Context, *, searchmsg):
@@ -615,35 +596,6 @@ class Music(commands.Cog):
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
-    @commands.command(name="lyrics")
-    async def _lyrics(self, ctx: commands.Context):
-        """Shows lyrics of current song, if it exists"""
-        async with ctx.typing():
-            try:
-                command = " ".join(ctx.voice_state.current.return_request_string().split()[1:])
-                azpi = azapi.AZlyrics('google', accuracy=0.5)
-                azpi.title = command
-                lyrics = azpi.getLyrics()
-                embed = discord.Embed(title="Lyrics for "+command, description=lyrics)
-                await ctx.send(embed=embed)
-            except:
-                await ctx.send("There was an error getting lyrics for this song")
-
-    @commands.command(name="lyricsofsong", aliases=['songlyrics'])
-    async def _lyricsofsong(self, ctx: commands.Context, *, songname: str):
-        """Shows lyrics of any song"""
-        async with ctx.typing():
-            try:
-                command = songname
-                print(command, songname)
-                azpi = azapi.AZlyrics('google', accuracy=0.5)
-                azpi.title = command
-                lyrics = azpi.getLyrics()
-                embed = discord.Embed(title="Lyrics for "+command, description=lyrics)
-                await ctx.send(embed=embed)
-            except:
-                await ctx.send("There was an error getting lyrics for this song")
-
     @commands.command(name='pause')
     #@commands.has_permissions(manage_guild=True)
     async def _pause(self, ctx: commands.Context):
@@ -741,19 +693,6 @@ class Music(commands.Cog):
             return await ctx.send('Empty queue.')
 
         ctx.voice_state.songs.remove(index - 1)
-        await ctx.message.add_reaction('✅')
-
-    @commands.command(name='loop')
-    async def _loop(self, ctx: commands.Context):
-        """Loops the currently playing song.
-        Invoke this command again to unloop the song.
-        """
-
-        if not ctx.voice_state.is_playing:
-            return await ctx.send('Nothing being played at the moment.')
-
-        # Inverse boolean value to loop and unloop.
-        ctx.voice_state.loop = not ctx.voice_state.loop
         await ctx.message.add_reaction('✅')
 
     @commands.command()
