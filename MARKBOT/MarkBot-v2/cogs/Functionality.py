@@ -1,18 +1,24 @@
-# Copy paste this for other cogs
-
+# For Discord
 import discord
 from discord.ext import commands
+
+# Api to interact with wikipedia
 import wikipedia
+# Api to interact with wolfram alpha
 import wolframalpha
+# Api to convert currency
 from currency_converter import CurrencyConverter
+# Api to beautify tables
 from tabulate import tabulate
 
 
-def write_db(db: str) -> None:
+# Function to write into database
+def write_db(db: dict) -> None:
     with open("database", 'w+') as file:
-        file.write(db)
+        file.write(str(db))
 
 
+# Function to get database
 def get_db() -> dict:
     with open('database') as file:
         return eval(file.read())
