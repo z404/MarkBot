@@ -34,16 +34,16 @@ class Functionality(commands.Cog):
         self.wolframclient = client
         self.db = get_db()
 
-    @commands.Cog.listener()
-    async def on_command(self, ctx):
-        logchannel = self.bot.get_channel(844599292442181653)
-        try:
-            await logchannel.send(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
-        except AttributeError:
-            await logchannel.send(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+    # TODO: Deleted logging command here. Look for a better place for it
+    @commands.group(name="shrug", pass_context=True)
+    async def _shrug(self, ctx):
+        """Command to manage a shrug channel"""
+        if not ctx.invoked_subcommand:
+            # TODO: Add help command here for shrug channel management
+            pass
 
-    @commands.command(name="resetshrugchannel")
-    async def _resetshrugchannel(self, ctx: commands.Context):
+    @_shrug.command(pass_context=True, name="reset")
+    async def _reset(self, ctx: commands.Context):
         '''Resets Shrug channel in a server'''
         def check_if_server_has_shrug(server_id):
             for i in self.db.keys():
@@ -58,8 +58,8 @@ class Functionality(commands.Cog):
         else:
             await ctx.send("What's a shrug channel? I can't reset what I don't know. I'm not a supercomputer y'know")
 
-    @commands.command(name="setshrugchannel")
-    async def _setshrugchannel(self, ctx: commands.Context, channel: discord.TextChannel):
+    @_shrug.command(pass_context=True, name="set")
+    async def _set(self, ctx: commands.Context, channel: discord.TextChannel):
         '''Set Shrug channel in a server'''
         def check_if_server_has_shrug(server_id):
             for i in self.db.keys():
@@ -75,16 +75,16 @@ class Functionality(commands.Cog):
             async for message in channel.history(oldest_first=True, limit=None):
                 if message.content == "¯\\_(ツ)_/¯" or repr(message.content) == r"'¯\\\\_(ツ)\\_/¯'":
                     try:
-                        message_count[message.author] += 1
+                        message_count[message.author.id] += 1
                     except:
-                        message_count[message.author] = 1
+                        message_count[message.author.id] = 1
             self.db[str(ctx.guild.id)+str(channel.id) +
                     'shrugchan'] = message_count
             write_db(self.db)
             await ctx.send("Shrug channel is now configured!")
 
-    @commands.command(name="shrugleaderboard")
-    async def _shrugleaderboard(self, ctx: commands.Context):
+    @_shrug.command(pass_context=True, name="leaderboard")
+    async def _leaderboard(self, ctx: commands.Context):
         '''Displays a shrug leaderboard for the server'''
         def check_if_server_has_shrug(server_id):
             for i in self.db.keys():
@@ -101,9 +101,11 @@ class Functionality(commands.Cog):
             finaldict = []
             for i in userlst:
                 try:
-                    finaldict.append([str(i.nick), str(leaderdata[i])])
+                    finaldict.append(
+                        [str(ctx.guild.get_member(i).nick), str(leaderdata[i])])
                 except:
-                    finaldict.append([str(i), str(leaderdata[i])])
+                    finaldict.append(
+                        [str(ctx.guild.get_member(i)), str(leaderdata[i])])
             headers = ["User", "Shrugs"]
             table = tabulate(finaldict, headers, tablefmt="fancy_grid")
             # await ctx.send("Leaderboard:\n```"+table+"```")
