@@ -26,7 +26,9 @@ if not Path('database').is_file():
     with open('database', 'w+') as file:
         file.write('{}')
 
-initial_extensions = ['cogs.Functionality', 'cogs.Administration']
+initial_extensions = ['cogs.Functionality',
+                      'cogs.Administration',
+                      'cogs.Music']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
