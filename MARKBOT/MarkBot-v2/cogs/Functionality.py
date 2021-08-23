@@ -10,6 +10,8 @@ import wolframalpha
 from currency_converter import CurrencyConverter
 # Api to beautify tables
 from tabulate import tabulate
+# Library to make request for url shortener
+from urllib.request import urlopen
 
 
 # Function to write into database
@@ -34,9 +36,17 @@ class Functionality(commands.Cog):
         self.wolframclient = client
         self.db = get_db()
 
+    # URL shortener
+    @commands.group(name="tinify", pass_context=True)
+    async def _tinify(self, ctx: commands.Context, url):
+        """Command to shorten a url using tiny url"""
+        apiurl = "http://tinyurl.com/api-create.php?url="
+        tinyurl = await self.bot.loop.run_in_executor(None, lambda: urlopen(apiurl + url).read().decode("utf-8"))
+        await ctx.send(tinyurl)
+
     # TODO: Deleted logging command here. Look for a better place for it
     @commands.group(name="shrug", pass_context=True)
-    async def _shrug(self, ctx):
+    async def _shrug(self, ctx: commands.Context):
         """Command to manage a shrug channel"""
         if not ctx.invoked_subcommand:
             # TODO: Add help command here for shrug channel management
