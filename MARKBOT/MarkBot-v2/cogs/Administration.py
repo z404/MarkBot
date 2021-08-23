@@ -20,10 +20,12 @@ with open('config.json') as file:
     config = eval(file.read())
 
 
+# Cog for admin controld
 class AdminControls(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    # Command to change someone's nickname in a server, if they are not the owner of the server
     @commands.command(pass_context=True, hidden=True)
     async def changenick(self, ctx: commands.Context, member, *newnick):
         '''Changes nickname of any user, if the user is below the bot and if sender has admin perms'''
@@ -35,11 +37,13 @@ class AdminControls(commands.Cog):
             member = ctx.message.guild.get_member(int(member))
         await member.edit(nick=newnick)
 
+    # Command to kill the bot
     @commands.command(hidden=True)
     async def terminate(self, ctx: commands.Context):
         await ctx.send("It's getting dark.. Maybe I'll take a little nap..")
         await self.bot.close()
 
+    # Command to change status of the bot
     @commands.command(name='changestatus', aliases=['chst'], hidden=True)
     async def _changestatus(self, ctx: commands.Context, typeofstatus, *message):
         '''Changes the bot\'s status to the given parameters'''
@@ -64,6 +68,7 @@ class AdminControls(commands.Cog):
         else:
             await ctx.send('Wrong format! format = <type> <message> <url (for stream)> Choose type from ["playing","watching","listeningto","streaming"]. You can also set status as ["online","idle","dnd"]')
 
+    # Check if the user is admin before the execution of the above commands
     @_changestatus.before_invoke
     @changenick.before_invoke
     @terminate.before_invoke
