@@ -2,12 +2,15 @@ const Discord = require("discord.js");
 const client = new Discord.Client({
   intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES],
 });
+const { DiscordTogether } = require("discord-together");
+const fs = require("fs");
+
+let rawdata = fs.readFileSync("config.json");
+let config_vars = JSON.parse(rawdata);
 
 client.on("ready", () => {
   console.log("Bot is ready");
 });
-
-const { DiscordTogether } = require("discord-together");
 
 client.discordTogether = new DiscordTogether(client);
 
@@ -15,7 +18,7 @@ client.on("message", async (message) => {
   if (message.content === "start") {
     if (message.member.voice.channel) {
       client.discordTogether
-        .createTogetherCode(message.member.voice.channel.id, "poker")
+        .createTogetherCode(message.member.voice.channel.id, "youtube")
         .then(async (invite) => {
           return message.channel.send(`${invite.code}`);
         });
@@ -23,4 +26,4 @@ client.on("message", async (message) => {
   }
 });
 
-client.login("ODA4OTczMzMyOTg4OTUyNTg2.YCOVIA.oWhmJJL6cxpH8KwdmWhoQmSb8Zo");
+client.login(config_vars["discord_token"]);
