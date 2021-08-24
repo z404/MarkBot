@@ -1,0 +1,17 @@
+{
+  "name": "markbot-activity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord-together": "^1.1.62",
+    "discord.js": "^13.1.0"
+  }
+}
