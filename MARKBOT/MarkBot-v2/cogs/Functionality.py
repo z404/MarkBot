@@ -26,13 +26,16 @@ def get_db() -> dict:
         return eval(file.read())
 
 
+# Loading the config file
+with open('config.json') as file:
+    config = eval(file.read())
+
+
 class Functionality(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open('creds.txt') as file:
-            app_id = file.readlines()[4].strip().rstrip('\n ')
-        client = wolframalpha.Client(app_id)
+        client = wolframalpha.Client(config["wolframalpha_key"])
         self.wolframclient = client
         self.db = get_db()
 

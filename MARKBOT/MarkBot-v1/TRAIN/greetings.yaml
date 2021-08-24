@@ -1,0 +1,70 @@
+# Greet_Normal intent
+---
+type: intent
+name: Greet_Normal
+utterances:
+  - Hello
+  - Hi
+  - Howdy
+  - Greetings
+  - Good to see you
+  - Great to see you again
+
+# Greet_WithQuestion intent
+---
+type: intent
+name: Greet_WithQuestion
+utterances:
+  - Hello! How are you?
+  - Hi! How do you do?
+  - What's Up
+
+# Greet_WithName intent
+---
+type: intent
+name: Greet_WithName
+slots:
+  - name: username
+    entity: username
+utterances:
+  - hi, my name is [username](Anish)
+  - hello, i am [username](John)
+  - howdy, im [username](George)
+
+# Greet_AskNameOfAI intent 
+---
+type: intent
+name: Greet_AskNameOfAI
+slots:
+  - name: name
+    entity: name
+utterances:
+  - what is your name?
+  - what are you named as?
+  - who are you?
+  - what can i call you
+  - I'm [username](Anish), who are you?
+  - Who are you? Im [username](Terry)
+  - hello, im [username](Anish), who are you?
+
+# Greet_WithTime intent
+---
+type: intent
+name: Greet_WithTime
+slots:
+  - name: TimeOfDay
+    entity: TimeOfDay
+utterances:
+  - Good [TimeOfDay](morning)!
+  - Have a great [TimeOfDay](night)
+   
+# TimeOfDay entity
+---
+type: entity
+name: TimeOfDay
+automatically_extensible: yes
+values:
+- morning
+- night
+- [afternoon, noon]
+- midnight

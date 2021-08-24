@@ -6,3 +6,4 @@ cache
 .cache
 config.json
 database
+creds.txt.old
