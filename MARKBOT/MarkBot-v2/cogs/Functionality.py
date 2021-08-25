@@ -40,7 +40,7 @@ class Functionality(commands.Cog):
         self.db = get_db()
 
     # URL shortener
-    @commands.group(name="tinify", pass_context=True)
+    @commands.command(name="tinify", pass_context=True)
     async def _tinify(self, ctx: commands.Context, url):
         """Command to shorten a url using tiny url"""
         apiurl = "http://tinyurl.com/api-create.php?url="

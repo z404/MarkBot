@@ -28,7 +28,8 @@ if not Path('database').is_file():
 
 initial_extensions = ['cogs.Functionality',
                       'cogs.Administration',
-                      'cogs.Music']
+                      'cogs.Music',
+                      'cogs.Activity']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
