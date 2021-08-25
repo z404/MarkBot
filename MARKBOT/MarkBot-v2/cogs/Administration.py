@@ -3,7 +3,6 @@ from os import popen
 import discord
 from discord.ext import commands
 from subprocess import Popen
-from flask import Flask, request
 
 
 # Function to write into database
@@ -28,7 +27,7 @@ class AdminControls(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.node_server = Popen(
-            "npm start", shell=True, cwd=".\MARKBOT\MarkBot-v2\cogs\MarkBot-Activity")
+            "npm start", shell=True, cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
 
     # Command to change someone's nickname in a server, if they are not the owner of the server
     @commands.command(pass_context=True, hidden=True)
