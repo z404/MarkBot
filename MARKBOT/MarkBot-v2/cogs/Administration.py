@@ -29,6 +29,15 @@ class AdminControls(commands.Cog):
         self.node_server = Popen(
             "npm start", shell=True, cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
 
+    # Logging system
+    @commands.Cog.listener()
+    async def on_command(self, ctx):
+        logchannel = self.bot.get_channel(int(config['log-channel']))
+        try:
+            await logchannel.send(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+        except AttributeError:
+            await logchannel.send(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
     # Command to change someone's nickname in a server, if they are not the owner of the server
     @commands.command(pass_context=True, hidden=True)
     async def changenick(self, ctx: commands.Context, member, *newnick):

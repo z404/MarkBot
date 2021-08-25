@@ -187,6 +187,25 @@ class Functionality(commands.Cog):
         except Exception as e:
             await ctx.send("An Error occured: "+str(e))
 
+    @commands.command(aliases=['l'])
+    async def logo(self, ctx: commands.Context):
+        '''Displays MarkBot's logo'''
+        await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
+        await ctx.send(file=discord.File('logo.jpg'))
+
+    @commands.command(aliases=['inv'])
+    async def invite(self, ctx: commands.Context):
+        '''Invite the bot to your server!'''
+        embedVar = discord.Embed(title="Invite MarkBot to your server!",
+                                 description="MarkBot is a project that is being worked on since April 19th, 2019. It was developed by [Anish R](https://github.com/z404). Feel free to fork the bot, and send pull requests if you've made any good changes. If you're interested in discussing future features to this bot, dm <@353835291053785088> to discuss it further", color=0x00ff00)
+        embedVar.add_field(
+            name="Invite Markbot", value='[Click here to invite MarkBot](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=8&scope=bot)\n', inline=False)
+        embedVar.add_field(name="Invite MarkBot Beta",
+                           value="[Click here to invite MarkBot Beta](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot)\nMarkBot Beta is an unstable release, and will not be online at all times, but will have experimental features that aren't present in MarkBot", inline=False)
+        embedVar.set_image(
+            url='https://t4.ftcdn.net/jpg/03/75/38/73/360_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg')
+        await ctx.send(embed=embedVar)
+
 
 def setup(bot):
     bot.add_cog(Functionality(bot))
