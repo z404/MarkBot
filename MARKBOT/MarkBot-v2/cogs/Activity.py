@@ -19,7 +19,7 @@ with open('config.json') as file:
     config = eval(file.read())
 
 
-class _Activity(commands.Cog):
+class Activities(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -64,4 +64,4 @@ class _Activity(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(_Activity(bot))
+    bot.add_cog(Activities(bot))
