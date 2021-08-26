@@ -1,6 +1,7 @@
 # Project Mark
 
-A functional private virtual assistant build from scratch, inspired by the show Person of Interest.
+Refactoring underway, docs to be added soon
+<!-- A functional private virtual assistant build from scratch, inspired by the show Person of Interest.
 
 ## Project-Mark v4
 
@@ -85,4 +86,4 @@ To make your own bot with this source code, you will have to follow these instru
 - [x] Currency conversion bot
 - [x] Converstion to and from binary or morse code
 
-#### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations --->
+#### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations ---> -->
