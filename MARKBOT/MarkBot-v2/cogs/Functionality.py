@@ -1,7 +1,7 @@
 # For Discord
 import discord
 from discord.ext import commands
-
+from discord_slash import cog_ext, SlashContext
 # Api to interact with wikipedia
 import wikipedia
 # Api to interact with wolfram alpha
@@ -63,7 +63,6 @@ class Functionality(commands.Cog):
         tinyurl = await self.bot.loop.run_in_executor(None, lambda: urlopen(apiurl + url).read().decode("utf-8"))
         await ctx.send(tinyurl)
 
-    # TODO: Deleted logging command here. Look for a better place for it
     @commands.group(name="shrug", pass_context=True)
     async def _shrug(self, ctx: commands.Context):
         """Command to manage a shrug channel"""
@@ -215,12 +214,31 @@ class Functionality(commands.Cog):
         embedVar = discord.Embed(title="Invite MarkBot to your server!",
                                  description="MarkBot is a project that is being worked on since April 19th, 2019. It was developed by [Anish R](https://github.com/z404). Feel free to fork the bot, and send pull requests if you've made any good changes. If you're interested in discussing future features to this bot, dm <@353835291053785088> to discuss it further", color=0x00ff00)
         embedVar.add_field(
-            name="Invite Markbot", value='[Click here to invite MarkBot](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=8&scope=bot)\n', inline=False)
+            name="Invite Markbot", value='[Click here to invite MarkBot](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=0&scope=bot%20applications.commands)\n', inline=False)
         embedVar.add_field(name="Invite MarkBot Beta",
-                           value="[Click here to invite MarkBot Beta](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot)\nMarkBot Beta is an unstable release, and will not be online at all times, but will have experimental features that aren't present in MarkBot", inline=False)
+                           value="[Click here to invite MarkBot Beta](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot%20applications.commands)\nMarkBot Beta is an unstable release, and will not be online at all times, but will have experimental features that aren't present in MarkBot", inline=False)
         embedVar.set_image(
             url='https://t4.ftcdn.net/jpg/03/75/38/73/360_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg')
         await ctx.send(embed=embedVar)
+
+    @cog_ext.cog_slash(name="invite")
+    async def _invite_slash(self, ctx: SlashContext):
+        '''Invite the bot to your server!'''
+        embedVar = discord.Embed(title="Invite MarkBot to your server!",
+                                 description="MarkBot is a project that is being worked on since April 19th, 2019. It was developed by [Anish R](https://github.com/z404). Feel free to fork the bot, and send pull requests if you've made any good changes. If you're interested in discussing future features to this bot, dm <@353835291053785088> to discuss it further", color=0x00ff00)
+        embedVar.add_field(
+            name="Invite Markbot", value='[Click here to invite MarkBot](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=0&scope=bot%20applications.commands)\n', inline=False)
+        embedVar.add_field(name="Invite MarkBot Beta",
+                           value="[Click here to invite MarkBot Beta](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot%20applications.commands)\nMarkBot Beta is an unstable release, and will not be online at all times, but will have experimental features that aren't present in MarkBot", inline=False)
+        embedVar.set_image(
+            url='https://t4.ftcdn.net/jpg/03/75/38/73/360_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg')
+        await ctx.send(embed=embedVar)
+
+    @cog_ext.cog_slash(name="logo")
+    async def _logo_slash(self, ctx: SlashContext):
+        '''Displays MarkBot's logo'''
+        await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
+        await ctx.channel.send(file=discord.File('logo.jpg'))
 
 
 def setup(bot):

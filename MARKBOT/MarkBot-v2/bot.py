@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 from pathlib import Path
+from discord_slash import SlashCommand, SlashContext
 
 l = '''
  ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗    
@@ -33,6 +34,8 @@ initial_extensions = ['cogs.Functionality',
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
+slash = SlashCommand(bot, sync_commands=True)
+
 
 if __name__ == '__main__':
     for extension in initial_extensions:
