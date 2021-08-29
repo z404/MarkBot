@@ -25,6 +25,11 @@ def get_db() -> dict:
         return eval(file.read())
 
 
+# Loading the config file
+with open('config.json') as file:
+    config = eval(file.read())
+
+
 class VoiceError(Exception):
     pass
 
@@ -289,12 +294,8 @@ class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.voice_states = {}
-        with open('creds.txt') as file:
-            creds = file.readlines()
-            cli_id = creds[1].strip().rstrip('\n ')
-            cli_sec = creds[2].rstrip().rstrip('\n ')
-        self.cli_id = cli_id
-        self.cli_sec = cli_sec
+        self.cli_id = config["spotify_api_key"]
+        self.cli_sec = config["spotify_api_secret"]
 
     def get_voice_state(self, ctx: commands.Context):
         state = self.voice_states.get(ctx.guild.id)
