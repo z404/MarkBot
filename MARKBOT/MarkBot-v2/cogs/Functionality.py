@@ -240,6 +240,62 @@ class Functionality(commands.Cog):
         await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
         await ctx.channel.send(file=discord.File('logo.jpg'))
 
+    @cog_ext.cog_slash(name="math")
+    async def _math_slash(self, ctx: SlashContext, math_string: str):
+        '''Tries to solve a few basic math problems'''
+        try:
+            await ctx.send("Thinking..")
+            res = self.wolframclient.query(math_string)
+            for i in res:
+                # if i['@title'] == 'Result':
+                #    await ctx.send(i['subpod']['img']['@src'])
+                embed = discord.Embed()
+                if i['@title'] == 'Input interpretation' or i['@title'] == 'Input':
+                    embed.title = 'Input Interpretation:'
+                    embed.set_image(url=i['subpod']['img']['@src'])
+                    await ctx.channel.send(embed=embed)
+                elif i['@title'] == 'Result' or i['@title'] == 'Implicit plot' or i['@title'] == 'Plots' or i['@title'] == 'Surface plot' or i['@title'] == 'Volume of solid':
+                    try:
+                        embed.title = 'Result'
+                        embed.set_image(url=i['subpod']['img']['@src'])
+                        await ctx.channel.send(embed=embed)
+                    except:
+                        embed.title = 'Result'
+                        embed.set_image(url=i['subpod'][0]['img']['@src'])
+                        await ctx.channel.send(embed=embed)
+        except Exception as e:
+            await ctx.channel.send('Something went wrong. (Math is in beta) '+str(e))
+
+    @cog_ext.cog_slash(name="wiki")
+    async def _wiki_slash(self, ctx: SlashContext, search_message: str):
+        '''Searches wikipedia and shows a summary of the search term'''
+        await ctx.send("Thinking..")
+        try:
+            url = wikipedia.page(search_message)
+            summary = wikipedia.summary(search_message, sentences=5)
+            # await ctx.send(summary+'\n\nUrl = `'+str(url)+'`')
+            embed = discord.Embed()
+            embed.title = url.title
+            embed.description = summary + \
+                '\n\n[Click here to read more]('+url.url+')'
+            if url.images != None:
+                embed.set_image(url=url.images[0])
+            await ctx.channel.send(embed=embed)
+        except wikipedia.exceptions.PageError:
+            await ctx.channel.send("Could not find a page with that search term")
+        except wikipedia.exceptions.DisambiguationError:
+            await ctx.channel.send("Too many results. Please be more specific")
+
+    @cog_ext.cog_subcommand(base="convert", name="currency")
+    async def _currency_converter_slash(self, ctx: SlashContext, value: float, frm: str, to: str):
+        '''Converts currency from one unit to another'''
+        c = CurrencyConverter()
+        try:
+            newvalue = c.convert(value, frm.upper(), to.upper())
+            await ctx.send(str(value)+' '+frm.upper()+' is equal to '+str(newvalue)+' '+to.upper())
+        except Exception as e:
+            await ctx.send("An Error occured: "+str(e))
+
 
 def setup(bot):
     bot.add_cog(Functionality(bot))
