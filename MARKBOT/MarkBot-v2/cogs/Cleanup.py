@@ -35,6 +35,8 @@ class Cleanup(commands.Cog):
 
     @_cleanup.command(pass_context=True, name="commands")
     async def _commands(self, ctx: commands.Context, *which_prefix):
+        """Delete all messages that are bot commands.
+            Provide specific prefixes to target(optional)"""
         def is_undesired(message):
             prefixes = list(which_prefix) if len(
                 list(which_prefix)) > 0 else "! . ? ' (".split()
@@ -59,6 +61,8 @@ class Cleanup(commands.Cog):
 
     @_cleanup.command(pass_context=True, name="bots")
     async def _bots(self, ctx: commands.Context, which_bot: discord.Member = None):
+        """Delete all messages by bots.
+            Provide mention of specific bot(optional)"""
         if which_bot == None:
             def is_undesired(message): return message.author.bot
             await ctx.channel.purge(limit=100, check=is_undesired)
@@ -76,8 +80,10 @@ class Cleanup(commands.Cog):
         sleep(3)
         await msg.delete()
 
-    @_cleanup.command(pass_context=True, name="people")
+    @_cleanup.command(pass_context=True, name="people", hidden=True)
     async def _people(self, ctx: commands.Context, which_person: discord.Member = None):
+        """Delete last 100 messages by people.
+            Provide mention of specific specific people(optional)"""
         if which_person == None:
             def is_undesired(message):
                 return message.author.bot == False
