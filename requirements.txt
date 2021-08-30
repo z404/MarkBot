@@ -1,5 +1,3 @@
-setuptools_rust
-snips_nlu
 discord
 youtube_dl
 pynacl
