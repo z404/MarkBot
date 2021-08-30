@@ -76,6 +76,26 @@ class Cleanup(commands.Cog):
         sleep(3)
         await msg.delete()
 
+    @_cleanup.command(pass_context=True, name="people")
+    async def _people(self, ctx: commands.Context, which_person: discord.Member = None):
+        if which_person == None:
+            def is_undesired(message):
+                return message.author.bot == False
+            await ctx.channel.purge(limit=100, check=is_undesired)
+        else:
+            def is_undesired(message):
+                return message.author == which_person and not (message.author.bot)
+            await ctx.channel.purge(limit=100, check=is_undesired)
+        ways_to_clean = [
+            "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
+            "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
+        ]
+        choice = random.choice(ways_to_clean)
+        grammar = "has been" if choice[-2:] == "ed" else "is now"
+        msg = await ctx.send(f'This channel {grammar} {choice}')
+        sleep(3)
+        await msg.delete()
+
 
 def setup(bot):
     bot.add_cog(Cleanup(bot))
