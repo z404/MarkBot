@@ -296,6 +296,13 @@ class Functionality(commands.Cog):
         except Exception as e:
             await ctx.send("An Error occured: "+str(e))
 
+    @cog_ext.cog_slash(name="tinify")
+    async def _tinify_slash(self, ctx: SlashContext, url: str):
+        '''Uses tinyurl to shorten a url'''
+        apiurl = "http://tinyurl.com/api-create.php?url="
+        tinyurl = await self.bot.loop.run_in_executor(None, lambda: urlopen(apiurl + url).read().decode("utf-8"))
+        await ctx.send(tinyurl)
+
 
 def setup(bot):
     bot.add_cog(Functionality(bot))
