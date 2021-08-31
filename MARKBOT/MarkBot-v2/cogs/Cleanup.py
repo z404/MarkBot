@@ -26,11 +26,16 @@ class Cleanup(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    @commands.has_permissions(manage_messages=True)
     @commands.group(name="cleanup", pass_context=True)
     async def _cleanup(self, ctx: commands.Context):
         """Commands to cleanup a text channel."""
         if not ctx.invoked_subcommand:
             await ctx.send_help("cleanup")
+
+    @_cleanup.error
+    async def _error_handler(self, ctx: commands.Context, error):
+        await ctx.send("You don't have the permissions to use this command!:)")
 
     @_cleanup.command(pass_context=True, name="commands")
     async def _commands(self, ctx: commands.Context, *which_prefix):
