@@ -2,7 +2,6 @@
 from os import popen
 import discord
 from discord.ext import commands
-from subprocess import Popen
 
 
 # Function to write into database
@@ -26,8 +25,6 @@ with open('config.json') as file:
 class AdminControls(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.node_server = Popen(
-            "npm start", shell=True, cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
 
     # Logging system
     @commands.Cog.listener()
@@ -54,7 +51,6 @@ class AdminControls(commands.Cog):
     @commands.command(hidden=True)
     async def terminate(self, ctx: commands.Context):
         await ctx.send("It's getting dark.. Maybe I'll take a little nap..")
-        self.node_server.kill()
         await self.bot.close()
 
     # Command to change status of the bot
