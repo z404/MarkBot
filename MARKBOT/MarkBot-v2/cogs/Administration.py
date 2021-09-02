@@ -2,9 +2,11 @@
 from os import popen
 import discord
 from discord.ext import commands
-
+from discord_slash import cog_ext, SlashContext
 
 # Function to write into database
+
+
 def write_db(db: dict) -> None:
     with open("database", 'w+') as file:
         file.write(str(db))
@@ -34,6 +36,26 @@ class AdminControls(commands.Cog):
             await logchannel.send(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
         except AttributeError:
             await logchannel.send(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
+    @commands.Cog.listener()
+    async def on_slash_command(self, ctx: SlashContext):
+        print(ctx.data, ctx.name, ctx.subcommand_name, ctx.subcommand_group)
+
+        command_with_options = ctx.data['name']
+        try:
+            for i in ctx.data['options']:
+                if "options" in i.keys():
+                    command_with_options += ' ['+i['name'] + ': ' + \
+                        str((x['value'] for x in i["options"]))+']'
+                else:
+                    command_with_options += ' ['+i['name']+']'
+        except KeyError:
+            pass
+        logchannel = self.bot.get_channel(int(config['log-channel']))
+        try:
+            await logchannel.send(f"[Slash] {ctx.guild.name} > {ctx.author} > {command_with_options}")
+        except AttributeError:
+            await logchannel.send(f"Private message > {ctx.author} > {command_with_options}")
 
     # Command to change someone's nickname in a server, if they are not the owner of the server
     @commands.command(pass_context=True, hidden=True)
