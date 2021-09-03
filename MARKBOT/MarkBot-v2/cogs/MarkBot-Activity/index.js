@@ -62,6 +62,16 @@ client.on("interactionCreate", async (interaction) => {
 
   if (interaction.commandName === "activity") {
     const activity_name = interaction.options.get("activity_name")["value"];
+    client.channels.cache
+      .get(config_vars["log-channel"])
+      .send(
+        "[Slash] " +
+          interaction.guild.name +
+          " > " +
+          interaction.member.user.tag +
+          " > activity " +
+          activity_name
+      );
     if (interaction.member.voice.channel) {
       await interaction.reply("Hold on a sec, making the invite..");
       if (activity_name === "youtube") {

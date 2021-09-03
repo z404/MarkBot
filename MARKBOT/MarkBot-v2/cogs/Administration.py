@@ -39,16 +39,16 @@ class AdminControls(commands.Cog):
 
     @commands.Cog.listener()
     async def on_slash_command(self, ctx: SlashContext):
-        print(ctx.data, ctx.name, ctx.subcommand_name, ctx.subcommand_group)
-
         command_with_options = ctx.data['name']
         try:
             for i in ctx.data['options']:
                 if "options" in i.keys():
                     command_with_options += ' ['+i['name'] + ': ' + \
-                        str((x['value'] for x in i["options"]))+']'
+                        str(list([x['value'] for x in i["options"]]))+']'
+                elif "value" in i.keys():
+                    command_with_options += ' ['+i['name']+": "+i['value']+']'
                 else:
-                    command_with_options += ' ['+i['name']+']'
+                    command_with_options += ' ['+i['name']+"]"
         except KeyError:
             pass
         logchannel = self.bot.get_channel(int(config['log-channel']))
