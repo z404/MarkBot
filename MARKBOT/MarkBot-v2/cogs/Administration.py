@@ -2,10 +2,11 @@
 from os import popen
 import discord
 from discord.ext import commands
-from subprocess import Popen
-
+from discord_slash import cog_ext, SlashContext
 
 # Function to write into database
+
+
 def write_db(db: dict) -> None:
     with open("database", 'w+') as file:
         file.write(str(db))
@@ -26,8 +27,6 @@ with open('config.json') as file:
 class AdminControls(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.node_server = Popen(
-            "npm start", shell=True, cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
 
     # Logging system
     @commands.Cog.listener()
@@ -37,6 +36,27 @@ class AdminControls(commands.Cog):
             await logchannel.send(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
         except AttributeError:
             await logchannel.send(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+
+    @commands.Cog.listener()
+    async def on_slash_command(self, ctx: SlashContext):
+        command_with_options = ctx.data['name']
+        try:
+            for i in ctx.data['options']:
+                if "options" in i.keys():
+                    command_with_options += ' ['+str(i['name']) + ': ' + \
+                        str(list([str(x['value']) for x in i["options"]]))+']'
+                elif "value" in i.keys():
+                    command_with_options += ' [' + \
+                        str(i['name'])+": "+str(i['value'])+']'
+                else:
+                    command_with_options += ' ['+str(i['name'])+"]"
+        except KeyError:
+            pass
+        logchannel = self.bot.get_channel(int(config['log-channel']))
+        try:
+            await logchannel.send(f"[Slash] {ctx.guild.name} > {ctx.author} > {command_with_options}")
+        except AttributeError:
+            await logchannel.send(f"Private message > {ctx.author} > {command_with_options}")
 
     # Command to change someone's nickname in a server, if they are not the owner of the server
     @commands.command(pass_context=True, hidden=True)
@@ -54,7 +74,6 @@ class AdminControls(commands.Cog):
     @commands.command(hidden=True)
     async def terminate(self, ctx: commands.Context):
         await ctx.send("It's getting dark.. Maybe I'll take a little nap..")
-        self.node_server.kill()
         await self.bot.close()
 
     # Command to change status of the bot

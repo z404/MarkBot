@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 from pathlib import Path
 from discord_slash import SlashCommand, SlashContext
+from subprocess import Popen
 
 l = '''
  ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗    
@@ -31,7 +32,8 @@ initial_extensions = ['cogs.Functionality',
                       'cogs.Administration',
                       'cogs.Music',
                       'cogs.Activity',
-                      'cogs.Cleanup']
+                      'cogs.Cleanup',
+                      'cogs.Shrug']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
@@ -41,6 +43,9 @@ slash = SlashCommand(bot, sync_commands=True)
 if __name__ == '__main__':
     for extension in initial_extensions:
         bot.load_extension(extension)
+
+node_server = Popen("npm start", shell=True,
+                    cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
 
 
 @bot.event
