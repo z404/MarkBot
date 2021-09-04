@@ -1,6 +1,7 @@
 # For Discord
 import discord
 from discord.ext import commands
+from discord.partial_emoji import PartialEmoji
 from discord_slash import cog_ext, SlashContext
 # Api to interact with wikipedia
 import wikipedia
@@ -138,6 +139,18 @@ class Functionality(commands.Cog):
         embedVar.set_image(
             url='https://t4.ftcdn.net/jpg/03/75/38/73/360_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg')
         await ctx.send(embed=embedVar)
+
+    @commands.command(name="stealemoji")
+    async def _stealemoji(self, ctx: commands.Context, emoji: discord.PartialEmoji):
+        img = await emoji.url.read()
+        name = emoji.name
+        emoji = await ctx.guild.create_custom_emoji(name=(name), image=img)
+        await ctx.send("Added "+str(emoji))
+
+    @_stealemoji.error
+    async def _emoji_error(self, ctx: commands.Context, error):
+        if "PartialEmoji" in str(error):
+            await ctx.send("Yo this emoji already exists!")
 
     @cog_ext.cog_slash(name="invite")
     async def _invite_slash(self, ctx: SlashContext):
