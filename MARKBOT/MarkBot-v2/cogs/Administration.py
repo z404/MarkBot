@@ -43,12 +43,13 @@ class AdminControls(commands.Cog):
         try:
             for i in ctx.data['options']:
                 if "options" in i.keys():
-                    command_with_options += ' ['+i['name'] + ': ' + \
-                        str(list([x['value'] for x in i["options"]]))+']'
+                    command_with_options += ' ['+str(i['name']) + ': ' + \
+                        str(list([str(x['value']) for x in i["options"]]))+']'
                 elif "value" in i.keys():
-                    command_with_options += ' ['+i['name']+": "+i['value']+']'
+                    command_with_options += ' [' + \
+                        str(i['name'])+": "+str(i['value'])+']'
                 else:
-                    command_with_options += ' ['+i['name']+"]"
+                    command_with_options += ' ['+str(i['name'])+"]"
         except KeyError:
             pass
         logchannel = self.bot.get_channel(int(config['log-channel']))
