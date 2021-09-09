@@ -142,6 +142,7 @@ class Functionality(commands.Cog):
 
     @commands.command(name="stealemoji")
     async def _stealemoji(self, ctx: commands.Context, emoji: discord.PartialEmoji):
+        """If you have nitro, you can use this command to save an emoji of another server to the current server"""
         img = await emoji.url.read()
         name = emoji.name
         emoji = await ctx.guild.create_custom_emoji(name=(name), image=img)
