@@ -1,6 +1,12 @@
 # MarkBot
 
-A general purpose, easy to use discord bot
+A general purpose, easy to use discord bot. Have an idea for a command? Open an issue!
+
+[![image](https://img.shields.io/badge/Invite%20MarkBot-white?style=for-the-badge&logoColor=white)](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=8&scope=bot%20applications.commands)
+
+[![image](https://img.shields.io/badge/Invite%20MarkBot%20Beta-black?style=for-the-badge&logoColor=black)](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot%20applications.commands)
+
+badge/MarkBot-Invite MarkBot-red
 
 ## Commands:
 
@@ -58,3 +64,21 @@ V1 has been discarded as it is extremely uncomfortable to work with and develop.
 - 📄 [runscript.sh](runscript.sh)
 
 As is visible, the driver code for the bot exists in [bot.py](MARKBOT/MarkBot-v2/bot.py). Each file in the cogs folder contains a command cog. Each of these cogs have a bunch of commands that have the same theme. If a new set of commands were to be developed, they would be made in a new cog.
+
+## How to set up the bot on your local machine
+
+! Under construction :(
+
+## Make your own command for Mark
+
+Open an issue! I'll be glad to help out! You can add me on discord as well (Wilford Warfstache#0256)
+
+## Difficulties when making the bot
+
+- Discord is changing continuously. Adapting to these changes is definitely not easy
+- As of April of 2022, In-chat commands will no longer work. Only slash commands will work
+- [Discord.py](https://github.com/Rapptz/discord.py), the library being used to code this bot has been marked read-only and will not be developed further
+- [Discord.py](https://github.com/Rapptz/discord.py) has no support for slash commands, and any other library in python that implements slash commands does not have support for voice channels (No music slash commands)
+- The new library being used for slash commands, [Discord-interactions](https://github.com/goverfl0w/discord-interactions) is a little low on documentation
+
+### Developed by [z404](https://github.com/z404)
