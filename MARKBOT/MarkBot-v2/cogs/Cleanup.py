@@ -127,12 +127,14 @@ class Cleanup(commands.Cog):
 
     @commands.has_permissions(manage_messages=True)
     @cog_ext.cog_subcommand(name="commands", base="cleanup")
-    async def _commands_slash(self, ctx: SlashContext, *which_prefix):
+    async def _commands_slash(self, ctx: SlashContext, which_prefix: str = None):
         """Delete all messages that are bot commands.
             Provide specific prefixes to target(optional)"""
+        which_prefix = [i for i in which_prefix if i != ' ']
+
         def is_undesired(message):
-            prefixes = list(which_prefix) if len(
-                list(which_prefix)) > 0 else "! . ? ' (".split()
+            prefixes = which_prefix if len(
+                which_prefix) > 0 else "! . ? ' (".split()
             starts_with_prefix = None
             for i in prefixes:
                 if message.content.startswith(i):

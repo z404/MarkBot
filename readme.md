@@ -1,89 +1,84 @@
-# Project Mark
+# MarkBot
 
-Refactoring underway, docs to be added soon
-<!-- A functional private virtual assistant build from scratch, inspired by the show Person of Interest.
+A general purpose, easy to use discord bot. Have an idea for a command? Open an issue!
 
-## Project-Mark v4
+[![image](https://img.shields.io/badge/Invite%20MarkBot-white?style=for-the-badge&logoColor=white)](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=8&scope=bot%20applications.commands)
 
-This version aims to combine basic discord functions with advanced functions like an alexa interface, Natural Language Processing, Text to speech etc.
-[Click here to invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=781403770721402901&permissions=8&scope=bot)
+[![image](https://img.shields.io/badge/Invite%20MarkBot%20Beta-black?style=for-the-badge&logoColor=black)](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot%20applications.commands)
 
-## Creating your own discord bot
+badge/MarkBot-Invite MarkBot-red
 
-To make your own bot with this source code, you will have to follow these instructions carefully. These steps assume that you are a little comfortable in using the repl.it environment, as well as git
+## Commands:
 
-- **Step 1: Creating an application**
+|          Command           | Description                                               | Slash command | Cog              | Working? |
+| :------------------------: | --------------------------------------------------------- | :-----------: | ---------------- | :------: |
+|            help            | Displays the bot's commands                               |      No       | None             |   Yes    |
+|           invite           | Displays the invite link for the bot                      |      Yes      | Functionality    |   Yes    |
+|            logo            | Displays MarkBot's logo and ascii art                     |      Yes      | Functionality    |   Yes    |
+|            math            | Tries to solve a few basic math problems                  |      Yes      | Functionality    |    No    |
+|           tinify           | Command to shorten a url using tiny url                   |      Yes      | Functionality    |   Yes    |
+|            wiki            | Searches wikipedia and shows a summary of the search term |      Yes      | Functionality    |  Buggy   |
+|         stealemoji         | Steal an emoji from another server                        |      No       | Functionality    |   Yes    |
+|     currency_converter     | Converts currency from one unit to another                |      Yes      | Functionality    |   Yes    |
+| activity (and subcommands) | Command to launch activities                              |      Yes      | MarkBot-Activity |   Yes    |
+| cleanup (and subcommands)  | Commands to clean up your channel                         |      Yes      | Cleanup          |   Yes    |
+|           purge            | Mass deletes messages to clean a channel                  |      Yes      | Cleanup          |   Yes    |
+|            join            | Joins a voice channel                                     |      No       | Music            |   Yes    |
+|           leave            | Leaves a voice channel                                    |      No       | Music            |   Yes    |
+|            now             | Shows current song playing                                |      No       | Music            |   Yes    |
+|           pause            | Pauses playback of current audio                          |      No       | Music            |   Yes    |
+|            play            | Enqueues the song into the queue                          |      No       | Music            |   Yes    |
+|           queue            | Displays the current song queue                           |      No       | Music            |   Yes    |
+|           remove           | Removes a song from the queue                             |      No       | Music            |   Yes    |
+|           resume           | Resumes paused playback                                   |      No       | Music            |   Yes    |
+|          shuffle           | Shuffles the queue                                        |      No       | Music            |   Yes    |
+|            skip            | Skips song that is currently playing                      |      No       | Music            |   Yes    |
+|            stop            | Stops playback                                            |      No       | Music            |   Yes    |
+|           summon           | Summons the bot to a voice channel                        |      No       | Music            |   Yes    |
+|       toggleannounce       | Stops announcement of new song in channel                 |      No       | Music            |   Yes    |
 
-  - Sign up for a discord developer account [here](https://discord.com/developers/)
-  - Create an application under the developer console, and name it the name of your bot
-  - Under the "General Information" of your bot, set the icon you want for your bot
+## Structure of the bot
 
-- **Step 2: Creating a Discord Bot**
+V1 has been discarded as it is extremely uncomfortable to work with and develop. V2's structure will be defined here.
 
-  - In the application you created above, navigate to the "Bot" menu on the left
-  - Under the "Build-A-Bot" menu, add a new bot, and set the name and image accordingly
-  - Notice the "Copy token" button. This will come in handy later
+- 📂 **MARKBOT**
+  - 📂 **MarkBot\-v2**
+    - 📄 [bot.py](MARKBOT/MarkBot-v2/bot.py)
+    - 📂 **cogs**
+      - 📄 [Activity.py](MARKBOT/MarkBot-v2/cogs/Activity.py)
+      - 📄 [Administration.py](MARKBOT/MarkBot-v2/cogs/Administration.py)
+      - 📄 [Cleanup.py](MARKBOT/MarkBot-v2/cogs/Cleanup.py)
+      - 📄 [Functionality.py](MARKBOT/MarkBot-v2/cogs/Functionality.py)
+      - 📂 **MarkBot\-Activity**
+        - 📄 config.json
+        - 📄 [index.js](MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/index.js)
+        - 📄 node_modules
+        - 📄 [package\-lock.json](MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/package-lock.json)
+        - 📄 [package.json](MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/package.json)
+      - 📄 [Music.py](MARKBOT/MarkBot-v2/cogs/Music.py)
+      - 📄 [Shrug.py](MARKBOT/MarkBot-v2/cogs/Shrug.py)
+- 📄 config.json
+- 📄 database
+- 📄 [readme.md](readme.md)
+- 📄 [requirements.txt](requirements.txt)
+- 📄 [runscript.sh](runscript.sh)
 
-- **Step 3: Creating a repl.it server to run your bot**
+As is visible, the driver code for the bot exists in [bot.py](MARKBOT/MarkBot-v2/bot.py). Each file in the cogs folder contains a command cog. Each of these cogs have a bunch of commands that have the same theme. If a new set of commands were to be developed, they would be made in a new cog.
 
-  - Create a new account in repl.it [here](https://repl.it/signup)
-  - Once you've created your account, navigate to your [dashboard](https://repl.it/~), and create a new repl by pressing the blue "+" button on the top left
-  - Set language as Bash, name it accordingly. Make it private if you wish to keep your source code private
+## How to set up the bot on your local machine
 
-- **Step 4: Uploading the bot to repl.it**
+! Under construction :(
 
-  - Clone this repository into your local computer
-  - Go to your repl that you just created, and press the three dots and choose the option to "Upload files"
-  - Select all files of the repository, and wait for them to upload
-  - Don't upload the .git file (It changes the repl to a python repl, and then won't work at all)
+## Make your own command for Mark
 
-- **Step 5: Creating other required accounts**
+Open an issue! I'll be glad to help out! You can add me on discord as well (Wilford Warfstache#0256)
 
-  - Create a [spotify developer](https://developer.spotify.com/) account, make an application and copy the client id and client secret
-  - Create a [giphy developer](https://developers.giphy.com/) account, and copy the API key after creating a new application
-  - Create a [Wolfram Alpha](https://www.wolframalpha.com/) Account, navigate to the api page, create an application. Copy the AppID
+## Difficulties when making the bot
 
-- **Step 6: Creating required credentials file**
+- Discord is changing continuously. Adapting to these changes is definitely not easy
+- As of April of 2022, In-chat commands will no longer work. Only slash commands will work
+- [Discord.py](https://github.com/Rapptz/discord.py), the library being used to code this bot has been marked read-only and will not be developed further
+- [Discord.py](https://github.com/Rapptz/discord.py) has no support for slash commands, and any other library in python that implements slash commands does not have support for voice channels (No music slash commands)
+- The new library being used for slash commands, [Discord-interactions](https://github.com/goverfl0w/discord-interactions) is a little low on documentation
 
-  - Create a new file in the repl by pressing the "Add file" button
-  - Name it `creds.txt`
-  - Open `creds.txt`, and set the first line to your `discord bot's token` ("Copy Token" Button in the discord developer console)
-  - Set the second line to `spotify client id`
-  - Set the third line to the `spotify client secret`
-  - Set the fourth line to your `giphy api key`
-  - Set the fifth line to `your Wolfram Alpha AppID`
-  - In the logging function, there is a hardcoded value for the log channel. Change that value to a channel ID that the bot has access to
-
-- **Step 7: Creating required prefix file**
-
-  - Create a new file in the repl by pressing the "Add file" button
-  - name it `.prefix`
-  - Type your prefix in the file (for example, if my prefix is !, then I type `!` in the file)
-
-- **Step 8: Hit run**
-  - If everything ran properly, then the Project Mark Logo should be displayed in the console window of repl.
-  - If something didn't work, feel free to raise an issue here, and I'll help you out
-- **Step 9: Keeping your bot always on** 
-  - Follow the guide given [here](https://repl.it/talk/learn/Hosting-discordpy-bots-with-replit/11008)
-
-
-<!---
-
-## Info
-
-### Basic functions to be added:
-
-- [ ] Natural Language Processor ---In Development
-- [ ] Text to Speech
-- [ ] Speech to Text
-- [ ] Video Processing
-  - [ ] Face Recognition
-  - [ ] Object detection
-
-### Functions as a discord bot:
-
-- [x] Music bot
-- [x] Currency conversion bot
-- [x] Converstion to and from binary or morse code
-
-#### Do not run any programs in the subfolders, as they will not work, and might also break your packages and installations ---> -->
+### Developed by [z404](https://github.com/z404)
