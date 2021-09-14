@@ -6,8 +6,6 @@ A general purpose, easy to use discord bot. Have an idea for a command? Open an 
 
 [![image](https://img.shields.io/badge/Invite%20MarkBot%20Beta-black?style=for-the-badge&logoColor=black)](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot%20applications.commands)
 
-badge/MarkBot-Invite MarkBot-red
-
 ## Commands:
 
 |          Command           | Description                                               | Slash command | Cog              | Working? |
