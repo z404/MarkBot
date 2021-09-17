@@ -1,7 +1,9 @@
 from discord.ext import commands
 import discord
 from pathlib import Path
-from discord_slash import SlashCommand, SlashContext
+# from discord_slash import SlashCommand, SlashContext
+
+from dislash import InteractionClient, Option, OptionType
 from subprocess import Popen
 
 l = '''
@@ -28,17 +30,17 @@ if not Path('database').is_file():
     with open('database', 'w+') as file:
         file.write('{}')
 
-initial_extensions = ['cogs.Functionality',
-                      'cogs.Administration',
-                      'cogs.Music',
-                      'cogs.Activity',
-                      'cogs.Cleanup',
-                      'cogs.Shrug']
+initial_extensions = ['cogs.Functionality']
+#   'cogs.Administration',
+#   'cogs.Music',
+#   'cogs.Activity',
+#   'cogs.Cleanup',
+#   'cogs.Shrug']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
-slash = SlashCommand(bot, sync_commands=True)
-
+# slash = SlashCommand(bot, sync_commands=True)
+inter_client = InteractionClient(bot)
 
 if __name__ == '__main__':
     for extension in initial_extensions:

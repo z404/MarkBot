@@ -2,7 +2,8 @@
 import discord
 from discord.ext import commands
 from discord.partial_emoji import PartialEmoji
-from discord_slash import cog_ext, SlashContext
+# from discord_slash import cog_inter
+from dislash import slash_command, Option, OptionType
 # Api to interact with wikipedia
 import wikipedia
 # Api to interact with wolfram alpha
@@ -153,8 +154,8 @@ class Functionality(commands.Cog):
         if "PartialEmoji" in str(error):
             await ctx.send("Yo this emoji already exists!")
 
-    @cog_ext.cog_slash(name="invite")
-    async def _invite_slash(self, ctx: SlashContext):
+    @slash_command(name="invite", description="Displays the invite message, so you can invite the bot!")
+    async def _invite_slash(self, inter):
         '''Invite the bot to your server!'''
         embedVar = discord.Embed(title="Invite MarkBot to your server!",
                                  description="MarkBot is a project that is being worked on since April 19th, 2019. It was developed by [Anish R](https://github.com/z404). Feel free to fork the bot, and send pull requests if you've made any good changes. If you're interested in discussing future features to this bot, dm <@353835291053785088> to discuss it further", color=0x00ff00)
@@ -164,19 +165,26 @@ class Functionality(commands.Cog):
                            value="[Click here to invite MarkBot Beta](https://discord.com/api/oauth2/authorize?client_id=808973332988952586&permissions=8&scope=bot%20applications.commands)\nMarkBot Beta is an unstable release, and will not be online at all times, but will have experimental features that aren't present in MarkBot", inline=False)
         embedVar.set_image(
             url='https://t4.ftcdn.net/jpg/03/75/38/73/360_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg')
-        await ctx.send(embed=embedVar)
+        await inter.send(embed=embedVar)
 
-    @cog_ext.cog_slash(name="logo")
-    async def _logo_slash(self, ctx: SlashContext):
+    @slash_command(name="logo", description="Displays MarkBot's logo")
+    async def _logo_slash(self, inter):
         '''Displays MarkBot's logo'''
-        await ctx.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
-        await ctx.channel.send(file=discord.File('logo.jpg'))
+        await inter.send('```'+l+'\nDeveloped by Wilford Warfstache#0256, started on April 16th, 2019'+'```')
+        await inter.channel.send(file=discord.File('logo.jpg'))
 
-    @cog_ext.cog_slash(name="math")
-    async def _math_slash(self, ctx: SlashContext, math_string: str):
+    @slash_command(
+        name="math",
+        options=[
+            Option('math_string', 'Math string that needs a solution',
+                   OptionType.STRING, required=True)
+        ],
+        description="Tries to solve basic math problems (doesn't work well most of the time)"
+    )
+    async def _math_slash(self, inter, math_string: str):
         '''Tries to solve a few basic math problems'''
         try:
-            await ctx.send("Thinking..")
+            await inter.send("Thinking..")
             res = self.wolframclient.query(math_string)
             for i in res:
                 # if i['@title'] == 'Result':
@@ -185,23 +193,30 @@ class Functionality(commands.Cog):
                 if i['@title'] == 'Input interpretation' or i['@title'] == 'Input':
                     embed.title = 'Input Interpretation:'
                     embed.set_image(url=i['subpod']['img']['@src'])
-                    await ctx.channel.send(embed=embed)
+                    await inter.channel.send(embed=embed)
                 elif i['@title'] == 'Result' or i['@title'] == 'Implicit plot' or i['@title'] == 'Plots' or i['@title'] == 'Surface plot' or i['@title'] == 'Volume of solid':
                     try:
                         embed.title = 'Result'
                         embed.set_image(url=i['subpod']['img']['@src'])
-                        await ctx.channel.send(embed=embed)
+                        await inter.channel.send(embed=embed)
                     except:
                         embed.title = 'Result'
                         embed.set_image(url=i['subpod'][0]['img']['@src'])
-                        await ctx.channel.send(embed=embed)
+                        await inter.channel.send(embed=embed)
         except Exception as e:
-            await ctx.channel.send('Something went wrong. (Math is in beta) '+str(e))
+            await inter.channel.send('Something went wrong. (Math is in beta) '+str(e))
 
-    @cog_ext.cog_slash(name="wiki")
-    async def _wiki_slash(self, ctx: SlashContext, search_message: str):
+    @slash_command(
+        name="wiki",
+        options=[
+            Option('search_message', 'Term to search wikipedia for',
+                   OptionType.STRING, required=True)
+        ],
+        description="Searches wikipedia for a term, and displays relevant information"
+    )
+    async def _wiki_slash(self, inter, search_message: str):
         '''Searches wikipedia and shows a summary of the search term'''
-        await ctx.send("Thinking..")
+        await inter.send("Thinking..")
         try:
             url = wikipedia.page(search_message)
             summary = wikipedia.summary(search_message, sentences=5)
@@ -212,28 +227,49 @@ class Functionality(commands.Cog):
                 '\n\n[Click here to read more]('+url.url+')'
             if url.images != None:
                 embed.set_image(url=url.images[0])
-            await ctx.channel.send(embed=embed)
+            await inter.channel.send(embed=embed)
         except wikipedia.exceptions.PageError:
-            await ctx.channel.send("Could not find a page with that search term")
+            await inter.channel.send("Could not find a page with that search term")
         except wikipedia.exceptions.DisambiguationError:
-            await ctx.channel.send("Too many results. Please be more specific")
+            await inter.channel.send("Too many results. Please be more specific")
 
-    @cog_ext.cog_subcommand(base="convert", name="currency")
-    async def _currency_converter_slash(self, ctx: SlashContext, value: float, frm: str, to: str):
+    @slash_command(description="Has subcommands")
+    async def convert_base(inter):
+        pass
+
+    @convert_base.sub_command(
+        name="currency",
+        options=[
+            Option('value', 'Value for conversion',
+                   OptionType.INTEGER, required=True),
+            Option('to', 'Initial currency',
+                   OptionType.INTEGER, required=True),
+            Option('from', 'Final currency', OptionType.INTEGER, required=True)
+        ],
+        description="Converts one currency to the other"
+    )
+    async def _currency_converter_slash(self, inter, value: float, frm: str, to: str):
         '''Converts currency from one unit to another'''
         c = CurrencyConverter()
         try:
             newvalue = c.convert(value, frm.upper(), to.upper())
-            await ctx.send(str(value)+' '+frm.upper()+' is equal to '+str(newvalue)+' '+to.upper())
+            await inter.send(str(value)+' '+frm.upper()+' is equal to '+str(newvalue)+' '+to.upper())
         except Exception as e:
-            await ctx.send("An Error occured: "+str(e))
+            await inter.send("An Error occured: "+str(e))
 
-    @cog_ext.cog_slash(name="tinify")
-    async def _tinify_slash(self, ctx: SlashContext, url: str):
+    @slash_command(
+        name="tinify",
+        options=[
+            Option('url', 'Url to shorten',
+                   OptionType.STRING, required=True)
+        ],
+        description="Shortens a url using tinyurl's api"
+    )
+    async def _tinify_slash(self, inter, url: str):
         '''Uses tinyurl to shorten a url'''
         apiurl = "http://tinyurl.com/api-create.php?url="
         tinyurl = await self.bot.loop.run_in_executor(None, lambda: urlopen(apiurl + url).read().decode("utf-8"))
-        await ctx.send(tinyurl)
+        await inter.send(tinyurl)
 
 
 def setup(bot):
