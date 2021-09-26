@@ -6,6 +6,7 @@ import itertools
 import math
 import random
 from discord.ext import commands
+from discord_slash import cog_ext, SlashContext
 # Importing packages for music
 import youtube_dl
 # importing packages for spotify
@@ -73,7 +74,10 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.requester = ctx.author
         self.channel = ctx.channel
         self.data = data
-        self.requested_string = ctx.message.content
+        try:
+            self.requested_string = ctx.message.content
+        except:
+            self.requested_string = ctx.songname
 
         self.uploader = data.get('uploader')
         self.uploader_url = data.get('uploader_url')
@@ -494,6 +498,117 @@ class Music(commands.Cog):
             await ctx.send('Announcement of new songs is toggled on')
             del self.db[str(ctx.guild.id) + 'announce']
             write_db(self.db)
+
+    @cog_ext.cog_slash(name="play")
+    async def _play_slash(self, ctx: SlashContext, search: str):
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+
+        if not ctx.author.voice or not ctx.author.voice.channel:
+            raise commands.CommandError(
+                'You are not connected to any voice channel.')
+
+        if ctx.voice_client:
+            if ctx.voice_client.channel != ctx.author.voice.channel:
+                raise commands.CommandError(
+                    'Bot is already in a voice channel.')
+        if not ctx.voice_state.voice:
+            destination = ctx.author.voice.channel
+            if ctx.voice_state.voice:
+                await ctx.voice_state.voice.move_to(destination)
+                return
+
+            ctx.voice_state.voice = await destination.connect()
+        ctx.songname = search
+        try:
+            if 'open.spotify' in search:
+                auth = oauth2.SpotifyClientCredentials(
+                    client_id=self.cli_id,
+                    client_secret=self.cli_sec
+                )
+                token = auth.get_access_token(as_dict=False)
+                spotify = spotipy.Spotify(auth=token)
+                if 'track' in search:
+                    features = spotify.track(search)
+                    search_new = features['name'] + \
+                        ' '+features['artists'][0]['name']
+                    source = await YTDLSource.create_source(ctx, search_new, loop=self.bot.loop)
+                    song = Song(source)
+
+                    await ctx.voice_state.songs.put(song)
+                    await ctx.send('Enqueued {}'.format(str(source)))
+                else:
+                    response = spotify.playlist_items(search)
+                    await ctx.send("Enqueueing "+str(len(response['items']))+" songs. This may take a while..")
+                    for i in response['items']:
+                        try:
+                            search_new = i['track']['name'] + \
+                                ' '+i['track']['artists'][0]['name']
+                            source = await YTDLSource.create_source(ctx, search_new, loop=self.bot.loop)
+                            song = Song(source)
+                            await ctx.voice_state.songs.put(song)
+                        except:
+                            continue
+                    await ctx.send("Playlist has been enqueued")
+
+            else:
+                YTDL_OPTIONS = {
+                    'format': 'bestaudio/best',
+                    'extractaudio': True,
+                    # 'audioformat': 'mp3',
+                    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+                    'restrictfilenames': True,
+                    'noplaylist': True,
+                    'nocheckcertificate': True,
+                    'ignoreerrors': False,
+                    'logtostderr': False,
+                    'quiet': True,
+                    'no_warnings': True,
+                    'default_search': 'auto',
+                    'source_address': '0.0.0.0',
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }],
+                }
+
+                FFMPEG_OPTIONS = {
+                    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+                    'options': '-vn',
+                }
+
+                ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS)
+                partial = functools.partial(
+                    ytdl.extract_info, search, download=False, process=False)
+                loop = asyncio.get_event_loop()
+                data = await loop.run_in_executor(None, partial)
+                if 'entries' in list(data.keys()):
+                    video = data['entries']
+                    count = 0
+                    urllst = []
+                    for i in video:
+                        count += 1
+                        urllst.append(i['title'])
+                    await ctx.send('Enqueued '+str(count)+' songs')
+                    for i in urllst:
+                        try:
+                            source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
+                            song = Song(source)
+                            await ctx.voice_state.songs.put(song)
+                        except:
+                            pass
+                        # break
+                else:
+                    source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
+                    song = Song(source)
+
+                    await ctx.voice_state.songs.put(song)
+                    await ctx.send('Enqueued {}'.format(str(source)))
+        except YTDLError as e:
+            await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
 
     @commands.command(name='play', aliases=['p'])
     async def _play(self, ctx: commands.Context, *, search: str):
