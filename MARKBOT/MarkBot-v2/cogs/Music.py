@@ -337,6 +337,31 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
+    @cog_ext.cog_slash(name="join")
+    async def _join_slash(self, ctx: SlashContext):
+        """Joins a voice channel."""
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+
+        if not ctx.author.voice or not ctx.author.voice.channel:
+            raise commands.CommandError(
+                'You are not connected to any voice channel.')
+
+        if ctx.voice_client:
+            if ctx.voice_client.channel != ctx.author.voice.channel:
+                raise commands.CommandError(
+                    'Bot is already in a voice channel.')
+
+        destination = ctx.author.voice.channel
+        if ctx.voice_state.voice:
+            await ctx.voice_state.voice.move_to(destination)
+            return
+
+        ctx.voice_state.voice = await destination.connect()
+        await ctx.send("Hello there!", hidden=True)
+
     @commands.command(name='summon')
     # @commands.has_permissions(manage_guild=True)
     async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
