@@ -380,6 +380,27 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
+    @cog_ext.cog_slash(name="summon")
+    async def _summon_slash(self, ctx: SlashContext, channel: discord.VoiceChannel = None):
+        """Summons the bot to a voice channel.
+        If no channel was specified, it joins your channel."""
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+
+        if not channel and not ctx.author.voice:
+            raise VoiceError(
+                'You are neither connected to a voice channel nor specified a channel to join.')
+
+        destination = channel or ctx.author.voice.channel
+        if ctx.voice_state.voice:
+            await ctx.voice_state.voice.move_to(destination)
+            return
+
+        ctx.voice_state.voice = await destination.connect()
+        await ctx.send("Hello there!!", hidden=True)
+
     @commands.command(name='leave', aliases=['disconnect', 'yeet'])
     # @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
@@ -391,19 +412,6 @@ class Music(commands.Cog):
         await ctx.voice_state.stop()
         await ctx.send("I've been yeeted :(")
         del self.voice_states[ctx.guild.id]
-
-    # @commands.command(name='volume', aliases=['vol'])
-    # async def _volume(self, ctx: commands.Context, *, volume: int):
-    #     """Sets the volume of the player."""
-
-    #     if not ctx.voice_state.is_playing:
-    #         return await ctx.send('Nothing being played at the moment.')
-
-    #     if 0 > volume > 100:
-    #         return await ctx.send('Volume must be between 0 and 100')
-
-    #     ctx.voice_state.volume = volume / 100
-    #     await ctx.send('Volume of the player set to {}%'.format(volume))
 
     @commands.command(name='now', aliases=['current', 'playing', 'np'])
     async def _now(self, ctx: commands.Context):
