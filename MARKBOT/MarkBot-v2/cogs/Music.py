@@ -434,6 +434,17 @@ class Music(commands.Cog):
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
+    @cog_ext.cog_subcommand(base="now", name="playing")
+    async def _now_slash(self, ctx: SlashContext):
+        """Displays the currently playing song."""
+
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+
+        await ctx.send(embed=ctx.voice_state.current.create_embed())
+
     @commands.command(name='pause')
     # @commands.has_permissions(manage_guild=True)
     async def _pause(self, ctx: commands.Context):
@@ -442,6 +453,18 @@ class Music(commands.Cog):
         # if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_playing():
         ctx.voice_state.voice.pause()
         await ctx.message.add_reaction('⏯')
+
+    @cog_ext.cog_slash(name="pause")
+    async def _pause_slash(self, ctx: SlashContext):
+        """Pauses the currently playing song."""
+        print("here")
+        # if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_playing():
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+        ctx.voice_state.voice.pause()
+        await ctx.send("Paused song. Use /resume to resume")
 
     @commands.command(name='resume')
     # @commands.has_permissions(manage_guild=True)
