@@ -413,6 +413,21 @@ class Music(commands.Cog):
         await ctx.send("I've been yeeted :(")
         del self.voice_states[ctx.guild.id]
 
+    @cog_ext.cog_slash(name="leave")
+    async def _leave_slash(self, ctx: SlashContext):
+        """Clears the queue and leaves the voice channel."""
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+
+        if not ctx.voice_state.voice:
+            return await ctx.send('Not connected to any voice channel.')
+
+        await ctx.voice_state.stop()
+        await ctx.send("I've been yeeted :(")
+        del self.voice_states[ctx.guild.id]
+
     @commands.command(name='now', aliases=['current', 'playing', 'np'])
     async def _now(self, ctx: commands.Context):
         """Displays the currently playing song."""
