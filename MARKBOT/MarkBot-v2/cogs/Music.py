@@ -457,7 +457,6 @@ class Music(commands.Cog):
     @cog_ext.cog_slash(name="pause")
     async def _pause_slash(self, ctx: SlashContext):
         """Pauses the currently playing song."""
-        print("here")
         # if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_playing():
         try:
             ctx.voice_state
@@ -475,6 +474,17 @@ class Music(commands.Cog):
         ctx.voice_state.voice.resume()
         await ctx.message.add_reaction('⏯')
 
+    @cog_ext.cog_slash(name="resume")
+    async def _resume_slash(self, ctx: SlashContext):
+        """Resumes a currently paused song."""
+        # if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_playing():
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+        ctx.voice_state.voice.resume()
+        await ctx.send("Resumed song!")
+
     @commands.command(name='stop')
     # @commands.has_permissions(manage_guild=True)
     async def _stop(self, ctx: commands.Context):
@@ -486,11 +496,21 @@ class Music(commands.Cog):
         ctx.voice_state.voice.stop()
         await ctx.message.add_reaction('⏹')
 
+    @cog_ext.cog_slash(name="stop")
+    async def _stop_slash(self, ctx: SlashContext):
+        """Stops playing song and clears the queue."""
+        # if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_playing():
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+        ctx.voice_state.songs.clear()
+        ctx.voice_state.voice.stop()
+        await ctx.send("Song stopped and queue cleared!")
+
     @commands.command(name='skip', aliases=['n', 'next'])
     async def _skip(self, ctx: commands.Context):
-        """Vote to skip a song. The requester can automatically skip.
-        3 skip votes are needed for the song to be skipped.
-        """
+        """Skips a song in queue"""
 
         if not ctx.voice_state.is_playing:
             return await ctx.send('Not playing any music right now...')
