@@ -533,6 +533,18 @@ class Music(commands.Cog):
         # else:
         #   await ctx.send('You have already voted to skip this song.')
 
+    @cog_ext.cog_slash(name="skip")
+    async def _stop_slash(self, ctx: SlashContext):
+        """Skips a song in queue"""
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+        if not ctx.voice_state.is_playing:
+            return await ctx.send('Not playing any music right now...')
+        ctx.voice_state.skip()
+        await ctx.send("Skipped song!")
+
     @commands.command(name='queue', aliases=['q'])
     async def _queue(self, ctx: commands.Context, *, page: int = 1):
         """Shows the player's queue.
