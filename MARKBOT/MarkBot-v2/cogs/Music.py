@@ -624,6 +624,19 @@ class Music(commands.Cog):
 
         await ctx.send("Shuffled queue!")
 
+    @cog_ext.cog_slash(name="remove")
+    async def _remove_slash(self, ctx: SlashContext, index: int):
+        """Shuffles the queue."""
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+        if len(ctx.voice_state.songs) == 0:
+            return await ctx.send('Empty queue.')
+
+        ctx.voice_state.songs.remove(index - 1)
+        await ctx.send("Song removed at "+str(index))
+
     @commands.command(name='remove', aliases=['r'])
     async def _remove(self, ctx: commands.Context, index: int):
         """Removes a song from the queue at a given index."""
@@ -633,6 +646,19 @@ class Music(commands.Cog):
 
         ctx.voice_state.songs.remove(index - 1)
         await ctx.message.add_reaction('✅')
+
+    @cog_ext.cog_slash(name="toggleannounce")
+    async def toggleannounce(self, ctx: commands.Context):
+        '''Toggles the announcement of a new song in a server'''
+        self.db = get_db()
+        if (str(ctx.guild.id)+'announce') not in self.db.keys():
+            await ctx.send('Announcement of new songs is toggled off')
+            self.db[str(ctx.guild.id) + 'announce'] = True
+            write_db(self.db)
+        else:
+            await ctx.send('Announcement of new songs is toggled on')
+            del self.db[str(ctx.guild.id) + 'announce']
+            write_db(self.db)
 
     @commands.command()
     async def toggleannounce(self, ctx: commands.Context):
