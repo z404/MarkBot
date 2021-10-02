@@ -534,7 +534,7 @@ class Music(commands.Cog):
         #   await ctx.send('You have already voted to skip this song.')
 
     @cog_ext.cog_slash(name="skip")
-    async def _stop_slash(self, ctx: SlashContext):
+    async def _skip_slash(self, ctx: SlashContext):
         """Skips a song in queue"""
         try:
             ctx.voice_state
@@ -569,6 +569,36 @@ class Music(commands.Cog):
                  .set_footer(text='Viewing page {}/{}'.format(page, pages)))
         await ctx.send(embed=embed)
 
+    @cog_ext.cog_slash(name="queue")
+    async def _queue_slash(self, ctx: SlashContext, page: int = None):
+        """Shows the player's queue.
+        """
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+
+        if page == None:
+            page = 1
+
+        if len(ctx.voice_state.songs) == 0:
+            return await ctx.send('Empty queue.')
+
+        items_per_page = 10
+        pages = math.ceil(len(ctx.voice_state.songs) / items_per_page)
+
+        start = (page - 1) * items_per_page
+        end = start + items_per_page
+
+        queue = ''
+        for i, song in enumerate(ctx.voice_state.songs[start:end], start=start):
+            queue += '`{0}.` [**{1.source.title}**]({1.source.url})\n'.format(
+                i + 1, song)
+
+        embed = (discord.Embed(description='**{} tracks:**\n\n{}'.format(len(ctx.voice_state.songs), queue))
+                 .set_footer(text='Viewing page {}/{}'.format(page, pages)))
+        await ctx.send(embed=embed)
+
     @commands.command(name='shuffle')
     async def _shuffle(self, ctx: commands.Context):
         """Shuffles the queue."""
@@ -578,6 +608,21 @@ class Music(commands.Cog):
 
         ctx.voice_state.songs.shuffle()
         await ctx.message.add_reaction('✅')
+
+    @cog_ext.cog_slash(name="shuffle")
+    async def _shuffle_slash(self, ctx: SlashContext):
+        """Shuffles the queue."""
+        try:
+            ctx.voice_state
+        except:
+            ctx.voice_state = self.get_voice_state(ctx)
+
+        if len(ctx.voice_state.songs) == 0:
+            return await ctx.send('Empty queue.')
+
+        ctx.voice_state.songs.shuffle()
+
+        await ctx.send("Shuffled queue!")
 
     @commands.command(name='remove', aliases=['r'])
     async def _remove(self, ctx: commands.Context, index: int):
