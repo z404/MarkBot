@@ -696,6 +696,7 @@ class Music(commands.Cog):
 
             ctx.voice_state.voice = await destination.connect()
         ctx.songname = search
+        await ctx.send("Searching for song..")
         try:
             if 'open.spotify' in search:
                 auth = oauth2.SpotifyClientCredentials(

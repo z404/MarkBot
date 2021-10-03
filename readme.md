@@ -23,19 +23,19 @@ A general purpose, easy to use discord bot. Have an idea for a command? Open an 
 |    cleanup bots    | Cleans messages of bots                                   |      Yes      | Cleanup          |   Yes    |
 |  cleanup commands  | Cleans up bot command messages (can provide a prefix)     |      Yes      | Cleanup          |   Yes    |
 |       purge        | Mass deletes messages to clean a channel                  |      Yes      | Cleanup          |   Yes    |
-|        join        | Joins a voice channel                                     |      No       | Music            |   Yes    |
-|       leave        | Leaves a voice channel                                    |      No       | Music            |   Yes    |
-|        now         | Shows current song playing                                |      No       | Music            |   Yes    |
-|       pause        | Pauses playback of current audio                          |      No       | Music            |   Yes    |
-|        play        | Enqueues the song into the queue                          |      No       | Music            |   Yes    |
-|       queue        | Displays the current song queue                           |      No       | Music            |   Yes    |
-|       remove       | Removes a song from the queue                             |      No       | Music            |   Yes    |
-|       resume       | Resumes paused playback                                   |      No       | Music            |   Yes    |
-|      shuffle       | Shuffles the queue                                        |      No       | Music            |   Yes    |
-|        skip        | Skips song that is currently playing                      |      No       | Music            |   Yes    |
-|        stop        | Stops playback                                            |      No       | Music            |   Yes    |
-|       summon       | Summons the bot to a voice channel                        |      No       | Music            |   Yes    |
-|   toggleannounce   | Stops announcement of new song in channel                 |      No       | Music            |   Yes    |
+|        join        | Joins a voice channel                                     |      Yes      | Music            |   Yes    |
+|       leave        | Leaves a voice channel                                    |      Yes      | Music            |   Yes    |
+|        now         | Shows current song playing                                |      Yes      | Music            |   Yes    |
+|       pause        | Pauses playback of current audio                          |      Yes      | Music            |   Yes    |
+|        play        | Enqueues the song into the queue                          |      Yes      | Music            |   Yes    |
+|       queue        | Displays the current song queue                           |      Yes      | Music            |   Yes    |
+|       remove       | Removes a song from the queue                             |      Yes      | Music            |   Yes    |
+|       resume       | Resumes paused playback                                   |      Yes      | Music            |   Yes    |
+|      shuffle       | Shuffles the queue                                        |      Yes      | Music            |   Yes    |
+|        skip        | Skips song that is currently playing                      |      Yes      | Music            |   Yes    |
+|        stop        | Stops playback                                            |      Yes      | Music            |   Yes    |
+|       summon       | Summons the bot to a voice channel                        |      Yes      | Music            |   Yes    |
+|   toggleannounce   | Stops announcement of new song in channel                 |      Yes      | Music            |   Yes    |
 |     changenick     | [Hidden] Changes a person's nickname in a server          |      No       | Administration   |   Yes    |
 |     terminate      | [Hidden] Kills the bot globally                           |      No       | Administration   |   Yes    |
 |    changestatus    | [Hidden] Changes the bot's status on discord              |      No       | Administration   |   Yes    |

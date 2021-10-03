@@ -28,13 +28,12 @@ if not Path('database').is_file():
     with open('database', 'w+') as file:
         file.write('{}')
 
-initial_extensions = ['cogs.Music']  # ,
-#    'cogs.Functionality',
-#   'cogs.Administration',
-#   'cogs.Music',
-#   'cogs.Activity',
-#   'cogs.Cleanup',
-#   'cogs.Shrug']
+initial_extensions = ['cogs.Music',
+                      'cogs.Functionality',
+                      'cogs.Administration',
+                      'cogs.Activity',
+                      'cogs.Cleanup',
+                      'cogs.Shrug']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
@@ -45,8 +44,8 @@ if __name__ == '__main__':
     for extension in initial_extensions:
         bot.load_extension(extension)
 
-# node_server = Popen("npm start", shell=True,
-#                     cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
+node_server = Popen("npm start", shell=True,
+                    cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
 
 
 @ bot.event
