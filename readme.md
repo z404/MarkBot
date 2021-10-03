@@ -84,4 +84,6 @@ Open an issue! I'll be glad to help out! You can add me on discord as well (Wilf
 - [Discord.py](https://github.com/Rapptz/discord.py) has no support for slash commands, and any other library in python that implements slash commands does not have support for voice channels (No music slash commands)
 - The new library being used for slash commands, [Discord-interactions](https://github.com/goverfl0w/discord-interactions) is a little low on documentation
 
-### Developed by [z404](https://github.com/z404)
+## License
+
+This project is licensed by [MIT License](LICENSE)
