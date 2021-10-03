@@ -3,6 +3,8 @@ import discord
 from pathlib import Path
 from discord_slash import SlashCommand, SlashContext
 from subprocess import Popen
+import os
+from shutil import copyfile
 
 l = '''
  ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
@@ -43,6 +45,9 @@ slash = SlashCommand(bot, sync_commands=True)
 if __name__ == '__main__':
     for extension in initial_extensions:
         bot.load_extension(extension)
+
+if not os.path.isdir("./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/config.json"):
+    copyfile("config.json", "./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/config.json")
 
 node_server = Popen("npm start", shell=True,
                     cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")

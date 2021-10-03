@@ -1,0 +1,9 @@
+{
+    "prefix": "<enter-prefix-here>",
+    "discord_token": "<enter-discord-bot-token>",
+    "admin_list": ["<discord-user-ID-1>", "<discord-user-ID-2>"],
+    "spotify_api_key" : "<spotify-api-key>",
+    "spotify_api_secret": "<spoify-api-secret>",
+    "wolframalpha_key": "<wolframalpha-api-key>",
+    "log-channel": "<discord-channel-id>"
+}
