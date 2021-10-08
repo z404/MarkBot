@@ -130,6 +130,8 @@ class Cleanup(commands.Cog):
     async def _commands_slash(self, ctx: SlashContext, which_prefix: str = None):
         """Delete all messages that are bot commands.
             Provide specific prefixes to target(optional)"""
+        if which_prefix == None:
+            which_prefix = "! . ? ' ("
         which_prefix = [i for i in which_prefix if i != ' ']
 
         def is_undesired(message):
