@@ -89,17 +89,19 @@ class Cleanup(commands.Cog):
         await msg.delete()
 
     @_cleanup.command(pass_context=True, name="people")
-    async def _people(self, ctx: commands.Context, which_person: discord.Member = None):
+    async def _people(self, ctx: commands.Context, which_person: discord.Member = None, number_of_people: int = None):
         """Delete last 100 messages by people.
             Provide mention of specific specific people(optional)"""
+        if number_of_people == None:
+            number_of_people = 100
         if which_person == None:
             def is_undesired(message):
                 return message.author.bot == False
-            await ctx.channel.purge(limit=100, check=is_undesired)
+            await ctx.channel.purge(limit=number_of_people, check=is_undesired)
         else:
             def is_undesired(message):
                 return message.author == which_person and not (message.author.bot)
-            await ctx.channel.purge(limit=100, check=is_undesired)
+            await ctx.channel.purge(limit=number_of_people, check=is_undesired)
         await ctx.message.delete()
         ways_to_clean = [
             "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
@@ -177,17 +179,19 @@ class Cleanup(commands.Cog):
 
     @commands.has_permissions(manage_messages=True)
     @cog_ext.cog_subcommand(name="people", base="cleanup")
-    async def _people_slash(self, ctx: SlashContext, which_person: discord.Member = None):
+    async def _people_slash(self, ctx: SlashContext, which_person: discord.Member = None, number_of_messages: int = None):
         """Delete last 100 messages by people.
             Provide mention of specific specific people(optional)"""
+        if number_of_messages == None:
+            number_of_messages = 100
         if which_person == None:
             def is_undesired(message):
                 return message.author.bot == False
-            await ctx.channel.purge(limit=100, check=is_undesired)
+            await ctx.channel.purge(limit=number_of_messages, check=is_undesired)
         else:
             def is_undesired(message):
                 return message.author == which_person and not (message.author.bot)
-            await ctx.channel.purge(limit=100, check=is_undesired)
+            await ctx.channel.purge(limit=number_of_messages, check=is_undesired)
         ways_to_clean = [
             "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
             "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
