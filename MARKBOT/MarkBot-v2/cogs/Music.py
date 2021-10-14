@@ -904,10 +904,32 @@ class Music(commands.Cog):
 
     @commands.group(name="playlist", pass_context=True)
     async def _playlist(self, ctx: commands.Context):
-        # temp1 = self.bot.commands
-        # temp = self.bot.get_command(name='play')
-        # await temp.callback(ctx=ctx, search="Level of concern")
-        await self._play(ctx=ctx, search="level of concern", flag=True)
+        self.db = get_db()
+        if not ctx.invoked_subcommand:
+            # Display saved playlists
+            try:
+                # Make a better display of playlists
+                for i in self.db[str(ctx.author.id) + "_saved_playlists"]:
+                    await ctx.send(i)
+            except KeyError:
+                await ctx.send("You don't have any saved playlists!")
+        # await self._play(ctx=ctx, search="level of concern", flag=True)
+
+    @_playlist.command(pass_context=True, name="create")
+    async def _playlist_create(self, ctx: commands.Context, *, name_of_playlist: str):
+        self.db = get_db()
+        if " " in name_of_playlist:
+            await ctx.send("Playlist names cannot have spaces!")
+        else:
+            try:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"].update({name_of_playlist: None})
+            except:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"] = {name_of_playlist: None}
+            await ctx.send("Playlist added!")
+            write_db(self.db)
+            self.db = get_db()
 
 
 def setup(bot):
