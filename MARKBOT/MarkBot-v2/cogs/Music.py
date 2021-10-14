@@ -931,6 +931,27 @@ class Music(commands.Cog):
             write_db(self.db)
             self.db = get_db()
 
+    @_playlist.command(pass_context=True, name="add")
+    async def _playlist_add(self, ctx: commands.Context, name_of_playlist: str, *name_of_song: str):
+        self.db = get_db()
+        name_of_song = " ".join(name_of_song)
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            if self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist] == None:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"][name_of_playlist] = [name_of_song]
+            else:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"][name_of_playlist].append(name_of_song)
+
+            await ctx.send("Song added to "+name_of_playlist+"!")
+            write_db(self.db)
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
