@@ -786,7 +786,7 @@ class Music(commands.Cog):
             await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
 
     @commands.command(name='play', aliases=['p'])
-    async def _play(self, ctx: commands.Context, *, search: str):
+    async def _play(self, ctx: commands.Context, *, search: str, flag=None):
         """Plays a song.
         If there are songs in the queue, this will be queued until the
         other songs finished playing.
@@ -814,7 +814,8 @@ class Music(commands.Cog):
                         song = Song(source)
 
                         await ctx.voice_state.songs.put(song)
-                        await ctx.send('Enqueued {}'.format(str(source)))
+                        if flag == None:
+                            await ctx.send('Enqueued {}'.format(str(source)))
                     else:
                         response = spotify.playlist_items(search)
                         await ctx.send("Enqueueing "+str(len(response['items']))+" songs. This may take a while..")
@@ -827,7 +828,8 @@ class Music(commands.Cog):
                                 await ctx.voice_state.songs.put(song)
                             except:
                                 continue
-                        await ctx.send("Playlist has been enqueued")
+                        if flag == None:
+                            await ctx.send("Playlist has been enqueued")
 
                 else:
                     YTDL_OPTIONS = {
@@ -868,7 +870,8 @@ class Music(commands.Cog):
                         for i in video:
                             count += 1
                             urllst.append(i['title'])
-                        await ctx.send('Enqueued '+str(count)+' songs')
+                        if flag == None:
+                            await ctx.send('Enqueued '+str(count)+' songs')
                         for i in urllst:
                             try:
                                 source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
@@ -882,7 +885,8 @@ class Music(commands.Cog):
                         song = Song(source)
 
                         await ctx.voice_state.songs.put(song)
-                        await ctx.send('Enqueued {}'.format(str(source)))
+                        if flag == None:
+                            await ctx.send('Enqueued {}'.format(str(source)))
             except YTDLError as e:
                 await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
 
@@ -897,6 +901,13 @@ class Music(commands.Cog):
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError(
                     'Bot is already in a voice channel.')
+
+    @commands.group(name="playlist", pass_context=True)
+    async def _playlist(self, ctx: commands.Context):
+        # temp1 = self.bot.commands
+        # temp = self.bot.get_command(name='play')
+        # await temp.callback(ctx=ctx, search="Level of concern")
+        await self._play(ctx=ctx, search="level of concern", flag=True)
 
 
 def setup(bot):
