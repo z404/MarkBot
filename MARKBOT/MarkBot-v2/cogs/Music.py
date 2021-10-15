@@ -12,6 +12,7 @@ import youtube_dl
 # importing packages for spotify
 import spotipy
 import spotipy.oauth2 as oauth2
+from tabulate import tabulate
 
 
 # Function to write into database
@@ -515,7 +516,7 @@ class Music(commands.Cog):
         if not ctx.voice_state.is_playing:
             return await ctx.send('Not playing any music right now...')
 
-        #voter = ctx.message.author
+        # voter = ctx.message.author
         # if voter == ctx.voice_state.current.requester:
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
@@ -908,9 +909,18 @@ class Music(commands.Cog):
         if not ctx.invoked_subcommand:
             # Display saved playlists
             try:
-                # Make a better display of playlists
-                for i in self.db[str(ctx.author.id) + "_saved_playlists"]:
-                    await ctx.send(i)
+                self.db = get_db()
+                lst = list(self.db[str(ctx.author.id) +
+                                   "_saved_playlists"].keys())
+                lst = [[i+1, lst[i]] for i in range(len(lst))]
+                if len(lst) != 0:
+                    embed = discord.Embed(
+                        title="Playlists", description=ctx.author.mention+"'s playlists!")
+                    embed.add_field(name="Playlists", value="```"+tabulate(
+                        lst, tablefmt="fancy_grid")+"```")
+                    await ctx.send(embed=embed)
+                else:
+                    await ctx.send("You don't have any saved playlists!")
             except KeyError:
                 await ctx.send("You don't have any saved playlists!")
         # await self._play(ctx=ctx, search="level of concern", flag=True)
@@ -969,6 +979,73 @@ class Music(commands.Cog):
                 await ctx.send("Playlist enqueued!")
             else:
                 await ctx.send("This playlist has no songs. Please add a few songs first")
+
+    @_playlist.command(pass_context=True, name="listsongs")
+    async def _playlist_listsongs(self, ctx: commands.Context, name_of_playlist: str, pagenumber: int = None):
+        self.db = get_db()
+        if pagenumber == None:
+            pagenumber = 1
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            if self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist] != None:
+                embed = discord.Embed(
+                    title="Tracks in "+name_of_playlist, description=ctx.author.mention+"'s playlist contains the following songs")
+                lst = self.db[str(ctx.author.id) +
+                              "_saved_playlists"][name_of_playlist]
+                lst = [[i+1, lst[i]]
+                       for i in range(len(lst))][(pagenumber-1)*10:((pagenumber-1)*10)+10]
+                embed.add_field(name="Tracks", value="```"+tabulate(
+                    lst, tablefmt="fancy_grid")+"```")
+                embed.set_footer(text="Page "+str(pagenumber)+" of "+str((len(self.db[str(ctx.author.id) +
+                                                                                      "_saved_playlists"][name_of_playlist])+9)//10))
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send("This playlist has no songs. Please add a few songs first")
+
+    @_playlist.command(pass_context=True, name="remove")
+    async def _playlist_remove(self, ctx: commands.Context, name_of_playlist: str, remove_index: int):
+        self.db = get_db()
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            if self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist] != None:
+                lst = self.db[str(ctx.author.id) +
+                              "_saved_playlists"][name_of_playlist]
+                try:
+                    song_name = lst[remove_index-1]
+                    del(lst[remove_index-1])
+                    self.db[str(ctx.author.id) +
+                            "_saved_playlists"][name_of_playlist] = lst
+                    write_db(self.db)
+                    await ctx.send('"'+song_name+"\" has been removed from "+name_of_playlist)
+                except IndexError:
+                    await ctx.send("Sorry, I couldn't find the song you wanted to remove")
+            else:
+                await ctx.send("This playlist has no songs. Please add a few songs first")
+
+    @_playlist.command(pass_context=True, name="delete")
+    async def _playlist_delete(self, ctx: commands.Context, name_of_playlist: str):
+        self.db = get_db()
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            del(self.db[str(ctx.author.id) + "_saved_playlists"]
+                [name_of_playlist])
+            write_db(self.db)
+            await ctx.send(name_of_playlist+" has been deleted!")
 
 
 def setup(bot):
