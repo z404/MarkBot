@@ -786,7 +786,7 @@ class Music(commands.Cog):
             await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
 
     @commands.command(name='play', aliases=['p'])
-    async def _play(self, ctx: commands.Context, *, search: str):
+    async def _play(self, ctx: commands.Context, *, search: str, flag=None):
         """Plays a song.
         If there are songs in the queue, this will be queued until the
         other songs finished playing.
@@ -814,7 +814,8 @@ class Music(commands.Cog):
                         song = Song(source)
 
                         await ctx.voice_state.songs.put(song)
-                        await ctx.send('Enqueued {}'.format(str(source)))
+                        if flag == None:
+                            await ctx.send('Enqueued {}'.format(str(source)))
                     else:
                         response = spotify.playlist_items(search)
                         await ctx.send("Enqueueing "+str(len(response['items']))+" songs. This may take a while..")
@@ -827,7 +828,8 @@ class Music(commands.Cog):
                                 await ctx.voice_state.songs.put(song)
                             except:
                                 continue
-                        await ctx.send("Playlist has been enqueued")
+                        if flag == None:
+                            await ctx.send("Playlist has been enqueued")
 
                 else:
                     YTDL_OPTIONS = {
@@ -868,7 +870,8 @@ class Music(commands.Cog):
                         for i in video:
                             count += 1
                             urllst.append(i['title'])
-                        await ctx.send('Enqueued '+str(count)+' songs')
+                        if flag == None:
+                            await ctx.send('Enqueued '+str(count)+' songs')
                         for i in urllst:
                             try:
                                 source = await YTDLSource.create_source(ctx, i, loop=self.bot.loop)
@@ -882,7 +885,8 @@ class Music(commands.Cog):
                         song = Song(source)
 
                         await ctx.voice_state.songs.put(song)
-                        await ctx.send('Enqueued {}'.format(str(source)))
+                        if flag == None:
+                            await ctx.send('Enqueued {}'.format(str(source)))
             except YTDLError as e:
                 await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
 
@@ -897,6 +901,74 @@ class Music(commands.Cog):
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError(
                     'Bot is already in a voice channel.')
+
+    @commands.group(name="playlist", pass_context=True)
+    async def _playlist(self, ctx: commands.Context):
+        self.db = get_db()
+        if not ctx.invoked_subcommand:
+            # Display saved playlists
+            try:
+                # Make a better display of playlists
+                for i in self.db[str(ctx.author.id) + "_saved_playlists"]:
+                    await ctx.send(i)
+            except KeyError:
+                await ctx.send("You don't have any saved playlists!")
+        # await self._play(ctx=ctx, search="level of concern", flag=True)
+
+    @_playlist.command(pass_context=True, name="create")
+    async def _playlist_create(self, ctx: commands.Context, *, name_of_playlist: str):
+        self.db = get_db()
+        if " " in name_of_playlist:
+            await ctx.send("Playlist names cannot have spaces!")
+        else:
+            try:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"].update({name_of_playlist: None})
+            except:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"] = {name_of_playlist: None}
+            await ctx.send("Playlist added!")
+            write_db(self.db)
+            self.db = get_db()
+
+    @_playlist.command(pass_context=True, name="add")
+    async def _playlist_add(self, ctx: commands.Context, name_of_playlist: str, *name_of_song: str):
+        self.db = get_db()
+        name_of_song = " ".join(name_of_song)
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            if self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist] == None:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"][name_of_playlist] = [name_of_song]
+            else:
+                self.db[str(ctx.author.id) +
+                        "_saved_playlists"][name_of_playlist].append(name_of_song)
+
+            await ctx.send("Song added to "+name_of_playlist+"!")
+            write_db(self.db)
+
+    @_playlist.command(pass_context=True, name="play")
+    async def _playlist_play(self, ctx: commands.Context, name_of_playlist: str):
+        self.db = get_db()
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            if self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist] != None:
+                await ctx.send("Enqueueing "+str(len(self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]))+" songs. This could take a while..")
+                for i in self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]:
+                    await self._play(ctx=ctx, search=i, flag=True)
+                await ctx.send("Playlist enqueued!")
+            else:
+                await ctx.send("This playlist has no songs. Please add a few songs first")
 
 
 def setup(bot):
