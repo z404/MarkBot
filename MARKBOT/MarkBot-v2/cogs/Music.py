@@ -909,9 +909,18 @@ class Music(commands.Cog):
         if not ctx.invoked_subcommand:
             # Display saved playlists
             try:
-                # Make a better display of playlists
-                for i in self.db[str(ctx.author.id) + "_saved_playlists"]:
-                    await ctx.send(i)
+                self.db = get_db()
+                lst = list(self.db[str(ctx.author.id) +
+                                   "_saved_playlists"].keys())
+                lst = [[i+1, lst[i]] for i in range(len(lst))]
+                if len(lst) != 0:
+                    embed = discord.Embed(
+                        title="Playlists", description=ctx.author.mention+"'s playlists!")
+                    embed.add_field(name="Playlists", value="```"+tabulate(
+                        lst, tablefmt="fancy_grid")+"```")
+                    await ctx.send(embed=embed)
+                else:
+                    await ctx.send("You don't have any saved playlists!")
             except KeyError:
                 await ctx.send("You don't have any saved playlists!")
         # await self._play(ctx=ctx, search="level of concern", flag=True)
@@ -999,7 +1008,7 @@ class Music(commands.Cog):
                 await ctx.send("This playlist has no songs. Please add a few songs first")
 
     @_playlist.command(pass_context=True, name="remove")
-    async def _playlist_remove(self, ctx: commands.Context, name_of_playlist: str, remove_index: int = None):
+    async def _playlist_remove(self, ctx: commands.Context, name_of_playlist: str, remove_index: int):
         self.db = get_db()
         flag = True
         try:
