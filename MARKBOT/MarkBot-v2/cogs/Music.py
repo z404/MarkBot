@@ -998,6 +998,46 @@ class Music(commands.Cog):
             else:
                 await ctx.send("This playlist has no songs. Please add a few songs first")
 
+    @_playlist.command(pass_context=True, name="remove")
+    async def _playlist_remove(self, ctx: commands.Context, name_of_playlist: str, remove_index: int = None):
+        self.db = get_db()
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            if self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist] != None:
+                lst = self.db[str(ctx.author.id) +
+                              "_saved_playlists"][name_of_playlist]
+                try:
+                    song_name = lst[remove_index-1]
+                    del(lst[remove_index-1])
+                    self.db[str(ctx.author.id) +
+                            "_saved_playlists"][name_of_playlist] = lst
+                    write_db(self.db)
+                    await ctx.send('"'+song_name+"\" has been removed from "+name_of_playlist)
+                except IndexError:
+                    await ctx.send("Sorry, I couldn't find the song you wanted to remove")
+            else:
+                await ctx.send("This playlist has no songs. Please add a few songs first")
+
+    @_playlist.command(pass_context=True, name="delete")
+    async def _playlist_delete(self, ctx: commands.Context, name_of_playlist: str):
+        self.db = get_db()
+        flag = True
+        try:
+            self.db[str(ctx.author.id) + "_saved_playlists"][name_of_playlist]
+        except KeyError:
+            flag = False
+            await ctx.send("Playlist couldn't be found! Check for typos or create a playlist!")
+        if flag:
+            del(self.db[str(ctx.author.id) + "_saved_playlists"]
+                [name_of_playlist])
+            write_db(self.db)
+            await ctx.send(name_of_playlist+" has been deleted!")
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
