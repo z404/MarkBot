@@ -32,6 +32,7 @@ class ReactionRoles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         role, user = self.parse_reaction_payload(payload)
+        print('hello', role, user)
         if role is not None and user is not None:
             await user.add_roles(role, reason="ReactionRole")
 
@@ -59,9 +60,10 @@ class ReactionRoles(commands.Cog):
 
     @commands.has_permissions(manage_channels=True)
     @commands.command()
-    async def reaction_add(
-        self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id
-    ):
+    async def reaction_add(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id):
+        print(f"Adding reaction {emote} to message {message_id}")
+        message = await channel.fetch_message(message_id)
+        await message.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
 
     @commands.has_permissions(manage_channels=True)
@@ -147,10 +149,11 @@ class ReactionRoles(commands.Cog):
         data = reaction_roles_data.get(str(guild_id), None)
         if data is not None:
             for rr in data:
-                emote = rr.get("emote")
-                if payload.message_id == rr.get("messageID"):
-                    if payload.channel_id == rr.get("channelID"):
+                emote = rr["emote"]
+                if str(payload.message_id) == str(rr["messageID"]):
+                    if str(payload.channel_id) == str(rr["channelID"]):
                         if str(payload.emoji) == emote:
+                            print(str(payload.emoji), emote)
                             guild = self.bot.get_guild(guild_id)
                             role = guild.get_role(rr.get("roleID"))
                             user = guild.get_member(payload.user_id)
