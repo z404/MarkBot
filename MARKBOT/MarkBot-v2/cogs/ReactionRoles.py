@@ -3,7 +3,7 @@ from discord.ext import commands
 import json
 import atexit
 import uuid
-
+import asyncio
 
 reaction_roles_data = {}
 
@@ -26,13 +26,8 @@ class ReactionRoles(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_ready(self):
-        print(f"ReactionRoles ready.")
-
-    @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         role, user = self.parse_reaction_payload(payload)
-        print('hello', role, user)
         if role is not None and user is not None:
             await user.add_roles(role, reason="ReactionRole")
 
@@ -61,7 +56,6 @@ class ReactionRoles(commands.Cog):
     @commands.has_permissions(manage_channels=True)
     @commands.command()
     async def reaction_add(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id):
-        print(f"Adding reaction {emote} to message {message_id}")
         message = await channel.fetch_message(message_id)
         await message.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
@@ -119,16 +113,16 @@ class ReactionRoles(commands.Cog):
             await msg.add_reaction("🗑️")
 
             def check(reaction, user):
-                return (
-                    reaction.message.id == msg.id
-                    and user == ctx.message.author
-                    and str(reaction.emoji) == "🗑️"
-                )
-
-            reaction, user = await self.bot.wait_for("reaction_add", check=check)
-            data.remove(rr)
-            reaction_roles_data[str(guild_id)] = data
-            store_reaction_roles()
+                return(user == ctx.message.author and str(reaction.emoji) == "🗑️")
+            msg = await self.bot.get_channel(channel_id).fetch_message(message_id)
+            await msg.remove_reaction(emote, self.bot.user)
+            try:
+                reaction, user = await self.bot.wait_for("reaction_add", check=check, timeout=15)
+                data.remove(rr)
+                reaction_roles_data[str(guild_id)] = data
+                store_reaction_roles()
+            except asyncio.TimeoutError:
+                await ctx.send("Timed out. Operation cancelled.")
 
     def add_reaction(self, guild_id, emote, role_id, channel_id, message_id):
         if not str(guild_id) in reaction_roles_data:
@@ -153,7 +147,6 @@ class ReactionRoles(commands.Cog):
                 if str(payload.message_id) == str(rr["messageID"]):
                     if str(payload.channel_id) == str(rr["channelID"]):
                         if str(payload.emoji) == emote:
-                            print(str(payload.emoji), emote)
                             guild = self.bot.get_guild(guild_id)
                             role = guild.get_role(rr.get("roleID"))
                             user = guild.get_member(payload.user_id)
