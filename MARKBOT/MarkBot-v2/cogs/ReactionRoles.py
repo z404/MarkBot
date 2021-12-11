@@ -4,6 +4,8 @@ import json
 import atexit
 import uuid
 import asyncio
+from discord.ext.commands.converter import EmojiConverter, PartialEmojiConverter
+from discord_slash import cog_ext, SlashContext
 
 reaction_roles_data = {}
 
@@ -152,6 +154,35 @@ class ReactionRoles(commands.Cog):
                             user = guild.get_member(payload.user_id)
                             return role, user
         return None, None
+
+    @commands.has_permissions(manage_channels=True)
+    @commands.command()
+    async def reaction_role_clear(self, ctx):
+        guild_id = ctx.guild.id
+        data = reaction_roles_data.get(str(guild_id), None)
+        if data is not None:
+            print()
+            del reaction_roles_data[str(guild_id)]
+            store_reaction_roles()
+        await ctx.send("Reaction Roles cleared.")
+
+    @commands.has_permissions(manage_channels=True)
+    @cog_ext.cog_slash(name="create_reaction_role")
+    async def reaction_slash(
+        self,
+        ctx,
+        emote: PartialEmojiConverter,
+        role: discord.Role,
+        channel: discord.TextChannel,
+        title,
+        message,
+    ):
+        '''Create a reaction role message'''
+        embed = discord.Embed(title=title, description=message)
+        msg = await channel.send(embed=embed)
+        await msg.add_reaction(emote)
+        self.add_reaction(ctx.guild.id, emote, role.id, channel.id, msg.id)
+        await ctx.send("Reaction role created.", hidden=True)
 
 
 def setup(bot):
