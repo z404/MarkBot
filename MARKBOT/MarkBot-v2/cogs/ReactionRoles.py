@@ -184,6 +184,20 @@ class ReactionRoles(commands.Cog):
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, msg.id)
         await ctx.send("Reaction role created.", hidden=True)
 
+    @cog_ext.cog_slash(name="add_reaction_role")
+    async def reaction_slash_add(
+        self,
+        ctx,
+        emote: PartialEmojiConverter,
+        role: discord.Role,
+        channel: discord.TextChannel,
+        message_id: str
+    ):
+        message = await channel.fetch_message(message_id)
+        await message.add_reaction(emote)
+        self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
+        await ctx.send("Reaction role added.", hidden=True)
+
 
 def setup(bot):
     bot.add_cog(ReactionRoles(bot))
