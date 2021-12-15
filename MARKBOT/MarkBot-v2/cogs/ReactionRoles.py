@@ -198,6 +198,22 @@ class ReactionRoles(commands.Cog):
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
         await ctx.send("Reaction role added.", hidden=True)
 
+    @cog_ext.cog_slash(name="remove_reaction_role")
+    async def reaction_remove_slash(self, ctx, index: int):
+        '''Remove a reaction role'''
+        guild_id = ctx.guild.id
+        data = reaction_roles_data.get(str(guild_id), None)
+        embed = discord.Embed(title=f"Remove Reaction Role {index}")
+        rr = None
+        if data is None:
+            await ctx.send("Given Reaction Role was not found.", hidden=True)
+        else:
+            rr = data[index]
+            data.remove(rr)
+            reaction_roles_data[str(guild_id)] = data
+            store_reaction_roles()
+            await ctx.send("Reaction role removed.", hidden=True)
+
 
 def setup(bot):
     bot.add_cog(ReactionRoles(bot))
