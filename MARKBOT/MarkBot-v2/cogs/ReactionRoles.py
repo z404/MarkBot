@@ -47,10 +47,10 @@ class ReactionRoles(commands.Cog):
         emote,
         role: discord.Role,
         channel: discord.TextChannel,
-        title,
-        message,
+        *message,
     ):
-        embed = discord.Embed(title=title, description=message)
+        embed = discord.Embed(title="Reaction Role",
+                              description=" ".join(message))
         msg = await channel.send(embed=embed)
         await msg.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, msg.id)
@@ -161,7 +161,6 @@ class ReactionRoles(commands.Cog):
         guild_id = ctx.guild.id
         data = reaction_roles_data.get(str(guild_id), None)
         if data is not None:
-            print()
             del reaction_roles_data[str(guild_id)]
             store_reaction_roles()
         await ctx.send("Reaction Roles cleared.")
@@ -184,6 +183,7 @@ class ReactionRoles(commands.Cog):
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, msg.id)
         await ctx.send("Reaction role created.", hidden=True)
 
+    @commands.has_permissions(manage_channels=True)
     @cog_ext.cog_slash(name="add_reaction_role")
     async def reaction_slash_add(
         self,
@@ -198,6 +198,7 @@ class ReactionRoles(commands.Cog):
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
         await ctx.send("Reaction role added.", hidden=True)
 
+    @commands.has_permissions(manage_channels=True)
     @cog_ext.cog_slash(name="remove_reaction_role")
     async def reaction_remove_slash(self, ctx, index: int):
         '''Remove a reaction role'''
@@ -214,6 +215,7 @@ class ReactionRoles(commands.Cog):
             store_reaction_roles()
             await ctx.send("Reaction role removed.", hidden=True)
 
+    @commands.has_permissions(manage_channels=True)
     @cog_ext.cog_slash(name="list_reaction_roles")
     async def reaction_slash_list(self, ctx):
         '''List reaction roles'''
@@ -235,6 +237,19 @@ class ReactionRoles(commands.Cog):
                     inline=False,
                 )
             await ctx.send(embed=embed, hidden=True)
+
+    @commands.has_permissions(manage_channels=True)
+    @cog_ext.cog_slash(name="clear_reaction_roles")
+    async def reaction_slash_clear(self, ctx):
+        '''Clear all reaction roles'''
+        guild_id = ctx.guild.id
+        data = reaction_roles_data.get(str(guild_id), None)
+        if data is None:
+            await ctx.send("No reaction roles found.", hidden=True)
+        else:
+            del reaction_roles_data[str(guild_id)]
+            store_reaction_roles()
+            await ctx.send("Reaction roles cleared.", hidden=True)
 
 
 def setup(bot):
