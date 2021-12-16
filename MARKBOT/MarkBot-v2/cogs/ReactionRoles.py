@@ -214,6 +214,28 @@ class ReactionRoles(commands.Cog):
             store_reaction_roles()
             await ctx.send("Reaction role removed.", hidden=True)
 
+    @cog_ext.cog_slash(name="list_reaction_roles")
+    async def reaction_slash_list(self, ctx):
+        '''List reaction roles'''
+        guild_id = ctx.guild.id
+        data = reaction_roles_data.get(str(guild_id), None)
+        if data is None:
+            await ctx.send("No reaction roles found.", hidden=True)
+        else:
+            embed = discord.Embed(title="Reaction Roles")
+            for index, rr in enumerate(data):
+                emote = rr.get("emote")
+                role_id = rr.get("roleID")
+                role = ctx.guild.get_role(role_id)
+                channel_id = rr.get("channelID")
+                message_id = rr.get("messageID")
+                embed.add_field(
+                    name=index,
+                    value=f"{emote} - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
+                    inline=False,
+                )
+            await ctx.send(embed=embed, hidden=True)
+
 
 def setup(bot):
     bot.add_cog(ReactionRoles(bot))
