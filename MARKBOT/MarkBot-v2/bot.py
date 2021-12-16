@@ -35,7 +35,8 @@ initial_extensions = ['cogs.Music',
                       'cogs.Administration',
                       'cogs.Activity',
                       'cogs.Cleanup',
-                      'cogs.Shrug']
+                      'cogs.Shrug',
+                      'cogs.ReactionRoles']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
@@ -53,7 +54,7 @@ node_server = Popen("npm start", shell=True,
                     cwd="./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity")
 
 
-@ bot.event
+@bot.event
 async def on_ready():
     print("Bot is online!")
 

@@ -8,37 +8,42 @@ A general purpose, easy to use discord bot. Have an idea for a command? Open an 
 
 ## Commands:
 
-|      Command       | Description                                               | Slash command | Cog              | Working? |
-| :----------------: | --------------------------------------------------------- | :-----------: | ---------------- | :------: |
-|        help        | Displays the bot's commands                               |      No       | None             |   Yes    |
-|       invite       | Displays the invite link for the bot                      |      Yes      | Functionality    |   Yes    |
-|        logo        | Displays MarkBot's logo and ascii art                     |      Yes      | Functionality    |   Yes    |
-|        math        | Tries to solve a few basic math problems                  |      Yes      | Functionality    |    No    |
-|       tinify       | Command to shorten a url using tiny url                   |      Yes      | Functionality    |   Yes    |
-|        wiki        | Searches wikipedia and shows a summary of the search term |      Yes      | Functionality    |  Buggy   |
-|     stealemoji     | Steal an emoji from another server                        |      No       | Functionality    |   Yes    |
-| currency_converter | Converts currency from one unit to another                |      Yes      | Functionality    |   Yes    |
-|      activity      | Command to launch activities                              |      Yes      | MarkBot-Activity |   Yes    |
-|   cleanup people   | Cleans messages of specific users                         |      Yes      | Cleanup          |   Yes    |
-|    cleanup bots    | Cleans messages of bots                                   |      Yes      | Cleanup          |   Yes    |
-|  cleanup commands  | Cleans up bot command messages (can provide a prefix)     |      Yes      | Cleanup          |   Yes    |
-|       purge        | Mass deletes messages to clean a channel                  |      Yes      | Cleanup          |   Yes    |
-|        join        | Joins a voice channel                                     |      Yes      | Music            |   Yes    |
-|       leave        | Leaves a voice channel                                    |      Yes      | Music            |   Yes    |
-|        now         | Shows current song playing                                |      Yes      | Music            |   Yes    |
-|       pause        | Pauses playback of current audio                          |      Yes      | Music            |   Yes    |
-|        play        | Enqueues the song into the queue                          |      Yes      | Music            |   Yes    |
-|       queue        | Displays the current song queue                           |      Yes      | Music            |   Yes    |
-|       remove       | Removes a song from the queue                             |      Yes      | Music            |   Yes    |
-|       resume       | Resumes paused playback                                   |      Yes      | Music            |   Yes    |
-|      shuffle       | Shuffles the queue                                        |      Yes      | Music            |   Yes    |
-|        skip        | Skips song that is currently playing                      |      Yes      | Music            |   Yes    |
-|        stop        | Stops playback                                            |      Yes      | Music            |   Yes    |
-|       summon       | Summons the bot to a voice channel                        |      Yes      | Music            |   Yes    |
-|   toggleannounce   | Stops announcement of new song in channel                 |      Yes      | Music            |   Yes    |
-|     changenick     | [Hidden] Changes a person's nickname in a server          |      No       | Administration   |   Yes    |
-|     terminate      | [Hidden] Kills the bot globally                           |      No       | Administration   |   Yes    |
-|    changestatus    | [Hidden] Changes the bot's status on discord              |      No       | Administration   |   Yes    |
+|       Command        | Description                                               | Slash command | Cog              | Working? |
+| :------------------: | --------------------------------------------------------- | :-----------: | ---------------- | :------: |
+|         help         | Displays the bot's commands                               |      No       | None             |   Yes    |
+|        invite        | Displays the invite link for the bot                      |      Yes      | Functionality    |   Yes    |
+|         logo         | Displays MarkBot's logo and ascii art                     |      Yes      | Functionality    |   Yes    |
+|         math         | Tries to solve a few basic math problems                  |      Yes      | Functionality    |    No    |
+|        tinify        | Command to shorten a url using tiny url                   |      Yes      | Functionality    |   Yes    |
+|         wiki         | Searches wikipedia and shows a summary of the search term |      Yes      | Functionality    |  Buggy   |
+|      stealemoji      | Steal an emoji from another server                        |      No       | Functionality    |   Yes    |
+|  currency_converter  | Converts currency from one unit to another                |      Yes      | Functionality    |   Yes    |
+|       activity       | Command to launch activities                              |      Yes      | MarkBot-Activity |   Yes    |
+|    cleanup people    | Cleans messages of specific users                         |      Yes      | Cleanup          |   Yes    |
+|     cleanup bots     | Cleans messages of bots                                   |      Yes      | Cleanup          |   Yes    |
+|   cleanup commands   | Cleans up bot command messages (can provide a prefix)     |      Yes      | Cleanup          |   Yes    |
+|        purge         | Mass deletes messages to clean a channel                  |      Yes      | Cleanup          |   Yes    |
+|         join         | Joins a voice channel                                     |      Yes      | Music            |   Yes    |
+|        leave         | Leaves a voice channel                                    |      Yes      | Music            |   Yes    |
+|         now          | Shows current song playing                                |      Yes      | Music            |   Yes    |
+|        pause         | Pauses playback of current audio                          |      Yes      | Music            |   Yes    |
+|         play         | Enqueues the song into the queue                          |      Yes      | Music            |   Yes    |
+|        queue         | Displays the current song queue                           |      Yes      | Music            |   Yes    |
+|        remove        | Removes a song from the queue                             |      Yes      | Music            |   Yes    |
+|        resume        | Resumes paused playback                                   |      Yes      | Music            |   Yes    |
+|       shuffle        | Shuffles the queue                                        |      Yes      | Music            |   Yes    |
+|         skip         | Skips song that is currently playing                      |      Yes      | Music            |   Yes    |
+|         stop         | Stops playback                                            |      Yes      | Music            |   Yes    |
+|        summon        | Summons the bot to a voice channel                        |      Yes      | Music            |   Yes    |
+|    toggleannounce    | Stops announcement of new song in channel                 |      Yes      | Music            |   Yes    |
+|      changenick      | [Hidden] Changes a person's nickname in a server          |      No       | Administration   |   Yes    |
+|      terminate       | [Hidden] Kills the bot globally                           |      No       | Administration   |   Yes    |
+|     changestatus     | [Hidden] Changes the bot's status on discord              |      No       | Administration   |   Yes    |
+| create_reaction_role | Sends a new message on a channel with a reaction role     |      Yes      | Reaction Role    |   Yes    |
+|  add_reaction_role   | Adds a reaction role to an already existing message       |      Yes      | Reaction Role    |   Yes    |
+| list_reaction_roles  | Displays all working reaction roles                       |      Yes      | Reaction Role    |   Yes    |
+| remove_reaction_role | Removes a reaction role from an already existing message  |      Yes      | Reaction Role    |   Yes    |
+| clear_reaction_roles | Removes all reaction roles in the server                  |      Yes      | Reaction Role    |   Yes    |
 
 ## Structure of the bot
 
@@ -60,6 +65,7 @@ V1 has been discarded as it is extremely uncomfortable to work with and develop.
         - 📄 [package.json](MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/package.json)
       - 📄 [Music.py](MARKBOT/MarkBot-v2/cogs/Music.py)
       - 📄 [Shrug.py](MARKBOT/MarkBot-v2/cogs/Shrug.py)
+      - 📄 [ReactionRoles.py](MARKBOT/MarkBot-v2/cogs/ReactionRoles.py)
 - 📄 config.json
 - 📄 database
 - 📄 [readme.md](readme.md)

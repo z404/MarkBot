@@ -41,7 +41,7 @@ class ReactionRoles(commands.Cog):
 
     @commands.has_permissions(manage_channels=True)
     @commands.command()
-    async def reaction(
+    async def create_reaction_role(
         self,
         ctx,
         emote,
@@ -57,14 +57,14 @@ class ReactionRoles(commands.Cog):
 
     @commands.has_permissions(manage_channels=True)
     @commands.command()
-    async def reaction_add(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id):
+    async def add_reaction_role(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id):
         message = await channel.fetch_message(message_id)
         await message.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
 
     @commands.has_permissions(manage_channels=True)
     @commands.command()
-    async def reactions(self, ctx):
+    async def list_reaction_roles(self, ctx):
         guild_id = ctx.guild.id
         data = reaction_roles_data.get(str(guild_id), None)
         embed = discord.Embed(title="Reaction Roles")
@@ -86,7 +86,7 @@ class ReactionRoles(commands.Cog):
 
     @commands.has_permissions(manage_channels=True)
     @commands.command()
-    async def reaction_remove(self, ctx, index: int):
+    async def remove_reaction_role(self, ctx, index: int):
         guild_id = ctx.guild.id
         data = reaction_roles_data.get(str(guild_id), None)
         embed = discord.Embed(title=f"Remove Reaction Role {index}")
