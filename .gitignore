@@ -136,3 +136,5 @@ cache
 config.json
 database
 creds.txt.old
+
+reaction_roles.json
