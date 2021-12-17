@@ -192,6 +192,7 @@ class AdminControls(commands.Cog):
 
     # Check if the user is admin before the execution of the above commands
     @_botstats.before_invoke
+    @_serverstats.before_invoke
     @_changestatus.before_invoke
     @changenick.before_invoke
     @terminate.before_invoke
