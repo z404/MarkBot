@@ -8,4 +8,5 @@ bs4
 spotipy
 giphy_client
 currencyconverter
-discord-py-slash-command
+discord-py-interactions
+tabulate
