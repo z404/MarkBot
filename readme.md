@@ -39,6 +39,8 @@ A general purpose, easy to use discord bot. Have an idea for a command? Open an 
 |      changenick      | [Hidden] Changes a person's nickname in a server          |      No       | Administration   |   Yes    |
 |      terminate       | [Hidden] Kills the bot globally                           |      No       | Administration   |   Yes    |
 |     changestatus     | [Hidden] Changes the bot's status on discord              |      No       | Administration   |   Yes    |
+|       botstats       | [Hidden] Displays the bots status and stats               |      No       | Administration   |   Yes    |
+|     serverstats      | [Hidden] Displays the bots server stats                   |      No       | Administration   |   Yes    |
 | create_reaction_role | Sends a new message on a channel with a reaction role     |      Yes      | Reaction Role    |   Yes    |
 |  add_reaction_role   | Adds a reaction role to an already existing message       |      Yes      | Reaction Role    |   Yes    |
 | list_reaction_roles  | Displays all working reaction roles                       |      Yes      | Reaction Role    |   Yes    |
