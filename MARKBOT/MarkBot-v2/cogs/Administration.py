@@ -174,19 +174,20 @@ class AdminControls(commands.Cog):
                 server.members), server.owner])
         total_servers = len(list_of_servers)
         total_members = sum([x[1] for x in list_of_servers])
-        pages = int(len(list_of_servers) / 10)
+        pages = int(len(list_of_servers) / 5)
         if page > pages+1 or page < 1:
             await ctx.send("Page does not exist")
         else:
-            embed = discord.Embed(
-                title="Server Stats", description="Displays all stats of the bot")
-            heading.extend(list_of_servers[(page-1)*10:page*10])
+            # embed = discord.Embed(
+            # title="Server Stats", description="Displays all stats of the bot")
+            heading.extend(list_of_servers[(page-1)*5:page*5])
             tabulate_list = tabulate.tabulate(heading, tablefmt="fancy_grid")
-            embed.add_field(name="Totals", value="Total servers: {}\nTotal members: {}".format(
-                total_servers, total_members), inline=False)
-            embed.add_field(name="Page {}/{}".format(page, pages+1),
-                            value="```"+tabulate_list+"```", inline=False)
-            await ctx.send(embed=embed)
+            # embed.add_field(name="Totals", value="Total servers: {}\nTotal members: {}".format(
+            # total_servers, total_members), inline=False)
+            # embed.add_field(name="Page {}/{}".format(page, pages+1),
+            #                 value="```"+tabulate_list+"```", inline=False)
+            # await ctx.send(embed=embed)
+            await ctx.send(("**Server Stats**\nTotal servers: {}\nTotal members: {} \n\n**Page {}/{} **```"+tabulate_list+"```").format(total_servers, total_members, page, pages+1))
         # tabletext = tabulate.tabulate(
         #     list_of_servers, headers="firstrow", tablefmt="fancy_grid")
 
