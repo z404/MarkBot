@@ -157,4 +157,4 @@ class Client(discord.Client):
 
 intents = discord.Intents.default()
 client = Client(intents=intents)
-client.run('ODA4OTczMzMyOTg4OTUyNTg2.YCOVIA.MTPSZdIOzBYxIedsWgOm4-5bdc4')
+client.run('token')
