@@ -1,6 +1,7 @@
 import discord
 import os
 import speech_recognition as sr
+import json
 
 
 def vc_required(func):
@@ -157,4 +158,8 @@ class Client(discord.Client):
 
 intents = discord.Intents.default()
 client = Client(intents=intents)
-client.run('token')
+# open config file and get token
+with open('config.json', 'r') as f:
+    config = json.load(f)
+    token = config['discord_token']
+client.run(token)
