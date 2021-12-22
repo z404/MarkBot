@@ -2,7 +2,7 @@
 from os import popen
 import discord
 from discord.ext import commands
-from discord_slash import cog_ext, SlashContext
+# from discord_slash import cog_ext, SlashContext
 import tabulate
 import psutil
 import datetime
@@ -43,28 +43,28 @@ class AdminControls(commands.Cog):
         trace = (''.join([i.replace("`", "") for i in tb]))
         await errorlogchannel.send(f"```py\n{trace}```")
 
-    @commands.Cog.listener()
-    async def on_slash_command_error(self, ctx: SlashContext, error: commands.CommandError):
-        command_with_options = ctx.data['name']
-        try:
-            for i in ctx.data['options']:
-                if "options" in i.keys():
-                    command_with_options += ' ['+str(i['name']) + ': ' + \
-                        str(list([str(x['value']) for x in i["options"]]))+']'
-                elif "value" in i.keys():
-                    command_with_options += ' [' + \
-                        str(i['name'])+": "+str(i['value'])+']'
-                else:
-                    command_with_options += ' ['+str(i['name'])+"]"
-        except KeyError:
-            pass
-        errorlogchannel = self.bot.get_channel(
-            int(config['error-log-channel']))
-        tb = traceback.format_exception(
-            type(error), error, error.__traceback__)
-        await errorlogchannel.send(f"{ctx.author} has used the SLASH command `{command_with_options}` with the following error: \n```py\n{error}``` in server {ctx.guild.name}")
-        trace = (''.join([i.replace("`", "") for i in tb]))
-        await errorlogchannel.send(f"```py\n{trace}```")
+    # @commands.Cog.listener()
+    # async def on_slash_command_error(self, ctx: SlashContext, error: commands.CommandError):
+    #     command_with_options = ctx.data['name']
+    #     try:
+    #         for i in ctx.data['options']:
+    #             if "options" in i.keys():
+    #                 command_with_options += ' ['+str(i['name']) + ': ' + \
+    #                     str(list([str(x['value']) for x in i["options"]]))+']'
+    #             elif "value" in i.keys():
+    #                 command_with_options += ' [' + \
+    #                     str(i['name'])+": "+str(i['value'])+']'
+    #             else:
+    #                 command_with_options += ' ['+str(i['name'])+"]"
+    #     except KeyError:
+    #         pass
+    #     errorlogchannel = self.bot.get_channel(
+    #         int(config['error-log-channel']))
+    #     tb = traceback.format_exception(
+    #         type(error), error, error.__traceback__)
+    #     await errorlogchannel.send(f"{ctx.author} has used the SLASH command `{command_with_options}` with the following error: \n```py\n{error}``` in server {ctx.guild.name}")
+    #     trace = (''.join([i.replace("`", "") for i in tb]))
+    #     await errorlogchannel.send(f"```py\n{trace}```")
 
     # Logging system
     @commands.Cog.listener()
@@ -75,26 +75,26 @@ class AdminControls(commands.Cog):
         except AttributeError:
             await logchannel.send(f"Private message > {ctx.author} > {ctx.message.clean_content}")
 
-    @commands.Cog.listener()
-    async def on_slash_command(self, ctx: SlashContext):
-        command_with_options = ctx.data['name']
-        try:
-            for i in ctx.data['options']:
-                if "options" in i.keys():
-                    command_with_options += ' ['+str(i['name']) + ': ' + \
-                        str(list([str(x['value']) for x in i["options"]]))+']'
-                elif "value" in i.keys():
-                    command_with_options += ' [' + \
-                        str(i['name'])+": "+str(i['value'])+']'
-                else:
-                    command_with_options += ' ['+str(i['name'])+"]"
-        except KeyError:
-            pass
-        logchannel = self.bot.get_channel(int(config['log-channel']))
-        try:
-            await logchannel.send(f"[Slash] {ctx.guild.name} > {ctx.author} > {command_with_options}")
-        except AttributeError:
-            await logchannel.send(f"Private message > {ctx.author} > {command_with_options}")
+    # @commands.Cog.listener()
+    # async def on_slash_command(self, ctx: SlashContext):
+    #     command_with_options = ctx.data['name']
+    #     try:
+    #         for i in ctx.data['options']:
+    #             if "options" in i.keys():
+    #                 command_with_options += ' ['+str(i['name']) + ': ' + \
+    #                     str(list([str(x['value']) for x in i["options"]]))+']'
+    #             elif "value" in i.keys():
+    #                 command_with_options += ' [' + \
+    #                     str(i['name'])+": "+str(i['value'])+']'
+    #             else:
+    #                 command_with_options += ' ['+str(i['name'])+"]"
+    #     except KeyError:
+    #         pass
+    #     logchannel = self.bot.get_channel(int(config['log-channel']))
+    #     try:
+    #         await logchannel.send(f"[Slash] {ctx.guild.name} > {ctx.author} > {command_with_options}")
+    #     except AttributeError:
+    #         await logchannel.send(f"Private message > {ctx.author} > {command_with_options}")
 
     # Command to change someone's nickname in a server, if they are not the owner of the server
     @commands.command(pass_context=True, hidden=True)
