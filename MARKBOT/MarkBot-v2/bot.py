@@ -35,7 +35,8 @@ initial_extensions = ['cogs.Music',
                       'cogs.Activity',
                       'cogs.Cleanup',
                       'cogs.Shrug',
-                      'cogs.ReactionRoles']
+                      'cogs.ReactionRoles',
+                      'cogs.VoiceListener']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
