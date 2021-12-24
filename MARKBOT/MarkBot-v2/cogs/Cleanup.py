@@ -2,7 +2,7 @@ from os import name
 import discord
 from discord.ext import commands
 from discord.ext.commands import cog
-from discord_slash import cog_ext, SlashContext
+# from discord_slash import cog_ext, SlashContext
 from time import sleep
 import random
 
@@ -127,98 +127,98 @@ class Cleanup(commands.Cog):
         sleep(3)
         await msg.delete()
 
-    @commands.has_permissions(manage_messages=True)
-    @cog_ext.cog_subcommand(name="commands", base="cleanup")
-    async def _commands_slash(self, ctx: SlashContext, which_prefix: str = None):
-        """Delete all messages that are bot commands.
-            Provide specific prefixes to target(optional)"""
-        if which_prefix == None:
-            which_prefix = "! . ? ' ("
-        which_prefix = [i for i in which_prefix if i != ' ']
+    # @commands.has_permissions(manage_messages=True)
+    # @cog_ext.cog_subcommand(name="commands", base="cleanup")
+    # async def _commands_slash(self, ctx: SlashContext, which_prefix: str = None):
+    #     """Delete all messages that are bot commands.
+    #         Provide specific prefixes to target(optional)"""
+    #     if which_prefix == None:
+    #         which_prefix = "! . ? ' ("
+    #     which_prefix = [i for i in which_prefix if i != ' ']
 
-        def is_undesired(message):
-            prefixes = which_prefix if len(
-                which_prefix) > 0 else "! . ? ' (".split()
-            starts_with_prefix = None
-            for i in prefixes:
-                if message.content.startswith(i):
-                    starts_with_prefix = i
-                    break
-            if starts_with_prefix:
-                return True
-            return False
-        await ctx.channel.purge(limit=100, check=is_undesired)
-        ways_to_clean = [
-            "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
-            "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
-        ]
-        choice = random.choice(ways_to_clean)
-        grammar = "has been" if choice[-2:] == "ed" else "is now"
-        await ctx.send(f'This channel {grammar} {choice}', hidden=True)
+    #     def is_undesired(message):
+    #         prefixes = which_prefix if len(
+    #             which_prefix) > 0 else "! . ? ' (".split()
+    #         starts_with_prefix = None
+    #         for i in prefixes:
+    #             if message.content.startswith(i):
+    #                 starts_with_prefix = i
+    #                 break
+    #         if starts_with_prefix:
+    #             return True
+    #         return False
+    #     await ctx.channel.purge(limit=100, check=is_undesired)
+    #     ways_to_clean = [
+    #         "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
+    #         "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
+    #     ]
+    #     choice = random.choice(ways_to_clean)
+    #     grammar = "has been" if choice[-2:] == "ed" else "is now"
+    #     await ctx.send(f'This channel {grammar} {choice}', hidden=True)
 
-    @commands.has_permissions(manage_messages=True)
-    @cog_ext.cog_subcommand(name="bots", base="cleanup")
-    async def _bots_slash(self, ctx: SlashContext, which_bot: discord.Member = None):
-        """Delete all messages by bots.
-            Provide mention of specific bot(optional)"""
-        if which_bot == None:
-            def is_undesired(message): return message.author.bot
-            await ctx.channel.purge(limit=100, check=is_undesired)
-        else:
-            def is_undesired(message):
-                return message.author == which_bot and message.author.bot
-            await ctx.channel.purge(limit=100, check=is_undesired)
-        ways_to_clean = [
-            "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
-            "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
-        ]
-        # await ctx.message.delete()
-        choice = random.choice(ways_to_clean)
-        grammar = "has been" if choice[-2:] == "ed" else "is now"
-        await ctx.send(f'This channel {grammar} {choice}', hidden=True)
+    # @commands.has_permissions(manage_messages=True)
+    # @cog_ext.cog_subcommand(name="bots", base="cleanup")
+    # async def _bots_slash(self, ctx: SlashContext, which_bot: discord.Member = None):
+    #     """Delete all messages by bots.
+    #         Provide mention of specific bot(optional)"""
+    #     if which_bot == None:
+    #         def is_undesired(message): return message.author.bot
+    #         await ctx.channel.purge(limit=100, check=is_undesired)
+    #     else:
+    #         def is_undesired(message):
+    #             return message.author == which_bot and message.author.bot
+    #         await ctx.channel.purge(limit=100, check=is_undesired)
+    #     ways_to_clean = [
+    #         "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
+    #         "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
+    #     ]
+    #     # await ctx.message.delete()
+    #     choice = random.choice(ways_to_clean)
+    #     grammar = "has been" if choice[-2:] == "ed" else "is now"
+    #     await ctx.send(f'This channel {grammar} {choice}', hidden=True)
 
-    @commands.has_permissions(manage_messages=True)
-    @cog_ext.cog_subcommand(name="people", base="cleanup")
-    async def _people_slash(self, ctx: SlashContext, which_person: discord.Member = None, number_of_messages: int = None):
-        """Delete last 100 messages by people.
-            Provide mention of specific specific people(optional)"""
-        if number_of_messages == None:
-            number_of_messages = 100
-        if which_person == None:
-            def is_undesired(message):
-                return message.author.bot == False
-            await ctx.channel.purge(limit=number_of_messages, check=is_undesired)
-        else:
-            def is_undesired(message):
-                return message.author == which_person and not (message.author.bot)
-            await ctx.channel.purge(limit=number_of_messages, check=is_undesired)
-        ways_to_clean = [
-            "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
-            "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
-        ]
-        choice = random.choice(ways_to_clean)
-        grammar = "has been" if choice[-2:] == "ed" else "is now"
-        await ctx.send(f'This channel {grammar} {choice}', hidden=True)
+    # @commands.has_permissions(manage_messages=True)
+    # @cog_ext.cog_subcommand(name="people", base="cleanup")
+    # async def _people_slash(self, ctx: SlashContext, which_person: discord.Member = None, number_of_messages: int = None):
+    #     """Delete last 100 messages by people.
+    #         Provide mention of specific specific people(optional)"""
+    #     if number_of_messages == None:
+    #         number_of_messages = 100
+    #     if which_person == None:
+    #         def is_undesired(message):
+    #             return message.author.bot == False
+    #         await ctx.channel.purge(limit=number_of_messages, check=is_undesired)
+    #     else:
+    #         def is_undesired(message):
+    #             return message.author == which_person and not (message.author.bot)
+    #         await ctx.channel.purge(limit=number_of_messages, check=is_undesired)
+    #     ways_to_clean = [
+    #         "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
+    #         "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
+    #     ]
+    #     choice = random.choice(ways_to_clean)
+    #     grammar = "has been" if choice[-2:] == "ed" else "is now"
+    #     await ctx.send(f'This channel {grammar} {choice}', hidden=True)
 
-    @commands.has_permissions(manage_messages=True)
-    @cog_ext.cog_slash(name="purge")
-    async def _purge_slash(self, ctx: commands.Context, num: int = None):
-        """Deletes last 100 messages."""
-        await ctx.channel.purge(limit=num+1 if num != None else 101)
-        ways_to_clean = [
-            "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
-            "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
-        ]
-        choice = random.choice(ways_to_clean)
-        grammar = "has been" if choice[-2:] == "ed" else "is now"
-        await ctx.send(f'This channel {grammar} {choice}', hidden=True)
+    # @commands.has_permissions(manage_messages=True)
+    # @cog_ext.cog_slash(name="purge")
+    # async def _purge_slash(self, ctx: commands.Context, num: int = None):
+    #     """Deletes last 100 messages."""
+    #     await ctx.channel.purge(limit=num+1 if num != None else 101)
+    #     ways_to_clean = [
+    #         "washed", "scrubbed", "cleansed", "cleaned", "polished", "spotless",
+    #         "usoiled", "unstained", "unspotted", "unsullied", "unblemished", "immaculate", "pristine"
+    #     ]
+    #     choice = random.choice(ways_to_clean)
+    #     grammar = "has been" if choice[-2:] == "ed" else "is now"
+    #     await ctx.send(f'This channel {grammar} {choice}', hidden=True)
 
-    @_commands_slash.error
-    @_bots_slash.error
-    @_people_slash.error
-    @_purge_slash.error
-    async def _error_handler(self, ctx: SlashContext, error):
-        await ctx.send("You don't have the permissions for this command")
+    # @_commands_slash.error
+    # @_bots_slash.error
+    # @_people_slash.error
+    # @_purge_slash.error
+    # async def _error_handler(self, ctx: SlashContext, error):
+    #     await ctx.send("You don't have the permissions for this command")
 
 
 def setup(bot):

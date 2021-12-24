@@ -138,3 +138,5 @@ database
 creds.txt.old
 
 reaction_roles.json
+waves
+*.wav

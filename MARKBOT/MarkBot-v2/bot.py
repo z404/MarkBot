@@ -1,7 +1,6 @@
 from discord.ext import commands
 import discord
 from pathlib import Path
-from discord_slash import SlashCommand, SlashContext
 from subprocess import Popen
 import os
 from shutil import copyfile
@@ -36,11 +35,11 @@ initial_extensions = ['cogs.Music',
                       'cogs.Activity',
                       'cogs.Cleanup',
                       'cogs.Shrug',
-                      'cogs.ReactionRoles']
+                      'cogs.ReactionRoles',
+                      'cogs.VoiceListener']
 
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
-slash = SlashCommand(bot, sync_commands=True)
 
 
 if __name__ == '__main__':
@@ -58,4 +57,4 @@ node_server = Popen("npm start", shell=True,
 async def on_ready():
     print("Bot is online!")
 
-bot.run(config['discord_token'], bot=True, reconnect=True)
+bot.run(config['discord_token'], reconnect=True)
