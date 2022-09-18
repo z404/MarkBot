@@ -252,5 +252,5 @@ class ReactionRoles(commands.Cog):
     #         await ctx.send("Reaction roles cleared.", hidden=True)
 
 
-def setup(bot):
-    bot.add_cog(ReactionRoles(bot))
+async def setup(bot):
+    await bot.add_cog(ReactionRoles(bot))

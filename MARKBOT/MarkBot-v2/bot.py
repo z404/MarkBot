@@ -4,6 +4,7 @@ from pathlib import Path
 from subprocess import Popen
 import os
 from shutil import copyfile
+import asyncio
 
 l = '''
  ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
@@ -43,8 +44,12 @@ bot = commands.Bot(
 
 
 if __name__ == '__main__':
-    for extension in initial_extensions:
-        bot.load_extension(extension)
+    async def setup():
+        for extension in initial_extensions:
+            print(extension)
+            await bot.load_extension(extension)
+
+    asyncio.get_event_loop().run_until_complete(setup())
 
 if not os.path.isdir("./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/config.json"):
     copyfile("config.json", "./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/config.json")

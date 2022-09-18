@@ -63,5 +63,5 @@ class Activities(commands.Cog):
                 'User Invoked activity command without being in a voice channel')
 
 
-def setup(bot):
-    bot.add_cog(Activities(bot))
+async def setup(bot):
+    await bot.add_cog(Activities(bot))

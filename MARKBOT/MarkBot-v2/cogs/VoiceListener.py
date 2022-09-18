@@ -152,5 +152,5 @@ class VoiceListener(commands.Cog):
         await ctx.invoke(self.bot.get_command('record'), args)
 
 
-def setup(bot):
-    bot.add_cog(VoiceListener(bot))
+async def setup(bot):
+    await bot.add_cog(VoiceListener(bot))

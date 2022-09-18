@@ -221,5 +221,5 @@ class Cleanup(commands.Cog):
     #     await ctx.send("You don't have the permissions for this command")
 
 
-def setup(bot):
-    bot.add_cog(Cleanup(bot))
+async def setup(bot):
+    await bot.add_cog(Cleanup(bot))

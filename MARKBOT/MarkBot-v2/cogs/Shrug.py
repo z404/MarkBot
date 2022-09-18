@@ -177,5 +177,5 @@ class Shrug(commands.Cog):
     #         await ctx.send("No shrug channel has been set! Set a shrug channel by typing `!setshrugchannel`")
 
 
-def setup(bot):
-    bot.add_cog(Shrug(bot))
+async def setup(bot):
+    await bot.add_cog(Shrug(bot))
