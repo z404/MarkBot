@@ -203,6 +203,12 @@ class AdminControls(commands.Cog):
         # tabletext = tabulate.tabulate(
         #     list_of_servers, headers="firstrow", tablefmt="fancy_grid")
 
+    @commands.command(name="resync", hidden=True)
+    async def _resync(self, ctx: commands.Context):
+        with ctx.typing():
+            await self.bot.tree.sync()
+
+
     # Check if the user is admin before the execution of the above commands
     @_botstats.before_invoke
     @_serverstats.before_invoke
@@ -210,6 +216,7 @@ class AdminControls(commands.Cog):
     @changenick.before_invoke
     @terminate.before_invoke
     @reloadcog.before_invoke
+    @_resync.before_invoke
     async def ensure_admin(self, ctx: commands.Context):
         if str(ctx.message.author.id) not in config['admin_list']:
             await ctx.send("I don't need to listen to you! you aren't an admin!")
