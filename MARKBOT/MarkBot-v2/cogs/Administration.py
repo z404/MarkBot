@@ -1,4 +1,5 @@
 # For Discord
+from code import interact
 from os import popen
 import discord
 from discord.ext import commands
@@ -37,64 +38,75 @@ class AdminControls(commands.Cog):
     async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
         errorlogchannel = self.bot.get_channel(
             int(config['error-log-channel']))
-        await errorlogchannel.send(f"`{ctx.author}` has used the command `{ctx.message.clean_content}` with the following error: \n```py\n{error}``` in server {ctx.guild.name}")
+        
+        if ctx.message.clean_content.startswith(config['prefix']):
+            try:
+                await errorlogchannel.send(f"`{ctx.author}` has used the command `{ctx.message.clean_content}` with the following error: \n```py\n{error}``` in server {ctx.guild.name}")
+            except AttributeError:
+                await errorlogchannel.send(f"`{ctx.author}` has used the command `{ctx.message.clean_content}` with the following error: \n```py\n{error}``` in Private Message")
+        else:
+            command_with_options = ctx.interaction.data['name']
+            try:
+                for i in ctx.interaction.data['options']:
+                    if "options" in i.keys():
+                        command_with_options += ' ['+str(i['name']) + ': ' + \
+                            str(list([str(x['value']) for x in i["options"]]))+']'
+                    elif "value" in i.keys():
+                        command_with_options += ' [' + \
+                            str(i['name'])+": "+str(i['value'])+']'
+                    else:
+                        command_with_options += ' ['+str(i['name'])+"]"
+            except KeyError:
+                pass
+            errorlogchannel = self.bot.get_channel(
+                int(config['error-log-channel']))
+            
+            try:
+                await errorlogchannel.send(f"{ctx.author} has used the SLASH command `{command_with_options}` with the following error: \n```py\n{error}``` in server {ctx.guild.name}")
+            except AttributeError:
+                await errorlogchannel.send(f"{ctx.author} has used the SLASH command `{command_with_options}` with the following error: \n```py\n{error}``` in Private Message")
         tb = traceback.format_exception(
             type(error), error, error.__traceback__)
         trace = (''.join([i.replace("`", "") for i in tb]))
         await errorlogchannel.send(f"```py\n{trace}```")
 
-    # @commands.Cog.listener()
-    # async def on_slash_command_error(self, ctx: SlashContext, error: commands.CommandError):
-    #     command_with_options = ctx.data['name']
-    #     try:
-    #         for i in ctx.data['options']:
-    #             if "options" in i.keys():
-    #                 command_with_options += ' ['+str(i['name']) + ': ' + \
-    #                     str(list([str(x['value']) for x in i["options"]]))+']'
-    #             elif "value" in i.keys():
-    #                 command_with_options += ' [' + \
-    #                     str(i['name'])+": "+str(i['value'])+']'
-    #             else:
-    #                 command_with_options += ' ['+str(i['name'])+"]"
-    #     except KeyError:
-    #         pass
-    #     errorlogchannel = self.bot.get_channel(
-    #         int(config['error-log-channel']))
-    #     tb = traceback.format_exception(
-    #         type(error), error, error.__traceback__)
-    #     await errorlogchannel.send(f"{ctx.author} has used the SLASH command `{command_with_options}` with the following error: \n```py\n{error}``` in server {ctx.guild.name}")
-    #     trace = (''.join([i.replace("`", "") for i in tb]))
-    #     await errorlogchannel.send(f"```py\n{trace}```")
-
     # Logging system
     @commands.Cog.listener()
     async def on_command(self, ctx):
         logchannel = self.bot.get_channel(int(config['log-channel']))
-        try:
-            await logchannel.send(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
-        except AttributeError:
-            await logchannel.send(f"Private message > {ctx.author} > {ctx.message.clean_content}")
+        if ctx.message.clean_content.startswith(config['prefix']):
+            try:
+                await logchannel.send(f"{ctx.guild.name} > {ctx.author} > {ctx.message.clean_content}")
+            except AttributeError:
+                await logchannel.send(f"Private Message > {ctx.author} > {ctx.message.clean_content}")
+        else:
+            command_with_options = ctx.interaction.data['name']
+            try:
+                for i in ctx.interaction.data['options']:
+                    if "options" in i.keys():
+                        command_with_options += ' ['+str(i['name']) + ': ' + \
+                            str(list([str(x['value']) for x in i["options"]]))+']'
+                    elif "value" in i.keys():
+                        command_with_options += ' [' + \
+                            str(i['name'])+": "+str(i['value'])+']'
+                    else:
+                        command_with_options += ' ['+str(i['name'])+"]"
+            except KeyError:
+                pass
+            logchannel = self.bot.get_channel(int(config['log-channel']))
+            try:
+                await logchannel.send(f"[Slash] {ctx.guild.name} > {ctx.author} > {command_with_options}")
+            except AttributeError:
+                await logchannel.send(f"Private message > {ctx.author} > {command_with_options}")
 
-    # @commands.Cog.listener()
-    # async def on_slash_command(self, ctx: SlashContext):
-    #     command_with_options = ctx.data['name']
-    #     try:
-    #         for i in ctx.data['options']:
-    #             if "options" in i.keys():
-    #                 command_with_options += ' ['+str(i['name']) + ': ' + \
-    #                     str(list([str(x['value']) for x in i["options"]]))+']'
-    #             elif "value" in i.keys():
-    #                 command_with_options += ' [' + \
-    #                     str(i['name'])+": "+str(i['value'])+']'
-    #             else:
-    #                 command_with_options += ' ['+str(i['name'])+"]"
-    #     except KeyError:
-    #         pass
-    #     logchannel = self.bot.get_channel(int(config['log-channel']))
-    #     try:
-    #         await logchannel.send(f"[Slash] {ctx.guild.name} > {ctx.author} > {command_with_options}")
-    #     except AttributeError:
-    #         await logchannel.send(f"Private message > {ctx.author} > {command_with_options}")
+    # Command to reload cogs
+    @commands.command(pass_context=True, hidden=True, name="reloadcog")
+    async def reloadcog(self, ctx: commands.Context, cog: str):
+        try:
+            await self.bot.reload_extension(f"cogs.{cog}")
+            await ctx.send(f"Reloaded {cog}")
+        except Exception as e:
+            await ctx.send(f"Error: {e}")
 
     # Command to change someone's nickname in a server, if they are not the owner of the server
     @commands.command(pass_context=True, hidden=True)
@@ -191,12 +203,20 @@ class AdminControls(commands.Cog):
         # tabletext = tabulate.tabulate(
         #     list_of_servers, headers="firstrow", tablefmt="fancy_grid")
 
+    @commands.command(name="resync", hidden=True)
+    async def _resync(self, ctx: commands.Context):
+        with ctx.typing():
+            await self.bot.tree.sync()
+
+
     # Check if the user is admin before the execution of the above commands
     @_botstats.before_invoke
     @_serverstats.before_invoke
     @_changestatus.before_invoke
     @changenick.before_invoke
     @terminate.before_invoke
+    @reloadcog.before_invoke
+    @_resync.before_invoke
     async def ensure_admin(self, ctx: commands.Context):
         if str(ctx.message.author.id) not in config['admin_list']:
             await ctx.send("I don't need to listen to you! you aren't an admin!")
