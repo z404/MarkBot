@@ -24,7 +24,7 @@ class Activities(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.group(name="activity", pass_context=True)
+    @commands.hybrid_group(name="activity", pass_context=True)
     async def _activity(self, ctx: commands.Context):
         """Command to launch activities. These activities are in beta, they might not work well"""
         if not ctx.invoked_subcommand:
