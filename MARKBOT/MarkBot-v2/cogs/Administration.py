@@ -203,5 +203,5 @@ class AdminControls(commands.Cog):
             raise commands.CommandError("Unauthorised command used!")
 
 
-def setup(bot):
-    bot.add_cog(AdminControls(bot))
+async def setup(bot):
+    await bot.add_cog(AdminControls(bot))
