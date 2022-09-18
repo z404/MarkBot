@@ -1,5 +1,6 @@
 from discord.ext import commands
 import discord
+from discord import app_commands
 from pathlib import Path
 from subprocess import Popen
 import os
@@ -42,7 +43,6 @@ initial_extensions = ['cogs.Music',
 bot = commands.Bot(
     command_prefix=config['prefix'], description='An easy to use multipurpose Discord bot!', intents=discord.Intents.all())
 
-
 if __name__ == '__main__':
     async def setup():
         for extension in initial_extensions:
@@ -50,6 +50,8 @@ if __name__ == '__main__':
             await bot.load_extension(extension)
 
     asyncio.get_event_loop().run_until_complete(setup())
+
+
 
 if not os.path.isdir("./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/config.json"):
     copyfile("config.json", "./MARKBOT/MarkBot-v2/cogs/MarkBot-Activity/config.json")
@@ -60,6 +62,7 @@ node_server = Popen("npm start", shell=True,
 
 @bot.event
 async def on_ready():
+    await bot.tree.sync()
     print("Bot is online!")
 
 bot.run(config['discord_token'], reconnect=True)
