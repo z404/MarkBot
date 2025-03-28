@@ -36,7 +36,6 @@ initial_extensions = [
     "cogs.Music",
     "cogs.Functionality",
     "cogs.Administration",
-    "cogs.Activity",
     "cogs.Cleanup",
     "cogs.Shrug",
     "cogs.ReactionRoles",
