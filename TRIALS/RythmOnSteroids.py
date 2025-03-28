@@ -23,20 +23,20 @@ import math
 import random
 
 import discord
-import youtube_dl
+import yt_dlp
 from async_timeout import timeout
 from discord.ext import commands
 
 # Silence useless bug reports messages
-youtube_dl.utils.bug_reports_message = lambda: ''
+yt_dlp.utils.bug_reports_message = lambda: ""
 
 
-#class VoiceError(Exception):
-#    pass
+class VoiceError(Exception):
+    pass
 
 
-#class YTDLError(Exception):
-#    pass
+class YTDLError(Exception):
+    pass
 
 
 class YTDLSource(discord.PCMVolumeTransformer):
@@ -61,7 +61,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'options': '-vn',
     }
 
-    ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS)
+    ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
 
     def __init__(self, ctx: commands.Context, source: discord.FFmpegPCMAudio, *, data: dict, volume: float = 0.5):
         super().__init__(source, volume)
@@ -385,7 +385,7 @@ class Music(commands.Cog):
 
         ctx.voice_state.songs.clear()
 
-        #if not ctx.voice_state.is_playing:
+        # if not ctx.voice_state.is_playing:
         ctx.voice_state.voice.stop()
         await ctx.message.add_reaction('⏹')
 
@@ -398,12 +398,12 @@ class Music(commands.Cog):
         if not ctx.voice_state.is_playing:
             return await ctx.send('Not playing any music right now...')
 
-        #voter = ctx.message.author
-        #if voter == ctx.voice_state.current.requester:
+        # voter = ctx.message.author
+        # if voter == ctx.voice_state.current.requester:
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
 
-        #elif voter.id not in ctx.voice_state.skip_votes:
+        # elif voter.id not in ctx.voice_state.skip_votes:
         #    ctx.voice_state.skip_votes.add(voter.id)
         #    total_votes = len(ctx.voice_state.skip_votes)
 
@@ -413,7 +413,7 @@ class Music(commands.Cog):
         #    else:
         #        await ctx.send('Skip vote added, currently at **{}/3**'.format(total_votes))
 
-        #else:
+        # else:
         #   await ctx.send('You have already voted to skip this song.')
 
     @commands.command(name='queue')
@@ -511,7 +511,7 @@ class Music(commands.Cog):
                     'options': '-vn',
                 }
 
-                ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS) 
+                ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
                 partial = functools.partial(ytdl.extract_info, search,            download=False, process=False)
                 loop = asyncio.get_event_loop()
                 data = await loop.run_in_executor(None, partial)

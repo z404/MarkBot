@@ -16,52 +16,63 @@ l = '''
 
 ## DISCORD BOT VERSION OF PROJECT MARk
 
-#Importing nessesary packages
+# Importing nessesary packages
 import json
 import os
 import warnings
-from random import randint, choice
+from random import choice, randint
+
 from discord import channel
-#Importing replit database
+
+# Importing replit database
 try:
     from replit import db
 except:
-    db={}
-#Importing packages required for discord bot
-import discord
+    db = {}
 import asyncio
 import functools
 import itertools
 import math
 import random
+
+# Importing packages required for discord bot
+import discord
+
+# importing package for searching
+import wikipedia
+
+# importing package for math
+import wolframalpha
+
+# Importing packages for music
+import yt_dlp
 from async_timeout import timeout
 from discord.ext import commands
-#Importing packages for music
-import youtube_dl
-#importing package for searching
-import wikipedia
-#importing package for math
-import wolframalpha
-#importing packages for google
+
+# importing packages for google
 try:
     from search_engine_parser import GoogleSearch
 except:
     pass
-#importing packages for spotify
-import spotipy
-import spotipy.oauth2 as oauth2
-#importing packages for giphy
-import giphy_client as gc
-from giphy_client.rest import ApiException
-#import packages for currency conversion
-from currency_converter import CurrencyConverter
-#importing pretty tables
-from tabulate import tabulate
-#importing azapi for lyrics
+# importing azapi for lyrics
 import azapi
 
+# importing packages for giphy
+import giphy_client as gc
+
+# importing packages for spotify
+import spotipy
+import spotipy.oauth2 as oauth2
+
+# import packages for currency conversion
+from currency_converter import CurrencyConverter
+from giphy_client.rest import ApiException
+
+# importing pretty tables
+from tabulate import tabulate
+
 print(l)
-youtube_dl.utils.bug_reports_message = lambda: ''
+yt_dlp.utils.bug_reports_message = lambda: ""
 warnings.catch_warnings()
 warnings.simplefilter("ignore")
 
@@ -288,7 +299,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'options': '-vn',
     }
 
-    ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS)
+    ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
 
     def __init__(self, ctx: commands.Context, source: discord.FFmpegPCMAudio, *, data: dict, volume: float = 0.5):
         super().__init__(source, volume)
@@ -549,7 +560,7 @@ class Music(commands.Cog):
         ctx.voice_state.voice = await destination.connect()
 
     @commands.command(name='summon')
-    #@commands.has_permissions(manage_guild=True)
+    # @commands.has_permissions(manage_guild=True)
     async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
         """Summons the bot to a voice channel.
         If no channel was specified, it joins your channel.
@@ -566,7 +577,7 @@ class Music(commands.Cog):
         ctx.voice_state.voice = await destination.connect()
 
     @commands.command(name='leave', aliases=['disconnect','yeet'])
-    #@commands.has_permissions(manage_guild=True)
+    # @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
         """Clears the queue and leaves the voice channel."""
 
@@ -597,31 +608,31 @@ class Music(commands.Cog):
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
     @commands.command(name='pause')
-    #@commands.has_permissions(manage_guild=True)
+    # @commands.has_permissions(manage_guild=True)
     async def _pause(self, ctx: commands.Context):
         """Pauses the currently playing song."""
 
-        #if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_playing():
+        # if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_playing():
         ctx.voice_state.voice.pause()
         await ctx.message.add_reaction('⏯')
 
     @commands.command(name='resume')
-    #@commands.has_permissions(manage_guild=True)
+    # @commands.has_permissions(manage_guild=True)
     async def _resume(self, ctx: commands.Context):
         """Resumes a currently paused song."""
 
-        #if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_paused():
+        # if not ctx.voice_state.is_playing and #ctx.voice_state.voice.is_paused():
         ctx.voice_state.voice.resume()
         await ctx.message.add_reaction('⏯')
 
     @commands.command(name='stop')
-    #@commands.has_permissions(manage_guild=True)
+    # @commands.has_permissions(manage_guild=True)
     async def _stop(self, ctx: commands.Context):
         """Stops playing song and clears the queue."""
 
         ctx.voice_state.songs.clear()
 
-        #if not ctx.voice_state.is_playing:
+        # if not ctx.voice_state.is_playing:
         ctx.voice_state.voice.stop()
         await ctx.message.add_reaction('⏹')
 
@@ -634,12 +645,12 @@ class Music(commands.Cog):
         if not ctx.voice_state.is_playing:
             return await ctx.send('Not playing any music right now...')
 
-        #voter = ctx.message.author
-        #if voter == ctx.voice_state.current.requester:
+        # voter = ctx.message.author
+        # if voter == ctx.voice_state.current.requester:
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
 
-        #elif voter.id not in ctx.voice_state.skip_votes:
+        # elif voter.id not in ctx.voice_state.skip_votes:
         #    ctx.voice_state.skip_votes.add(voter.id)
         #    total_votes = len(ctx.voice_state.skip_votes)
 
@@ -649,7 +660,7 @@ class Music(commands.Cog):
         #    else:
         #        await ctx.send('Skip vote added, currently at **{}/3**'.format(total_votes))
 
-        #else:
+        # else:
         #   await ctx.send('You have already voted to skip this song.')
 
     @commands.command(name='queue',aliases=['q'])
@@ -704,7 +715,7 @@ class Music(commands.Cog):
         else:
             await ctx.send('Announcement of new songs is toggled on')
             del db[str(ctx.guild.id) + 'announce']
-        
+
     @commands.command(name='play',aliases=['p'])
     async def _play(self, ctx: commands.Context, *, search: str):
         """Plays a song.
@@ -774,7 +785,7 @@ class Music(commands.Cog):
                         'options': '-vn',
                     }
 
-                    ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS) 
+                    ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
                     partial = functools.partial(ytdl.extract_info, search,            download=False, process=False)
                     loop = asyncio.get_event_loop()
                     data = await loop.run_in_executor(None, partial)
@@ -793,7 +804,7 @@ class Music(commands.Cog):
                                 await ctx.voice_state.songs.put(song)
                             except:
                                 pass
-                            #break
+                            # break
                     else:
                         source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
                         song = Song(source)
@@ -802,7 +813,6 @@ class Music(commands.Cog):
                         await ctx.send('Enqueued {}'.format(str(source)))
             except YTDLError as e:
                 await ctx.send('An error occurred while processing this request: {}'.format(str(e)))
-
 
     @_join.before_invoke
     @_play.before_invoke

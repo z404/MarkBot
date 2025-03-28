@@ -1,5 +1,5 @@
 discord
-youtube_dl
+yt-dlp[default]
 pynacl
 wikipedia
 wolframalpha

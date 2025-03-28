@@ -1,18 +1,21 @@
 # Importing packages required for discord bot
-import discord
 import asyncio
 import functools
 import itertools
 import math
 import random
-from discord.ext import commands
-# from discord_slash import cog_ext, SlashContext
-# import interactions
-# Importing packages for music
-import youtube_dl
+
+import discord
+
 # importing packages for spotify
 import spotipy
 import spotipy.oauth2 as oauth2
+
+# from discord_slash import cog_ext, SlashContext
+# import interactions
+# Importing packages for music
+import yt_dlp
+from discord.ext import commands
 from tabulate import tabulate
 
 
@@ -68,7 +71,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         'options': '-vn',
     }
 
-    ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS)
+    ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
 
     def __init__(self, ctx: commands.Context, source: discord.FFmpegPCMAudio, *, data: dict, volume: float = 0.5):
         super().__init__(source, volume)
@@ -342,7 +345,6 @@ class Music(commands.Cog):
 
         ctx.voice_state.voice = await destination.connect()
 
-
     @commands.hybrid_command(name='summon')
     # @commands.has_permissions(manage_guild=True)
     async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
@@ -363,7 +365,6 @@ class Music(commands.Cog):
         if ctx.interaction:
             await ctx.send("Summoned to voice channel!", ephemeral=True)
 
-
     @commands.hybrid_command(name='leave', aliases=['disconnect', 'yeet'])
     # @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
@@ -376,13 +377,11 @@ class Music(commands.Cog):
         await ctx.send("I've been yeeted :(")
         del self.voice_states[ctx.guild.id]
 
-
     @commands.hybrid_command(name='np', aliases=['current', 'playing', 'now'])
     async def _now(self, ctx: commands.Context):
         """Displays the currently playing song."""
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
-
 
     @commands.hybrid_command(name='pause')
     # @commands.has_permissions(manage_guild=True)
@@ -395,7 +394,6 @@ class Music(commands.Cog):
             await ctx.send('Song paused.')
         else:
             await ctx.message.add_reaction('⏯')
-
 
     @commands.hybrid_command(name='resume')
     # @commands.has_permissions(manage_guild=True)
@@ -422,7 +420,6 @@ class Music(commands.Cog):
             await ctx.send('Song stopped and queue cleared.')
         else:
             await ctx.message.add_reaction('⏹')
-
 
     @commands.hybrid_command(name='skip', aliases=['n', 'next'])
     async def _skip(self, ctx: commands.Context):
@@ -452,7 +449,6 @@ class Music(commands.Cog):
         # else:
         #   await ctx.send('You have already voted to skip this song.')
 
-
     @commands.hybrid_command(name='queue', aliases=['q'])
     async def _queue(self, ctx: commands.Context, *, page: int = 1):
         """Shows the player's queue.
@@ -476,7 +472,6 @@ class Music(commands.Cog):
         embed = (discord.Embed(description='**{} tracks:**\n\n{}'.format(len(ctx.voice_state.songs), queue))
                  .set_footer(text='Viewing page {}/{}'.format(page, pages)))
         await ctx.send(embed=embed)
-        
 
     @commands.hybrid_command(name='shuffle')
     async def _shuffle(self, ctx: commands.Context):
@@ -591,7 +586,7 @@ class Music(commands.Cog):
                         'options': '-vn',
                     }
 
-                    ytdl = youtube_dl.YoutubeDL(YTDL_OPTIONS)
+                    ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
                     partial = functools.partial(
                         ytdl.extract_info, search,            download=False, process=False)
                     loop = asyncio.get_event_loop()
